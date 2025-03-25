@@ -1,0 +1,67 @@
+# Frontend - Node.js, Build, and IDE
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+.vite/deps/
+.idea/
+
+# Build output
+dist/
+dist-ssr/
+
+# Coverage
+coverage/
+
+# Miscellaneous
+*.local
+.DS_Store
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Backend - Java, Maven, and IDE
+# Build output
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# STS (Spring Tool Suite) specific files
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA files
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# vscode
+.vscode/
