@@ -91,6 +91,12 @@ export default {
     },
 
     async responseToRequest(patientId, accept){
-        return await apiClient.get('/user/response_request?patient_id=' + patientId + '&accept_reject=' + accept);
+        const postJson = {
+            patientId: patientId,
+            accept: accept,
+        }
+        const result = await apiClient.post('/consult/response_request', postJson);
+        console.log(result);
+        return result;
     }
 };

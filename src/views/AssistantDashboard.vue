@@ -4,6 +4,7 @@
     <div v-if="currentRequest" class="request-panel">
       <h3>新的咨询请求</h3>
       <p>用户ID: {{ currentRequest.userId }}</p>
+      <p>消息: {{currentRequest.message}}</p>
       <div class="button-group">
         <button @click="handleRequest(true)" class="accept-btn">接受</button>
         <button @click="handleRequest(false)" class="reject-btn">拒绝</button>
@@ -54,8 +55,10 @@ export default {
         const data = JSON.parse(event.data)
         console.log(data)
         if (data.type === 'chat_request') {
+          const requestJson = JSON.parse(data.content)
           this.currentRequest = {
-            userId: data.content
+            userId: requestJson.patientId,
+            message: requestJson.message,
           }
         }
       }
