@@ -83,6 +83,7 @@ export default {
       }))
       */
       userApi.responseToRequest(this.currentRequest.userId, accept)
+      /*
       if (accept) {
         // 如果接受请求，跳转到聊天页面
         this.$router.push({
@@ -92,6 +93,8 @@ export default {
           }
         })
       }
+
+       */
 
       this.currentRequest = null
     }

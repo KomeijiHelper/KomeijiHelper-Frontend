@@ -86,16 +86,17 @@ export default {
         return await apiClient.get('/user/getUsers');
     },
 
-    async consulting(consultingId) {
-        return await apiClient.get('/consult/connect_request?consult_id=' + consultingId);
+    consulting(consultingId) {
+        return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
     },
 
-    async responseToRequest(patientId, accept){
+    responseToRequest(patientId, accept){
         const postJson = {
             patientId: patientId,
             accept: accept,
         }
-        const result = await apiClient.post('/consult/response_request', postJson);
+        console.log(postJson);
+        const result = apiClient.post('/consult/response_request', postJson);
         console.log(result);
         return result;
     }

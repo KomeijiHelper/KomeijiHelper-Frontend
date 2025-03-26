@@ -59,7 +59,8 @@ export default {
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
         // 发送咨询师ID
-        userApi.consulting(this.currentConsultantId)
+        let response = userApi.consulting(this.currentConsultantId)
+        console.log(response)
         // this.ws.send(JSON.stringify({
         //   type: 'CONSULTANT_REQUEST',
         //   consultantId: this.currentConsultantId
