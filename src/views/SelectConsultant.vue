@@ -69,12 +69,15 @@ export default {
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
         if (data.type === 'CONSULTANT_ACCEPTED') {
           alert('咨询师已接受请求')
           this.$router.push('/chat')
         } else if (data.type === 'CONSULTANT_REJECTED') {
           alert('咨询师已拒绝请求')
           this.waitingForConfirm = false
+        } else if (data.type === 'chat_connect') {
+          // TODO: 拿到websocket地址，开新页面，内置新websocket
         }
       }
 
