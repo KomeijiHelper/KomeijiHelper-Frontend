@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import userApi from "@/api/userApi.js";
+
 export default {
   name: 'AssistantDashboard',
   data() {
@@ -40,15 +42,18 @@ export default {
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
         // 发送咨询师身份信息
+        /*
         this.ws.send(JSON.stringify({
           type: 'assistant_identity',
           content: localStorage.getItem('userId') // 假设用户ID存储在localStorage中
         }))
+        */
       }
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        if (data.type === 'assistant_request') {
+        console.log(data)
+        if (data.type === 'chat_request') {
           this.currentRequest = {
             userId: data.content
           }
@@ -67,12 +72,14 @@ export default {
     handleRequest(accept) {
       if (!this.currentRequest) return
 
-      const messageType = accept ? 'assistant_accepted' : 'assistant_rejected'
+      /*
+      const messageType = accept ? 'chat_connect' : 'assistant_rejected'
       this.ws.send(JSON.stringify({
         type: messageType,
         content: this.currentRequest.userId
       }))
-
+      */
+      userApi.responseToRequest(this.currentRequest.userId, accept)
       if (accept) {
         // 如果接受请求，跳转到聊天页面
         this.$router.push({

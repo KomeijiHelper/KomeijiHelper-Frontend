@@ -59,10 +59,11 @@ export default {
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
         // 发送咨询师ID
-        this.ws.send(JSON.stringify({
-          type: 'CONSULTANT_REQUEST',
-          consultantId: this.currentConsultantId
-        }))
+        userApi.consulting(this.currentConsultantId)
+        // this.ws.send(JSON.stringify({
+        //   type: 'CONSULTANT_REQUEST',
+        //   consultantId: this.currentConsultantId
+        // }))
       }
 
       this.ws.onmessage = (event) => {
