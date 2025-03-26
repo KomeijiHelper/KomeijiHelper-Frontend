@@ -61,10 +61,6 @@ export default {
         // 发送咨询师ID
         let response = userApi.consulting(this.currentConsultantId)
         console.log(response)
-        // this.ws.send(JSON.stringify({
-        //   type: 'CONSULTANT_REQUEST',
-        //   consultantId: this.currentConsultantId
-        // }))
       }
 
       this.ws.onmessage = (event) => {
