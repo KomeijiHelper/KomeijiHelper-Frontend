@@ -82,7 +82,22 @@ export default {
         return await apiClient.post('/consultant/select', postJson);
     },
 
-    async getUsers(){
+    async getUsers() {
         return await apiClient.get('/user/getUsers');
+    },
+
+    consulting(consultingId) {
+        return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
+    },
+
+    responseToRequest(patientId, accept){
+        const postJson = {
+            patientId: patientId,
+            accept: accept,
+        }
+        console.log(postJson);
+        const result = apiClient.post('/consult/response_request', postJson);
+        console.log(result);
+        return result;
     }
 };

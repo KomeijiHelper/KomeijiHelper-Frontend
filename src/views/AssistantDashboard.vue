@@ -4,6 +4,7 @@
     <div v-if="currentRequest" class="request-panel">
       <h3>新的咨询请求</h3>
       <p>用户ID: {{ currentRequest.userId }}</p>
+      <p>消息: {{currentRequest.message}}</p>
       <div class="button-group">
         <button @click="handleRequest(true)" class="accept-btn">接受</button>
         <button @click="handleRequest(false)" class="reject-btn">拒绝</button>
@@ -16,6 +17,8 @@
 </template>
 
 <script>
+import userApi from "@/api/userApi.js";
+
 export default {
   name: 'AssistantDashboard',
   data() {
@@ -39,18 +42,16 @@ export default {
       
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
-        // 发送咨询师身份信息
-        this.ws.send(JSON.stringify({
-          type: 'assistant_identity',
-          content: localStorage.getItem('userId') // 假设用户ID存储在localStorage中
-        }))
       }
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        if (data.type === 'assistant_request') {
+        console.log(data)
+        if (data.type === 'chat_request') {
+          const requestJson = JSON.parse(data.content)
           this.currentRequest = {
-            userId: data.content
+            userId: requestJson.patientId,
+            message: requestJson.message,
           }
         }
       }
@@ -67,21 +68,7 @@ export default {
     handleRequest(accept) {
       if (!this.currentRequest) return
 
-      const messageType = accept ? 'assistant_accepted' : 'assistant_rejected'
-      this.ws.send(JSON.stringify({
-        type: messageType,
-        content: this.currentRequest.userId
-      }))
-
-      if (accept) {
-        // 如果接受请求，跳转到聊天页面
-        this.$router.push({
-          path: '/chat',
-          query: {
-            userId: this.currentRequest.userId
-          }
-        })
-      }
+      userApi.responseToRequest(this.currentRequest.userId, accept)
 
       this.currentRequest = null
     }
