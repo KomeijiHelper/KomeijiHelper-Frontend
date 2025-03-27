@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 const apiClient = axios.create({
     baseURL: 'http://127.0.0.1:8081', // 基础 URL
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
     },
     withCredentials: true,
 });
