@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, defineExpose } from "vue";
+import { ref, reactive } from "vue";
 
 const props = defineProps({
   x: { type: Number, required: true },

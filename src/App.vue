@@ -51,10 +51,10 @@ async function handleRouteChange(ignoreErrors = false) {
     loggedIn.value = false;
     localStorage.removeItem('userName');
     localStorage.removeItem('session');
-    if (!ignoreErrors){
-      alert('会话失效，跳转到登录页');
-      await router.push('/login');
-    }
+    // if (!ignoreErrors){
+    //   alert('会话失效，跳转到登录页');
+    //   await router.push('/login');
+    // }
   }
 }
 
@@ -191,4 +191,13 @@ function logout() {
   cursor: pointer;
   color: red;
 }
+</style>
+
+<style lang="scss">
+#app {
+  font-family: 'Inter', Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 </style>
