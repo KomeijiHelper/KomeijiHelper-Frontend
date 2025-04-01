@@ -51,10 +51,10 @@ async function handleRouteChange(ignoreErrors = false) {
     loggedIn.value = false;
     localStorage.removeItem('userName');
     localStorage.removeItem('session');
-    // if (!ignoreErrors){
-    //   alert('会话失效，跳转到登录页');
-    //   await router.push('/login');
-    // }
+    if (!ignoreErrors){
+      alert('会话失效，跳转到登录页');
+      await router.push('/login');
+    }
   }
 }
 
