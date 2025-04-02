@@ -66,6 +66,7 @@ export default {
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
         if (data.type === 'CONSULTANT_ACCEPTED') {
           alert('咨询师已接受请求')
           this.$router.push('/chat')
