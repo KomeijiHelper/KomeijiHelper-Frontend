@@ -54,7 +54,8 @@ onMounted(() => {
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const content = JSON.parse(data.content);
-      chatBubbleList.value.push({ avatarSrc: '', avatarName: content.userName, isSelf: false, time: content.time, content: content.content });
+      const time = new Date(data.timestamp);
+      chatBubbleList.value.push({ avatarSrc: '', avatarName: content.userName, isSelf: false, time: time.toLocaleString(), content: content.content });
     };
     websocket.onopen = () => {
       console.log("WebSocket connected");
@@ -70,19 +71,19 @@ const sendMessage = async (event) => {
     event.preventDefault();
     event.stopPropagation();
     if (messageContent.value.trim() === "") return;
-    const time = new Date().toLocaleString();
+    const time = new Date();
     const content = {
       userName: localStorage.getItem("userName"),
       content: messageContent.value,
-      time: time
     }
     const message = {
       type: "text",
       content: JSON.stringify(content),
+      timestamp: time.getTime(),
     };
 
     websocket.send(JSON.stringify(message));
-    chatBubbleList.value.push({ avatarSrc: '', avatarName: localStorage.getItem("userName"), isSelf: true, time: time, content: messageContent.value })
+    chatBubbleList.value.push({ avatarSrc: '', avatarName: localStorage.getItem("userName"), isSelf: true, time: time.toLocaleString(), content: messageContent.value })
     await scrollToBottom();
     messageContent.value = "";
 };
@@ -111,7 +112,7 @@ const sendImage = () => {
     alert('发送图片功能开发中');
 };
 
-const sendPisition = () => {
+const sendPosition = () => {
     alert('发送位置功能开发中');
 };
 </script>
