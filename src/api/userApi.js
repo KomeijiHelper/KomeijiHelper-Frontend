@@ -74,10 +74,6 @@ export default {
         await apiClient.get('/user/logout');
     },
 
-    async getUsers() {
-        return await apiClient.get('/user/getUsers');
-    },
-
     consulting(consultingId) {
         return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
     },
