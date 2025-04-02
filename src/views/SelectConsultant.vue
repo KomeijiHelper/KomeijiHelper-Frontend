@@ -33,8 +33,9 @@ export default {
   },
   async created() {
     try {
-      const response = await userApi.getUsersByUserClass(1)
-      this.consultants = response.data.data
+      const response = await userApi.getUsersByUserClass(1);
+      const parsedConsultantsArray = JSON.parse(response.data.data);
+      this.consultants = parsedConsultantsArray.map(item => item.userName);
     } catch (error) {
       console.error('获取咨询师列表失败:', error)
       alert('获取咨询师列表失败')
@@ -45,7 +46,7 @@ export default {
       try {
         this.waitingForConfirm = true
         this.currentConsultantId = consultantId
-        await userApi.selectConsultant(consultantId)
+        await userApi.consulting(consultantId)
         this.setupWebSocket()
       } catch (error) {
         console.error('选择咨询师失败:', error)
