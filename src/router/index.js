@@ -8,6 +8,8 @@ import AssistantDashboard from "@/views/AssistantDashboard.vue";
 import NormalDashboard from "@/views/NormalDashboard.vue";
 import ManagerDashboard from "@/views/ManagerDashboard.vue";
 import SupervisorDashboard from "@/views/SupervisorDashboard.vue";
+import Chat from "@/components/Chat.vue";
+import ChatView from "@/views/ChatView.vue";
 
 const routes = [
     {
@@ -49,6 +51,11 @@ const routes = [
         path: "/dashboard/supervisor",
         name: "SupervisorDashboard",
         component: SupervisorDashboard,
+    },
+    {
+        path: "/chat",
+        name: "Chat",
+        component: ChatView,
     }
 ];
 

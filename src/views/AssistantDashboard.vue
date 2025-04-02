@@ -18,6 +18,7 @@
 
 <script>
 import userApi from "@/api/userApi.js";
+import router from "@/router/index.js";
 
 export default {
   name: 'AssistantDashboard',
@@ -42,24 +43,20 @@ export default {
       
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
-        // 发送咨询师身份信息
-        /*
-        this.ws.send(JSON.stringify({
-          type: 'assistant_identity',
-          content: localStorage.getItem('userId') // 假设用户ID存储在localStorage中
-        }))
-        */
       }
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        console.log(data)
         if (data.type === 'chat_request') {
           const requestJson = JSON.parse(data.content)
           this.currentRequest = {
             userId: requestJson.patientId,
             message: requestJson.message,
           }
+        } else if (data.type === 'chat_connect') {
+          const newSocketAddress = "ws://127.0.0.1:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
+          localStorage.setItem('chatAddress', newSocketAddress)
+          router.push("/chat")
         }
       }
 
@@ -74,28 +71,7 @@ export default {
     },
     handleRequest(accept) {
       if (!this.currentRequest) return
-
-      /*
-      const messageType = accept ? 'chat_connect' : 'assistant_rejected'
-      this.ws.send(JSON.stringify({
-        type: messageType,
-        content: this.currentRequest.userId
-      }))
-      */
       userApi.responseToRequest(this.currentRequest.userId, accept)
-      /*
-      if (accept) {
-        // 如果接受请求，跳转到聊天页面
-        this.$router.push({
-          path: '/chat',
-          query: {
-            userId: this.currentRequest.userId
-          }
-        })
-      }
-
-       */
-
       this.currentRequest = null
     }
   }
