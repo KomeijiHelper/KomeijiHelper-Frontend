@@ -19,6 +19,7 @@
 
 <script>
 import userApi from '@/api/userApi.js'
+import router from "@/router/index.js";
 
 export default {
   name: 'SelectConsultant',
@@ -59,10 +60,8 @@ export default {
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
         // 发送咨询师ID
-        this.ws.send(JSON.stringify({
-          type: 'CONSULTANT_REQUEST',
-          consultantId: this.currentConsultantId
-        }))
+        let response = userApi.consulting(this.currentConsultantId)
+        console.log(response)
       }
 
       this.ws.onmessage = (event) => {
@@ -73,6 +72,10 @@ export default {
         } else if (data.type === 'CONSULTANT_REJECTED') {
           alert('咨询师已拒绝请求')
           this.waitingForConfirm = false
+        } else if (data.type === 'chat_connect') {
+          const newSocketAddress = "ws://127.0.0.1:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
+          localStorage.setItem('chatAddress', newSocketAddress)
+          router.push("/chat")
         }
       }
 
