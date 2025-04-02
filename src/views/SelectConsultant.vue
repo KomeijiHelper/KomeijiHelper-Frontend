@@ -19,6 +19,7 @@
 
 <script>
 import userApi from '@/api/userApi.js'
+import router from "@/router/index.js";
 
 export default {
   name: 'SelectConsultant',
@@ -73,7 +74,9 @@ export default {
           alert('咨询师已拒绝请求')
           this.waitingForConfirm = false
         } else if (data.type === 'chat_connect') {
-          // TODO: 拿到websocket地址，开新页面，内置新websocket
+          const newSocketAddress = "ws://127.0.0.1:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
+          localStorage.setItem('chatAddress', newSocketAddress)
+          router.push("/chat")
         }
       }
 
