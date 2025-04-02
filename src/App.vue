@@ -35,6 +35,7 @@ const route = useRoute();
 const loggedIn = ref(false);
 const userName = ref(localStorage.getItem("userName") || "");
 const dropdownOpen = ref(false);
+const userClass = ref(-1);
 
 watch(
     () => route.path,
@@ -46,7 +47,8 @@ watch(
 
 async function handleRouteChange(ignoreErrors = false) {
   try {
-    loggedIn.value = await userApi.checkSession();
+    userClass.value = await userApi.checkSession();
+    loggedIn.value = userClass.value !== -1;
   } catch (e) {
     loggedIn.value = false;
     localStorage.removeItem('userName');

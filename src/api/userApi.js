@@ -67,8 +67,7 @@ export default {
     },
 
     async checkSession() {
-        await apiClient.get('/user/checkSession')
-        return true;
+        return (await apiClient.get('/user/checkSession')).data
     },
 
     async logout() {
@@ -95,9 +94,6 @@ export default {
             patientId: patientId,
             accept: accept,
         }
-        console.log(postJson);
-        const result = apiClient.post('/consult/response_request', postJson);
-        console.log(result);
-        return result;
+        return apiClient.post('/consult/response_request', postJson);
     }
 };
