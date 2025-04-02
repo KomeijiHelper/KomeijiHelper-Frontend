@@ -43,7 +43,6 @@ const avatarStyle = computed(()=> {
     const maxSize = 20;
     const minSize = 5;
     const size = Math.max(minSize, maxSize - (props.avatarName.length * 0.75));
-    console.log(size)
     return {
         fontSize: `${size}px`,
     }
