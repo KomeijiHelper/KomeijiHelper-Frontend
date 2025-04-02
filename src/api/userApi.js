@@ -67,8 +67,7 @@ export default {
     },
 
     async checkSession() {
-        await apiClient.get('/user/checkSession')
-        return true;
+        return (await apiClient.get('/user/checkSession')).data
     },
 
     async logout() {
