@@ -42,6 +42,8 @@ export default {
         };
         const result = await apiClient.post('/user/login', postJson);
         localStorage.setItem("userName", username)
+        localStorage.setItem("logged", true);
+        window.location.reload();
         return result;
     },
 
@@ -72,6 +74,9 @@ export default {
 
     async logout() {
         await apiClient.get('/user/logout');
+        localStorage.removeItem("userName");
+        localStorage.setItem("logged", false);
+        window.location.reload();
     },
 
     consulting(consultingId) {

@@ -25,57 +25,23 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import {onMounted, onUnmounted, ref, watchEffect} from "vue";
 import userApi from "@/api/userApi.js";
-import { useRoute } from "vue-router";
-import router from "@/router/index.js";
 
-// 监听路径变化，检查 session
-const route = useRoute();
-const loggedIn = ref(false);
+const loggedIn = ref(localStorage.getItem("logged"));
 const userName = ref(localStorage.getItem("userName") || "");
 const dropdownOpen = ref(false);
-const userClass = ref(-1);
 
-watch(
-    () => route.path,
-    async (newPath, oldPath) => {
-      await handleRouteChange(newPath === "/login" || newPath === "/");
-      if (newPath === "/login" && loggedIn.value) await router.push("/");
-    }
-);
-
-async function handleRouteChange(ignoreErrors = false) {
-  try {
-    userClass.value = await userApi.checkSession();
-    loggedIn.value = userClass.value !== -1;
-  } catch (e) {
-    loggedIn.value = false;
-    localStorage.removeItem('userName');
-    localStorage.removeItem('session');
-    if (!ignoreErrors){
-      alert('会话失效，跳转到登录页');
-      await router.push('/login');
-    }
-  }
-}
-
-if (route.path === "/") handleRouteChange(true)
-
-// 监听 localStorage 变化
-const updateFromStorage = (event) => {
-  if (event.key === "userName") {
-    userName.value = event.newValue || "";
-  }
-};
+watchEffect(() => {
+  userName.value = localStorage.getItem("userName") || "";
+  loggedIn.value = localStorage.getItem("logged") === "true";
+});
 
 onMounted(() => {
-  window.addEventListener("storage", updateFromStorage);
   document.addEventListener("click", closeDropdownOnOutsideClick);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("storage", updateFromStorage);
   document.removeEventListener("click", closeDropdownOnOutsideClick);
 });
 
@@ -95,11 +61,7 @@ function closeDropdownOnOutsideClick(event) {
 // 登出逻辑
 function logout() {
   userApi.logout();
-  loggedIn.value = false;
-  userName.value = "";
-  localStorage.removeItem("userName");
   dropdownOpen.value = false;
-  router.push("/");
 }
 </script>
 

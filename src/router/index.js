@@ -9,58 +9,116 @@ import NormalDashboard from "@/views/NormalDashboard.vue";
 import ManagerDashboard from "@/views/ManagerDashboard.vue";
 import SupervisorDashboard from "@/views/SupervisorDashboard.vue";
 import ChatRoomView from "@/views/ChatRoomView.vue";
+import userApi from "@/api/userApi.js";
 
 const routes = [
     {
         path: "/",
         name: "Home",
         component: HomeView,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
     },
     {
         path: "/login",
         name: "Login",
         component: LoginView,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
+        beforeEnter: (to, from, next) => {
+            const logged = localStorage.getItem("logged");
+            if (logged) {
+                console.log("已登录，进入dashboard");
+                next("/dashboard");
+            }
+        }
     },
     {
         path: "/about",
         name: "About",
         component: AboutView,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
     },
     {
         path: "/select-consultant",
         name: "SelectConsultant",
         component: SelectConsultant,
+        meta: { needAuth: false, roles: [0]}
+    },
+    {
+        path: "/dashboard",
+        name: "Dashboard",
+        beforeEnter: (to, from, next) => {
+            const userRole = localStorage.getItem("userRole") || "-1";
+            if (userRole === "0") {
+                next("/select-consultant");
+            } else if (userRole === "1") {
+                next("/dashboard/assistant");
+            } else if (userRole === "2") {
+                next("/dashboard/supervisor");
+            } else if (userRole === "3") {
+                next("/dashboard/manager");
+            } else {
+                next("/")
+            }
+        },
     },
     {
         path: "/dashboard/assistant",
         name: "assistantDashboard",
         component: AssistantDashboard,
+        meta: { needAuth: false, roles: [1] }
     },
     {
         path: "/dashboard/normal",
         name: "NormalDashboard",
         component: NormalDashboard,
+        meta: { needAuth: false, roles: [0] }
     },
     {
         path: "/dashboard/manager",
         name: "ManagerDashboard",
         component: ManagerDashboard,
+        meta: { needAuth: false, roles: [3] }
     },
     {
         path: "/dashboard/supervisor",
         name: "SupervisorDashboard",
         component: SupervisorDashboard,
+        meta: { needAuth: false, roles: [2] }
     },
     {
         path: "/chat",
         name: "Chat",
         component: ChatRoomView,
+        meta: { needAuth: false, roles: [0, 1, 2] }
     }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+    let userRole, isAuthenticated;
+    try {
+        userRole = await userApi.checkSession();
+        isAuthenticated = localStorage.getItem("logged");
+    } catch (e) {
+        isAuthenticated = false;
+        userRole = -1;
+        localStorage.removeItem('userName');
+        localStorage.removeItem('session');
+    }
+    localStorage.setItem("userRole", userRole);
+    if (to.meta.needAuth && !isAuthenticated) {
+        console.log("推到login", to.meta.needAuth, !isAuthenticated);
+        next('/login');
+    } else if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+        console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
+        next('/');
+    } else {
+        next();
+    }
 });
 
 export default router;
