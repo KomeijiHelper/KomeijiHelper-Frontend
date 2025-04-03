@@ -25,15 +25,34 @@
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref, watchEffect} from "vue";
+import {onMounted, onUnmounted, provide, ref, watchEffect} from "vue";
 import userApi from "@/api/userApi.js";
 
 const loggedIn = ref(localStorage.getItem("logged"));
-const userName = ref(localStorage.getItem("userName") || "");
+const userName = ref(localStorage.getItem("userName"));
 const dropdownOpen = ref(false);
-
+const globalWebsocket = ref(null);
+provide("globalWebsocket", globalWebsocket);
+if (localStorage.getItem("userName") !== null){
+  globalWebsocket.value = new WebSocket('ws://127.0.0.1:54950/ws?id='+ localStorage.getItem("userName"));
+  globalWebsocket.value.onopen = () =>{
+    console.log("Websocket opened");
+  }
+  globalWebsocket.value.onclose = () =>{
+    console.log("Websocket closed");
+  }
+  globalWebsocket.value.onerror = (error) => {
+    console.error('WebSocket错误:', error)
+    alert('连接错误')
+  }
+} else {
+  if (globalWebsocket.value !== null){
+    globalWebsocket.value.close()
+    globalWebsocket.value = null
+  }
+}
 watchEffect(() => {
-  userName.value = localStorage.getItem("userName") || "";
+  userName.value = localStorage.getItem("userName");
   loggedIn.value = localStorage.getItem("logged") === "true";
 });
 

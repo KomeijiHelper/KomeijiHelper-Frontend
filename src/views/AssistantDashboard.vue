@@ -19,6 +19,7 @@
 <script>
 import userApi from "@/api/userApi.js";
 import router from "@/router/index.js";
+import {inject} from "vue";
 
 export default {
   name: 'AssistantDashboard',
@@ -38,14 +39,9 @@ export default {
   },
   methods: {
     setupWebSocket() {
-      const id = localStorage.getItem('userName');
-      this.ws = new WebSocket('ws://127.0.0.1:54950/ws?id='+id)
-      
-      this.ws.onopen = () => {
-        console.log('WebSocket连接已建立')
-      }
+      this.ws = inject('globalWebsocket');
 
-      this.ws.onmessage = (event) => {
+      this.ws.value.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.type === 'chat_request') {
           const requestJson = JSON.parse(data.content)
@@ -58,15 +54,6 @@ export default {
           localStorage.setItem('chatAddress', newSocketAddress)
           router.push("/chat")
         }
-      }
-
-      this.ws.onerror = (error) => {
-        console.error('WebSocket错误:', error)
-        alert('连接错误')
-      }
-
-      this.ws.onclose = () => {
-        console.log('WebSocket连接已关闭')
       }
     },
     handleRequest(accept) {

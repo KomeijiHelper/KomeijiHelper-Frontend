@@ -20,6 +20,7 @@
 <script>
 import userApi from '@/api/userApi.js'
 import router from "@/router/index.js";
+import {inject} from "vue";
 
 export default {
   name: 'SelectConsultant',
@@ -47,25 +48,19 @@ export default {
         this.waitingForConfirm = true
         this.currentConsultantId = consultantId
         await userApi.consulting(consultantId)
-        this.setupWebSocket()
+        this.useWebSocket()
       } catch (error) {
         console.error('选择咨询师失败:', error)
         alert('选择咨询师失败')
         this.waitingForConfirm = false
       }
     },
-    setupWebSocket() {
-      const id = localStorage.getItem('userName');
-      this.ws = new WebSocket('ws://127.0.0.1:54950/ws?id='+id)
-      
-      this.ws.onopen = () => {
-        console.log('WebSocket连接已建立')
-        // 发送咨询师ID
-        let response = userApi.consulting(this.currentConsultantId)
-        console.log(response)
-      }
+    useWebSocket() {
+      this.ws = inject('globalWebsocket');
+      let response = userApi.consulting(this.currentConsultantId)
+      console.log(response)
 
-      this.ws.onmessage = (event) => {
+      this.ws.value.onmessage = (event) => {
         const data = JSON.parse(event.data)
         console.log(data)
         if (data.type === 'CONSULTANT_ACCEPTED') {
@@ -81,14 +76,14 @@ export default {
         }
       }
 
-      this.ws.onerror = (error) => {
+      this.ws.value.onerror = (error) => {
         console.error('WebSocket错误:', error)
         alert('连接错误')
         this.waitingForConfirm = false
       }
 
-      this.ws.onclose = () => {
-        console.log('WebSocket连接已关闭')
+      this.ws.value.onclose = () => {
+        console.log("Websocket closed");
         this.waitingForConfirm = false
       }
     },
