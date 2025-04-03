@@ -26,8 +26,8 @@ const passwordRef = ref(null);
 const isRegistering = ref(false);
 
 const handleLogin = async () => {
-  const username = usernameRef.valueOf().value.getValue();
-  const password = passwordRef.valueOf().value.getValue();
+  const username = usernameRef.value.getValue();
+  const password = passwordRef.value.getValue();
 
   if (!username || !password) {
     alert("请输入用户名和密码！");
@@ -39,7 +39,6 @@ const handleLogin = async () => {
   } else {
     await userApi.login(username, password)
   }
-  window.location.reload();
 };
 </script>
 
