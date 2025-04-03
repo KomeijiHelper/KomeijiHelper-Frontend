@@ -60,6 +60,7 @@ const routes = [
                 next("/")
             }
         },
+        meta: { needAuth: false, roles: [0, 1, 2, 3]}
     },
     {
         path: "/dashboard/assistant",
@@ -106,10 +107,12 @@ router.beforeEach(async (to, from, next) => {
     } catch (e) {
         isAuthenticated = false;
         userRole = -1;
+        localStorage.setItem("logged", false);
         localStorage.removeItem('userName');
         localStorage.removeItem('session');
     }
     localStorage.setItem("userRole", userRole);
+    console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
         console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
         next('/login');
@@ -117,7 +120,8 @@ router.beforeEach(async (to, from, next) => {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
         next('/');
     } else {
-        next();
+        console.log("无处理")
+        next()
     }
 });
 
