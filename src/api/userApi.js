@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 const apiClient = axios.create({
     baseURL: 'http://127.0.0.1:8081', // 基础 URL
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
     },
     withCredentials: true,
 });
@@ -42,6 +42,8 @@ export default {
         };
         const result = await apiClient.post('/user/login', postJson);
         localStorage.setItem("userName", username)
+        localStorage.setItem("logged", true);
+        window.location.reload();
         return result;
     },
 
@@ -67,22 +69,25 @@ export default {
     },
 
     async checkSession() {
-        await apiClient.get('/user/checkSession')
-        return true;
+        return (await apiClient.get('/user/checkSession')).data
     },
 
     async logout() {
         await apiClient.get('/user/logout');
+        localStorage.removeItem("userName");
+        localStorage.setItem("logged", false);
+        window.location.reload();
     },
 
-    async selectConsultant(consultantId) {
+    consulting(consultingId) {
+        return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
+    },
+
+    responseToRequest(patientId, accept){
         const postJson = {
-            consultantId: consultantId,
-        };
-        return await apiClient.post('/consultant/select', postJson);
-    },
-
-    async getUsers(){
-        return await apiClient.get('/user/getUsers');
+            patientId: patientId,
+            accept: accept,
+        }
+        return apiClient.post('/consult/response_request', postJson);
     }
 };

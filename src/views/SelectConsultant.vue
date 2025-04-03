@@ -19,6 +19,7 @@
 
 <script>
 import userApi from '@/api/userApi.js'
+import router from "@/router/index.js";
 
 export default {
   name: 'SelectConsultant',
@@ -32,8 +33,9 @@ export default {
   },
   async created() {
     try {
-      const response = await userApi.getUsersByUserClass(1)
-      this.consultants = response.data.data
+      const response = await userApi.getUsersByUserClass(1);
+      const parsedConsultantsArray = JSON.parse(response.data.data);
+      this.consultants = parsedConsultantsArray.map(item => item.userName);
     } catch (error) {
       console.error('获取咨询师列表失败:', error)
       alert('获取咨询师列表失败')
@@ -44,7 +46,7 @@ export default {
       try {
         this.waitingForConfirm = true
         this.currentConsultantId = consultantId
-        await userApi.selectConsultant(consultantId)
+        await userApi.consulting(consultantId)
         this.setupWebSocket()
       } catch (error) {
         console.error('选择咨询师失败:', error)
@@ -59,20 +61,23 @@ export default {
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
         // 发送咨询师ID
-        this.ws.send(JSON.stringify({
-          type: 'CONSULTANT_REQUEST',
-          consultantId: this.currentConsultantId
-        }))
+        let response = userApi.consulting(this.currentConsultantId)
+        console.log(response)
       }
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
         if (data.type === 'CONSULTANT_ACCEPTED') {
           alert('咨询师已接受请求')
           this.$router.push('/chat')
         } else if (data.type === 'CONSULTANT_REJECTED') {
           alert('咨询师已拒绝请求')
           this.waitingForConfirm = false
+        } else if (data.type === 'chat_connect') {
+          const newSocketAddress = "ws://127.0.0.1:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
+          localStorage.setItem('chatAddress', newSocketAddress)
+          router.push("/chat")
         }
       }
 

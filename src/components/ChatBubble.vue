@@ -2,16 +2,10 @@
     <div class="chat-bubble" :class="{ 'chat-bubble--self': isSelf }">
         <!-- TODO: VaSkeleton -->
         <VaAvatar class="chat-avatar" :src="avatarSrc" :fallback-text="avatarName" :style="avatarStyle"
-            :color="isSelf ? selfAvatarColor : otherAvatarColor" :text-color="textColor"></VaAvatar>
+            :color="isSelf ? selfAvatarColor : otherAvatarColor" :text-color="textColor" ></VaAvatar>
         <div class="chat-content">
             <div class="chat-message">
-                <!-- TODO -->
-                <template v-if="type === MessageType.Image">
-                    <img :src="content" />
-                </template>
-                <template v-else-if="type === MessageType.Text">
-                    <slot>{{ content }}</slot>
-                </template>
+                <slot></slot>
             </div>
             <div class="chat-time">{{ time }}</div>
         </div>
@@ -19,48 +13,33 @@
 </template>
 
 <script setup>
-import { VaAvatar,VaImage } from "vuestic-ui"
-import { computed, onMounted } from "vue"
-import { ref } from "vue"
-import MessageType from "./MessageType";
+import {VaAvatar} from "vuestic-ui"
+import {computed} from "vue"
+import {ref} from "vue"
+
+const otherAvatarColor=ref("#F4A460");
+const selfAvatarColor=ref("#1E90FF");
+const textColor=ref("#FFFFFF");
 
 const props = defineProps({
-    avatarSrc: {
-        type: String,
+    avatarSrc:{
+        type:String,
         default: ""
     },
     avatarName: {
-        type: String,
+        type:String,
         required: true
     },
     isSelf: {
-        type: Boolean,
+        type:Boolean,
     },
-    time: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true,
-    },
-    type: {
-        type: String,
-        required: true,
-        default: MessageType.Text
+    time:{
+        type:String,
+        required:true
     }
 });
 
-
-const otherAvatarColor = ref("#F4A460");
-const selfAvatarColor = ref("#1E90FF");
-const textColor = ref("#FFFFFF");
-
-onMounted(() => {
-    console.log(props.type);
-})
-
-const avatarStyle = computed(() => {
+const avatarStyle = computed(()=> {
     const maxSize = 20;
     const minSize = 5;
     const size = Math.max(minSize, maxSize - (props.avatarName.length * 0.75));
