@@ -29,6 +29,9 @@ const routes = [
                 console.log("已登录，进入dashboard");
                 next("/dashboard");
             }
+            else {
+                next()
+            }
         }
     },
     {
