@@ -25,7 +25,7 @@ const routes = [
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
             const logged = localStorage.getItem("logged");
-            if (logged) {
+            if (logged === "true") {
                 console.log("已登录，进入dashboard");
                 next("/dashboard");
             }
@@ -110,8 +110,8 @@ router.beforeEach(async (to, from, next) => {
         localStorage.removeItem('session');
     }
     localStorage.setItem("userRole", userRole);
-    if (to.meta.needAuth && !isAuthenticated) {
-        console.log("推到login", to.meta.needAuth, !isAuthenticated);
+    if (to.meta.needAuth && isAuthenticated === "false") {
+        console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
         next('/login');
     } else if (to.meta.roles && !to.meta.roles.includes(userRole)) {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
