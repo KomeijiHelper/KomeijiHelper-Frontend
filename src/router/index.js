@@ -8,8 +8,12 @@ import AssistantDashboard from "@/views/AssistantDashboard.vue";
 import NormalDashboard from "@/views/NormalDashboard.vue";
 import ManagerDashboard from "@/views/ManagerDashboard.vue";
 import SupervisorDashboard from "@/views/SupervisorDashboard.vue";
+<<<<<<< HEAD
+import ChatRoom from "@/views/Chat/ChatRoomView.vue";
+=======
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
+>>>>>>> dc669678173e2294296d27c61f23e6b0379024f0
 
 const routes = [
     {
@@ -87,6 +91,13 @@ const routes = [
         path: "/dashboard/supervisor",
         name: "SupervisorDashboard",
         component: SupervisorDashboard,
+<<<<<<< HEAD
+    },
+    {
+        path: "/dashboard/chatroom",
+        name: "ChatRoomDashboard",
+        component: ChatRoom,
+=======
         meta: { needAuth: false, roles: [2] }
     },
     {
@@ -94,6 +105,7 @@ const routes = [
         name: "Chat",
         component: ChatRoomView,
         meta: { needAuth: false, roles: [0, 1, 2] }
+>>>>>>> dc669678173e2294296d27c61f23e6b0379024f0
     }
 ];
 
