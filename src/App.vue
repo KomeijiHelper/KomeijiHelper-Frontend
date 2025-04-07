@@ -1,36 +1,42 @@
 <template>
-  <nav class="navbar">
+   <nav class="navbar">
     <router-link to="/" class="nav-link">首页</router-link>
     <span class="separator">|</span>
     <router-link to="/about" class="nav-link">关于</router-link>
-
-    <!-- 用户头像 & 下拉菜单 -->
-    <div class="user-dropdown" v-if="loggedIn" @click="toggleDropdown">
-      <div class="user-icon">{{ userName.charAt(0).toUpperCase() }}</div>
-      <div v-if="dropdownOpen" class="dropdown-menu">
-        <router-link :to="`/user/${userName}`" class="dropdown-item">用户主页</router-link>
-        <div class="dropdown-item logout" @click="logout">登出</div>
-      </div>
-    </div>
-
-    <!-- 登录按钮 -->
-    <div class="user-dropdown" v-else>
-      <router-link to="/login" class="user-icon">
-        <i class="fas fa-sign-in-alt"></i>
-      </router-link>
-    </div>
+    <NavBarActions :avatar-name="userName" class="user-dropdown"></NavBarActions>
 
   </nav>
-  <router-view></router-view>
+  <main>
+    <nav class="flex items-center">
+      <VaBreadcrumbs v-if="loggedIn">
+      <VaBreadcrumbsItem label="Home" to="/dashboard"/>
+      <VaBreadcrumbsItem v-for="item in breadcrumbs" :label="item.label" :to="item.to"></VaBreadcrumbsItem>
+      </VaBreadcrumbs>
+    </nav>
+    <router-view></router-view>
+  </main>
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref, watchEffect} from "vue";
+import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import userApi from "@/api/userApi.js";
+import NavBarActions from "./components/navbar/NavBarActions.vue";
+import { useRoute} from "vue-router";
 
 const loggedIn = ref(localStorage.getItem("logged"));
 const userName = ref(localStorage.getItem("userName") || "");
 const dropdownOpen = ref(false);
+
+const route = useRoute();
+
+const breadcrumbs = computed(()=> {
+  const matched = route.matched.filter(r=>r.name != 'Home')
+  return matched.map((r,index)=>({
+    label:r.name,
+    to:index < matched.length-1 ? {name:r.name} : undefined,
+  }))
+});
+
 
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
@@ -66,6 +72,12 @@ function logout() {
 </script>
 
 <style scoped>
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
 .navbar {
   background-color: #333;
   padding: 10px 20px;
@@ -163,5 +175,4 @@ function logout() {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 </style>
