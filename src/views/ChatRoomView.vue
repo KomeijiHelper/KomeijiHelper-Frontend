@@ -6,7 +6,7 @@
                 <div class="chat-container">
                     <VaScrollContainer :items="chatBubbleList" class="chat-messages" ref="scroller" gradient>
                         <ChatBubble v-for="(item) in chatBubbleList" :avatar-name="item.avatarName"
-                            :avatar-src="item.avatarSrc" :is-self="item.isSelf" :time="item.time">{{ item.content }}
+                            :avatar-src="item.avatarSrc" :is-self="item.isSelf" :time="item.time" :type="item.type" :content="item.content">
                         </ChatBubble>
                     </VaScrollContainer>
                     <div class="send-part">
@@ -41,6 +41,7 @@
 import { ref, onMounted, watch, nextTick, useTemplateRef } from 'vue'
 import { VaTextarea, VaLayout, VaCard, VaButton, VaImage} from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
+import MessageType from './Chat/widgets/MessageType.js';
 
 const messageContent = ref('');
 const showExtensions = ref(false);
