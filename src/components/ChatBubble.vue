@@ -22,7 +22,7 @@
 import { VaAvatar,VaImage } from "vuestic-ui"
 import { computed, onMounted } from "vue"
 import { ref } from "vue"
-import MessageType from "./MessageType";
+import MessageType from "../views/Chat/widgets/MessageType.js";
 
 const props = defineProps({
   avatarSrc: {

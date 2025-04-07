@@ -89,5 +89,9 @@ export default {
             accept: accept,
         }
         return apiClient.post('/consult/response_request', postJson);
+    },
+
+    submitUserChange(userJson){
+        return apiClient.post('/user/changeInfo', userJson);
     }
 };
