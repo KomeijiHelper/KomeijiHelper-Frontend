@@ -1,6 +1,7 @@
 export default {
     presets: {
       light: {
+        textHeader: '#FFFFFF',
         backgroundPrimary: '#F4F6F8',
         backgroundSecondary: '#FFFFFF',
         backgroundCardPrimary: '#F7F9F9',
