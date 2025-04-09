@@ -54,6 +54,7 @@ const chatBubbleList = reactive([])
 
 onMounted(() => {
     websocket = new WebSocket(localStorage.getItem('chatAddress'));
+    localStorage.removeItem('chatAddress');
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       const content = JSON.parse(data.content);
