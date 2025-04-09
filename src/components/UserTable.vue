@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import userApi from "@/api/userApi.js";
-import {VaButton, VaInput, VaSelect} from "vuestic-ui";
+import {VaButton, VaCard, VaCardContent, VaCardTitle, VaContent, VaInput, VaSelect} from "vuestic-ui";
 
 const users = ref([]);
 const editableUsers = ref([]);
