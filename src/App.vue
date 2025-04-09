@@ -28,7 +28,7 @@ import {VaBreadcrumbs, VaBreadcrumbsItem} from "vuestic-ui";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
-const displayName = ref(userName.value);
+const displayName = ref(localStorage.getItem("displayUserRole") + userName.value);
 
 const route = useRoute();
 
@@ -43,16 +43,7 @@ const breadcrumbs = computed(()=> {
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
   loggedIn.value = localStorage.getItem("logged") === "true";
-  let userRole = localStorage.getItem("userRole");
-  if (userRole === '0'){
-    displayName.value = "普通用户" + userName.value;
-  } else if (userRole === '1'){
-    displayName.value = "咨询师" + userName.value;
-  } else if (userRole === '2'){
-    displayName.value = "督导" + userName.value;
-  } else if (userRole === '3'){
-    displayName.value = "管理员" + userName.value;
-  }
+  displayName.value = localStorage.getItem("displayUserRole") + userName.value;
 });
 
 </script>
