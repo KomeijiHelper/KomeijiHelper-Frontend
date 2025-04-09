@@ -5,7 +5,11 @@
     <router-link to="/about" class="nav-link">关于</router-link>
      <span class="separator">|</span>
      <router-link to="/workbench" class="nav-link">工作台</router-link>
-    <NavBarActions :avatar-name="displayName" class="user-dropdown"></NavBarActions>
+
+     <div class="navbar-right">
+       <va-content class="user-role">{{ displayName }}</va-content>
+       <NavBarActions :avatar-name="userName" class="user-dropdown" />
+     </div>
 
   </nav>
   <main>
@@ -24,11 +28,11 @@ import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
 import { useRoute} from "vue-router";
-import {VaBreadcrumbs, VaBreadcrumbsItem} from "vuestic-ui";
+import {VaBreadcrumbs, VaBreadcrumbsItem, VaContent} from "vuestic-ui";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
-const displayName = ref(localStorage.getItem("displayUserRole") + userName.value);
+const displayName = ref(localStorage.getItem("displayUserRole"));
 
 const route = useRoute();
 
@@ -43,7 +47,7 @@ const breadcrumbs = computed(()=> {
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
   loggedIn.value = localStorage.getItem("logged") === "true";
-  displayName.value = localStorage.getItem("displayUserRole") + userName.value;
+  displayName.value = localStorage.getItem("displayUserRole");
 });
 
 </script>
@@ -86,9 +90,19 @@ body,
   margin: 0 10px;
 }
 
-.user-dropdown {
+.navbar-right {
   position: absolute;
   right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 2vw; /* 以百分比控制它们之间的间距 */
+  min-width: 20%; /* 你可以按需调整宽度 */
+  justify-content: flex-end;
+}
+
+.user-dropdown,
+.user-role {
+  color: white;
   cursor: pointer;
 }
 

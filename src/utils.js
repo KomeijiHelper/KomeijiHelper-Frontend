@@ -11,6 +11,7 @@ const ClearLocalStorage = () => {
     localStorage.removeItem('session');
     localStorage.removeItem('userRole');
     localStorage.removeItem('chatWith');
+    localStorage.removeItem('displayUserRole');
 }
 
 export {ProxyEnum, ClearLocalStorage};
