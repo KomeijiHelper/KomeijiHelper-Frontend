@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from "@/router/index.js";
+import { ClearLocalStorage } from "@/utils.js";
 
 const apiClient = axios.create({
     baseURL: 'http://127.0.0.1:8081', // 基础 URL
@@ -74,7 +75,7 @@ export default {
 
     async logout() {
         await apiClient.get('/user/logout');
-        localStorage.removeItem("userName");
+        ClearLocalStorage();
         localStorage.setItem("logged", false);
         window.location.reload();
     },

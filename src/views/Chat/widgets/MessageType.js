@@ -1,4 +1,4 @@
-import ProxyEnum from "@/utils";
+import { ProxyEnum } from "@/utils";
 const MessageType = ProxyEnum({
     Text:'text',
     Image:'image'

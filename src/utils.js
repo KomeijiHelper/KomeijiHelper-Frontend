@@ -6,4 +6,11 @@ const ProxyEnum = (baseEnum)=> {
   })
 }
 
-export default ProxyEnum;
+const ClearLocalStorage = () => {
+    localStorage.removeItem('userName');
+    localStorage.removeItem('session');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('chatWith');
+}
+
+export {ProxyEnum, ClearLocalStorage};

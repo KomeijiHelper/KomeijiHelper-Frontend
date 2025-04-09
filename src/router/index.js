@@ -9,6 +9,7 @@ import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
 import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
+import {ClearLocalStorage} from "@/utils.js";
 
 const routes = [
     {
@@ -99,13 +100,13 @@ router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
     try {
         userRole = await userApi.checkSession();
+        if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
         isAuthenticated = localStorage.getItem("logged");
     } catch (e) {
         isAuthenticated = false;
         userRole = -1;
         localStorage.setItem("logged", false);
-        localStorage.removeItem('userName');
-        localStorage.removeItem('session');
+        ClearLocalStorage();
     }
     localStorage.setItem("userRole", userRole);
     console.log("from", from.path, "to", to.path);

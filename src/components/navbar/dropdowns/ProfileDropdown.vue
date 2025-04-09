@@ -38,8 +38,6 @@ import { ref } from 'vue';
 import { VaButton } from 'vuestic-ui/web-components';
 import userApi from '@/api/userApi';
 
-
-
 defineProps({
     avatarName: String,
 });
