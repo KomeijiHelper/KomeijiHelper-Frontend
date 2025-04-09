@@ -2,9 +2,9 @@
   <div class="login-container">
     <h2>登录</h2>
 
-    <InputBlank ref="usernameRef" :x="50" :y="100" placeholder="用户名" />
+    <InputBlank ref="usernameRef" placeholder="用户名" />
 
-    <InputBlank ref="passwordRef" :x="50" :y="150" placeholder="密码" type="password" />
+    <InputBlank ref="passwordRef" placeholder="密码" type="password" />
 
     <button class="login-button" @click="handleLogin">登录</button>
 
@@ -52,13 +52,13 @@ h2 {
 
 .login-button {
   width: 100%;
-  margin-top: 160px;
   padding: 10px;
   background: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .login-button:hover {
