@@ -3,6 +3,8 @@
     <router-link to="/" class="nav-link">首页</router-link>
     <span class="separator">|</span>
     <router-link to="/about" class="nav-link">关于</router-link>
+     <span class="separator">|</span>
+     <router-link to="/dashboard" class="nav-link">工作台</router-link>
     <NavBarActions :avatar-name="userName" class="user-dropdown"></NavBarActions>
 
   </nav>
@@ -30,7 +32,7 @@ const dropdownOpen = ref(false);
 const route = useRoute();
 
 const breadcrumbs = computed(()=> {
-  const matched = route.matched.filter(r=>r.name != 'Home')
+  const matched = route.matched.filter(r=>r.name !== 'Home')
   return matched.map((r,index)=>({
     label:r.name,
     to:index < matched.length-1 ? {name:r.name} : undefined,
@@ -64,11 +66,6 @@ function closeDropdownOnOutsideClick(event) {
   }
 }
 
-// 登出逻辑
-function logout() {
-  userApi.logout();
-  dropdownOpen.value = false;
-}
 </script>
 
 <style scoped>
