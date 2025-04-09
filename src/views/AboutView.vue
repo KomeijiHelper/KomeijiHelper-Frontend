@@ -26,6 +26,7 @@ const handleButtonClick1 = async () => {
 
 <template>
   <div class="about-group">
+    <img src="https://raw.githubusercontent.com/KomeijiHelper/KomeijiHelper-Frontend/refs/heads/master/src/assets/logo.svg" class="link-icon"  alt=""/>
     <h1>关于我们</h1>
     <p class="description">
       我们是 <strong>软件开发实践小组2</strong>。<br>
