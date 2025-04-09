@@ -2,13 +2,13 @@
   <div class="register-container">
     <h2>注册</h2>
 
-    <InputBlank ref="usernameRef" :x="50" :y="100" placeholder="用户名" />
+    <InputBlank ref="usernameRef" placeholder="用户名" />
 
-    <InputBlank ref="passwordRef" :x="50" :y="150" placeholder="密码" type="password" />
+    <InputBlank ref="passwordRef" placeholder="密码" type="password" />
 
-    <InputBlank ref="passwordRepeatRef" :x="50" :y="150" placeholder="请重复你的密码" type="password" />
+    <InputBlank ref="passwordRepeatRef" placeholder="请重复你的密码" type="password" />
 
-    <button class="login-button" @click="handleRegister">登录</button>
+    <button class="register-button" @click="handleRegister">注册</button>
 
     <router-link class="login-link" to="/login">已经有账号了？点我去登录</router-link>
   </div>
@@ -59,18 +59,18 @@ h2 {
   text-align: center;
 }
 
-.login-button {
+.register-button {
   width: 100%;
-  margin-top: 160px;
   padding: 10px;
   background: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-.login-button:hover {
+.register-button:hover {
   background: #0056b3;
 }
 
