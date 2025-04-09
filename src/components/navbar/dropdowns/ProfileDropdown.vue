@@ -48,13 +48,6 @@ function logout() {
     userApi.logout();
 }
 
-
-function valid() {
-    return avatarName != '';
-}
-
-
-
 const options = ref([
     {
         name: 'account',
@@ -104,8 +97,6 @@ const options = ref([
         ]
     }
 ]);
-
-const isShown = ref(false);
 
 const resolveLinkAttribute = (item) => {
     return item.click ? item.click : {}
