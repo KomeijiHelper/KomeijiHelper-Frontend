@@ -25,8 +25,8 @@ const routes = [
         component: LoginView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
@@ -41,8 +41,8 @@ const routes = [
         component: RegisterView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
