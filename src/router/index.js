@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/views/LoginView.vue";
 import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
-import SelectConsultant from "@/views/SelectConsultant.vue";
 import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
 import NormalWorkbench from "@/views/NormalWorkbench.vue";
 import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
@@ -41,18 +40,12 @@ const routes = [
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
     },
     {
-        path: "/select-consultant",
-        name: "SelectConsultant",
-        component: SelectConsultant,
-        meta: { needAuth: false, roles: [0]}
-    },
-    {
         path: "/workbench",
         name: "Workbench",
         beforeEnter: (to, from, next) => {
             const userRole = localStorage.getItem("userRole") || "-1";
             if (userRole === "0") {
-                next("/select-consultant");
+                next("/workbench/normal");
             } else if (userRole === "1") {
                 next("/workbench/assistant");
             } else if (userRole === "2") {

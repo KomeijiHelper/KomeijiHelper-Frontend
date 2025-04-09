@@ -49,7 +49,7 @@ const submitUser = async (userIndex) => {
           :per-page="5"
       >
         <template #cell(userName)="{ rowIndex }">
-          <va-text>{{ editableUsers[rowIndex].userName }}</va-text>
+          <va-content>{{ editableUsers[rowIndex].userName }}</va-content>
         </template>
 
         <template #cell(password)="{ rowIndex }">
