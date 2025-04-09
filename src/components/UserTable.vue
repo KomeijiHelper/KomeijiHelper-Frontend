@@ -58,6 +58,15 @@ const pagedUsers = computed(() => {
 
 // 页数
 const pageCount = computed(() => Math.ceil(filteredUsers.value.length / perPage.value));
+
+// 设置每一列的固定宽度
+const columnWidths = {
+  id: '100px',
+  userName: '150px',
+  password: '200px',
+  userClass: '150px',
+  operation: '100px',
+};
 </script>
 
 <template>
@@ -69,11 +78,11 @@ const pageCount = computed(() => Math.ceil(filteredUsers.value.length / perPage.
       <va-data-table
           :items="pagedUsers"
           :columns="[
-          { key: 'id', label: 'ID' },
-          { key: 'userName', label: '用户名' },
-          { key: 'password', label: '密码' },
-          { key: 'userClass', label: '身份类别', sortable: true },
-          { key: 'operation', label: '操作' },
+          { key: 'id', label: 'ID', style: { width: columnWidths.id } },
+          { key: 'userName', label: '用户名', style: { width: columnWidths.userName } },
+          { key: 'password', label: '密码', style: { width: columnWidths.password } },
+          { key: 'userClass', label: '身份类别', sortable: true, style: { width: columnWidths.userClass } },
+          { key: 'operation', label: '操作', style: { width: columnWidths.operation } },
         ]"
           :filter="''"
       >
