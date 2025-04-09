@@ -115,7 +115,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
-    const logged = localStorage.getItem("logged") === "true";
+    const oldUserRole = localStorage.getItem("userRole");
     try {
         userRole = await userApi.checkSession();
         if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
@@ -126,9 +126,9 @@ router.beforeEach(async (to, from, next) => {
         localStorage.setItem("logged", false);
         ClearLocalStorage();
     }
-    if (logged !== isAuthenticated) { window.location.reload(); }
     localStorage.setItem("userRole", userRole);
     localStorage.setItem("displayUserRole", userRole === 0?"普通用户":userRole === 1?"咨询师":userRole === 2?"督导":userRole===3?"管理员":"");
+    if (userRole.toString() !== oldUserRole) { console.log(userRole, "!=", oldUserRole);window.location.reload(); }
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
         console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
