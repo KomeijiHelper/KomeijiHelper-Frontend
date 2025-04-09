@@ -4,14 +4,14 @@
     <span class="separator">|</span>
     <router-link to="/about" class="nav-link">关于</router-link>
      <span class="separator">|</span>
-     <router-link to="/dashboard" class="nav-link">工作台</router-link>
+     <router-link to="/workbench" class="nav-link">工作台</router-link>
     <NavBarActions :avatar-name="userName" class="user-dropdown"></NavBarActions>
 
   </nav>
   <main>
     <nav class="flex items-center">
       <VaBreadcrumbs v-if="loggedIn">
-      <VaBreadcrumbsItem label="Home" to="/dashboard"/>
+      <VaBreadcrumbsItem label="Home" to="/workbench"/>
       <VaBreadcrumbsItem v-for="item in breadcrumbs" :label="item.label" :to="item.to"></VaBreadcrumbsItem>
       </VaBreadcrumbs>
     </nav>

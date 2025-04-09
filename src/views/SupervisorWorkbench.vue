@@ -1,8 +1,8 @@
 <template>
-  <div class="assistant-dashboard">
-    <h2>咨询师工作台</h2>
+  <div class="supervisor-workbench">
+    <h2>督导工作台</h2>
     <div v-if="currentRequest" class="request-panel">
-      <h3>新的咨询请求</h3>
+      <h3>新的求助请求</h3>
       <p>用户ID: {{ currentRequest.userId }}</p>
       <p>消息: {{currentRequest.message}}</p>
       <div class="button-group">
@@ -21,7 +21,7 @@ import userApi from "@/api/userApi.js";
 import router from "@/router/index.js";
 
 export default {
-  name: 'AssistantDashboard',
+  name: 'SupervisorWorkbench',
   data() {
     return {
       ws: null,
@@ -40,7 +40,7 @@ export default {
     setupWebSocket() {
       const id = localStorage.getItem('userName');
       this.ws = new WebSocket('ws://127.0.0.1:54950/ws?id='+id)
-      
+
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
       }
@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style scoped>
-.assistant-dashboard {
+.supervisor-workbench {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;

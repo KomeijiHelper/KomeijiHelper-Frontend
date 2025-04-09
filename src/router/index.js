@@ -4,10 +4,10 @@ import LoginView from "@/views/LoginView.vue";
 import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
 import SelectConsultant from "@/views/SelectConsultant.vue";
-import AssistantDashboard from "@/views/AssistantDashboard.vue";
-import NormalDashboard from "@/views/NormalDashboard.vue";
-import ManagerDashboard from "@/views/ManagerDashboard.vue";
-import SupervisorDashboard from "@/views/SupervisorDashboard.vue";
+import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
+import NormalWorkbench from "@/views/NormalWorkbench.vue";
+import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
+import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
 
@@ -26,8 +26,8 @@ const routes = [
         beforeEnter: (to, from, next) => {
             const logged = localStorage.getItem("logged");
             if (logged === "true") {
-                console.log("已登录，进入dashboard");
-                next("/dashboard");
+                console.log("已登录，进入workbench");
+                next("/workbench");
             }
             else {
                 next()
@@ -47,18 +47,18 @@ const routes = [
         meta: { needAuth: false, roles: [0]}
     },
     {
-        path: "/dashboard",
-        name: "Dashboard",
+        path: "/workbench",
+        name: "Workbench",
         beforeEnter: (to, from, next) => {
             const userRole = localStorage.getItem("userRole") || "-1";
             if (userRole === "0") {
                 next("/select-consultant");
             } else if (userRole === "1") {
-                next("/dashboard/assistant");
+                next("/workbench/assistant");
             } else if (userRole === "2") {
-                next("/dashboard/supervisor");
+                next("/workbench/supervisor");
             } else if (userRole === "3") {
-                next("/dashboard/manager");
+                next("/workbench/manager");
             } else {
                 next("/")
             }
@@ -66,27 +66,27 @@ const routes = [
         meta: { needAuth: false, roles: [0, 1, 2, 3]}
     },
     {
-        path: "/dashboard/assistant",
-        name: "assistantDashboard",
-        component: AssistantDashboard,
+        path: "/workbench/assistant",
+        name: "assistantWorkbench",
+        component: AssistantWorkbench,
         meta: { needAuth: false, roles: [1] }
     },
     {
-        path: "/dashboard/normal",
-        name: "NormalDashboard",
-        component: NormalDashboard,
+        path: "/workbench/normal",
+        name: "NormalWorkbench",
+        component: NormalWorkbench,
         meta: { needAuth: false, roles: [0] }
     },
     {
-        path: "/dashboard/manager",
-        name: "ManagerDashboard",
-        component: ManagerDashboard,
+        path: "/workbench/manager",
+        name: "ManagerWorkbench",
+        component: ManagerWorkbench,
         meta: { needAuth: false, roles: [3] }
     },
     {
-        path: "/dashboard/supervisor",
-        name: "SupervisorDashboard",
-        component: SupervisorDashboard,
+        path: "/workbench/supervisor",
+        name: "SupervisorWorkbench",
+        component: SupervisorWorkbench,
         meta: { needAuth: false, roles: [2] }
     },
     {
