@@ -38,15 +38,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, useTemplateRef, reactive } from 'vue'
+import {ref, onMounted, watch, nextTick, useTemplateRef, reactive, onUnmounted} from 'vue'
 import { VaTextarea, VaLayout, VaCard, VaButton, VaImage} from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
+import router from "@/router/index.js";
 
 const messageContent = ref('');
 const showExtensions = ref(false);
 const scroller = useTemplateRef("scroller");
 let websocket;
+let leave = false;
 
 const chatBubbleList = reactive([])
 
@@ -64,8 +66,19 @@ onMounted(() => {
 
     websocket.onclose = () => {
       console.log("WebSocket disconnected");
+      if (!leave){
+        alert("对方已退出");
+        router.push("/workbench")
+      } else {
+        console.log("主动退出")
+      }
     };
 });
+
+onUnmounted(() => {
+  leave = true;
+  websocket.close();
+})
 
 const sendMessage = async (event) => {
     if (event.repeat) return;

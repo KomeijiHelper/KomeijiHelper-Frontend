@@ -25,8 +25,8 @@ const routes = [
         component: LoginView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
@@ -41,8 +41,8 @@ const routes = [
         component: RegisterView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
@@ -115,16 +115,18 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
+    const logged = localStorage.getItem("logged") === "true";
     try {
         userRole = await userApi.checkSession();
         if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
-        isAuthenticated = localStorage.getItem("logged");
+        isAuthenticated = localStorage.getItem("logged") === "true";
     } catch (e) {
         isAuthenticated = false;
         userRole = -1;
         localStorage.setItem("logged", false);
         ClearLocalStorage();
     }
+    if (logged !== isAuthenticated) { window.location.reload(); }
     localStorage.setItem("userRole", userRole);
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
