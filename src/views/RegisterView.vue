@@ -1,14 +1,16 @@
 <template>
-  <div class="login-container">
-    <h2>登录</h2>
+  <div class="register-container">
+    <h2>注册</h2>
 
     <InputBlank ref="usernameRef" :x="50" :y="100" placeholder="用户名" />
 
     <InputBlank ref="passwordRef" :x="50" :y="150" placeholder="密码" type="password" />
 
-    <button class="login-button" @click="handleLogin">登录</button>
+    <InputBlank ref="passwordRepeatRef" :x="50" :y="150" placeholder="请重复你的密码" type="password" />
 
-    <router-link class="register-link" to="/register">没有账号？点我去注册</router-link>
+    <button class="login-button" @click="handleRegister">登录</button>
+
+    <router-link class="login-link" to="/login">已经有账号了？点我去登录</router-link>
   </div>
 </template>
 
@@ -19,22 +21,29 @@ import userApi from "@/api/userApi.js";
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
+const passwordRepeatRef = ref(null);
 
-const handleLogin = async () => {
+const handleRegister = async () => {
   const username = usernameRef.value.getValue();
   const password = passwordRef.value.getValue();
+  const passwordRepeat = passwordRef.value.getValue();
 
-  if (!username || !password) {
+  if (!username || !password || !passwordRepeat) {
     alert("请输入用户名和密码！");
     return;
   }
 
-  await userApi.login(username, password);
+  if (passwordRepeat !== password) {
+    alert("密码似乎不一致呢");
+    return;
+  }
+
+  await userApi.register(username, password);
 };
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
   width: 300px;
   top: 50%;
   left: 50%;
@@ -65,7 +74,7 @@ h2 {
   background: #0056b3;
 }
 
-.register-link {
+.login-link {
   display: block;
   margin-top: 20px;
   text-align: center;
@@ -73,7 +82,7 @@ h2 {
   text-decoration: none;
 }
 
-.register-link:hover {
+.login-link:hover {
   text-decoration: underline;
 }
 

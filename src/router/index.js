@@ -10,6 +10,7 @@ import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
 import {ClearLocalStorage} from "@/utils.js";
+import RegisterView from "@/views/RegisterView.vue";
 
 const routes = [
     {
@@ -22,6 +23,22 @@ const routes = [
         path: "/login",
         name: "Login",
         component: LoginView,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
+        beforeEnter: (to, from, next) => {
+            const logged = localStorage.getItem("logged");
+            if (logged === "true") {
+                console.log("已登录，进入workbench");
+                next("/workbench");
+            }
+            else {
+                next()
+            }
+        }
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: RegisterView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
             const logged = localStorage.getItem("logged");
