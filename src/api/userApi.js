@@ -86,6 +86,10 @@ export default {
         return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
     },
 
+    cancelConsulting(){
+        return apiClient.get('/consult/cancel_request');
+    },
+
     responseToRequest(patientId, accept){
         const postJson = {
             patientId: patientId,

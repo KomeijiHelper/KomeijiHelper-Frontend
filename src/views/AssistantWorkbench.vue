@@ -53,6 +53,7 @@ export default {
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
         if (data.type === 'chat_request') {
           const requestJson = JSON.parse(data.content)
           this.requests.push({
@@ -75,10 +76,14 @@ export default {
         console.log('WebSocket连接已关闭')
       }
     },
-    handleRequest(accept) {
-      if (!this.currentRequest) return
-      userApi.responseToRequest(this.currentRequest.userId, accept)
-      this.currentRequest = null
+    handleRequest(accept, index) {
+      const request = this.requests[index]
+      if (!request) return
+
+      userApi.responseToRequest(request.userId, accept)
+      if (accept) {
+      }
+      this.requests.splice(index, 1)
     }
   }
 }

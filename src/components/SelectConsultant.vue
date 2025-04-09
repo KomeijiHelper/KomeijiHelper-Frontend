@@ -99,6 +99,7 @@ export default {
       if (this.ws) {
         this.ws.close()
       }
+      userApi.cancelConsulting()
       this.waitingForConfirm = false
       this.currentConsultantId = null
     }
