@@ -128,7 +128,7 @@ router.beforeEach(async (to, from, next) => {
     }
     if (logged !== isAuthenticated) { window.location.reload(); }
     localStorage.setItem("userRole", userRole);
-    localStorage.setItem("displayUserRole", userRole === '0'?"普通用户":userRole === '1'?"咨询师":userRole === '2'?"督导":userRole==='3'?"管理员":"");
+    localStorage.setItem("displayUserRole", userRole === 0?"普通用户":userRole === 1?"咨询师":userRole === 2?"督导":userRole===3?"管理员":"");
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
         console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
