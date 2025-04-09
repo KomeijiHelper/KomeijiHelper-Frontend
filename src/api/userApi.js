@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from "@/router/index.js";
+import { ClearLocalStorage } from "@/utils.js";
 
 const apiClient = axios.create({
     baseURL: '/api', // 基础 URL
@@ -41,7 +42,7 @@ export default {
             password: password,
         };
         const result = await apiClient.post('/user/login', postJson);
-        localStorage.setItem("userName", username)
+        localStorage.setItem("userName", username);
         localStorage.setItem("logged", true);
         window.location.reload();
         return result;
@@ -53,7 +54,9 @@ export default {
             password: password,
         };
         const result = await apiClient.post('/user/register', postJson);
-        localStorage.setItem("userName", username)
+        localStorage.setItem("userName", username);
+        localStorage.setItem("logged", true);
+        window.location.reload();
         return result;
     },
 
@@ -74,7 +77,7 @@ export default {
 
     async logout() {
         await apiClient.get('/user/logout');
-        localStorage.removeItem("userName");
+        ClearLocalStorage();
         localStorage.setItem("logged", false);
         window.location.reload();
     },

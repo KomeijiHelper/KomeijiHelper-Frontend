@@ -46,8 +46,17 @@ export default {
       try {
         this.waitingForConfirm = true
         this.currentConsultantId = consultantId
-        await userApi.consulting(consultantId)
         this.setupWebSocket()
+        const result = await userApi.consulting(consultantId)
+        console.log(result.data)
+        if(result.data.code === 406) {
+            alert("您已经取消预约")
+            this.waitingForConfirm = false;
+        }
+        else if(result.data.code == 407) {
+          alert("咨询师拒绝了请求")
+          this.waitingForConfirm = false;
+        }
       } catch (error) {
         console.error('选择咨询师失败:', error)
         alert('选择咨询师失败')
@@ -68,13 +77,7 @@ export default {
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
         console.log(data)
-        if (data.type === 'CONSULTANT_ACCEPTED') {
-          alert('咨询师已接受请求')
-          this.$router.push('/chat')
-        } else if (data.type === 'CONSULTANT_REJECTED') {
-          alert('咨询师已拒绝请求')
-          this.waitingForConfirm = false
-        } else if (data.type === 'chat_connect') {
+        if (data.type === 'chat_connect') {
           const newSocketAddress = "wss://komeiji.cyou:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
           localStorage.setItem('chatAddress', newSocketAddress)
           router.push("/chat")

@@ -3,13 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/views/LoginView.vue";
 import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
-import SelectConsultant from "@/views/SelectConsultant.vue";
-import AssistantDashboard from "@/views/AssistantDashboard.vue";
-import NormalDashboard from "@/views/NormalDashboard.vue";
-import ManagerDashboard from "@/views/ManagerDashboard.vue";
-import SupervisorDashboard from "@/views/SupervisorDashboard.vue";
+import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
+import NormalWorkbench from "@/views/NormalWorkbench.vue";
+import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
+import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
+import {ClearLocalStorage} from "@/utils.js";
+import RegisterView from "@/views/RegisterView.vue";
 
 const routes = [
     {
@@ -26,8 +27,24 @@ const routes = [
         beforeEnter: (to, from, next) => {
             const logged = localStorage.getItem("logged");
             if (logged === "true") {
-                console.log("已登录，进入dashboard");
-                next("/dashboard");
+                console.log("已登录，进入workbench");
+                next("/workbench");
+            }
+            else {
+                next()
+            }
+        }
+    },
+    {
+        path: "/register",
+        name: "Register",
+        component: RegisterView,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
+        beforeEnter: (to, from, next) => {
+            const logged = localStorage.getItem("logged");
+            if (logged === "true") {
+                console.log("已登录，进入workbench");
+                next("/workbench");
             }
             else {
                 next()
@@ -41,24 +58,18 @@ const routes = [
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
     },
     {
-        path: "/select-consultant",
-        name: "SelectConsultant",
-        component: SelectConsultant,
-        meta: { needAuth: false, roles: [0]}
-    },
-    {
-        path: "/dashboard",
-        name: "Dashboard",
+        path: "/workbench",
+        name: "Workbench",
         beforeEnter: (to, from, next) => {
             const userRole = localStorage.getItem("userRole") || "-1";
             if (userRole === "0") {
-                next("/select-consultant");
+                next("/workbench/normal");
             } else if (userRole === "1") {
-                next("/dashboard/assistant");
+                next("/workbench/assistant");
             } else if (userRole === "2") {
-                next("/dashboard/supervisor");
+                next("/workbench/supervisor");
             } else if (userRole === "3") {
-                next("/dashboard/manager");
+                next("/workbench/manager");
             } else {
                 next("/")
             }
@@ -66,27 +77,27 @@ const routes = [
         meta: { needAuth: false, roles: [0, 1, 2, 3]}
     },
     {
-        path: "/dashboard/assistant",
-        name: "assistantDashboard",
-        component: AssistantDashboard,
+        path: "/workbench/assistant",
+        name: "assistantWorkbench",
+        component: AssistantWorkbench,
         meta: { needAuth: false, roles: [1] }
     },
     {
-        path: "/dashboard/normal",
-        name: "NormalDashboard",
-        component: NormalDashboard,
+        path: "/workbench/normal",
+        name: "NormalWorkbench",
+        component: NormalWorkbench,
         meta: { needAuth: false, roles: [0] }
     },
     {
-        path: "/dashboard/manager",
-        name: "ManagerDashboard",
-        component: ManagerDashboard,
+        path: "/workbench/manager",
+        name: "ManagerWorkbench",
+        component: ManagerWorkbench,
         meta: { needAuth: false, roles: [3] }
     },
     {
-        path: "/dashboard/supervisor",
-        name: "SupervisorDashboard",
-        component: SupervisorDashboard,
+        path: "/workbench/supervisor",
+        name: "SupervisorWorkbench",
+        component: SupervisorWorkbench,
         meta: { needAuth: false, roles: [2] }
     },
     {
@@ -106,13 +117,13 @@ router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
     try {
         userRole = await userApi.checkSession();
+        if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
         isAuthenticated = localStorage.getItem("logged");
     } catch (e) {
         isAuthenticated = false;
         userRole = -1;
         localStorage.setItem("logged", false);
-        localStorage.removeItem('userName');
-        localStorage.removeItem('session');
+        ClearLocalStorage();
     }
     localStorage.setItem("userRole", userRole);
     console.log("from", from.path, "to", to.path);

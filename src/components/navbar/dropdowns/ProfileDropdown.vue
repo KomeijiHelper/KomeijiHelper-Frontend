@@ -38,8 +38,6 @@ import { ref } from 'vue';
 import { VaButton } from 'vuestic-ui/web-components';
 import userApi from '@/api/userApi';
 
-
-
 defineProps({
     avatarName: String,
 });
@@ -47,13 +45,6 @@ defineProps({
 function logout() {
     userApi.logout();
 }
-
-
-function valid() {
-    return avatarName != '';
-}
-
-
 
 const options = ref([
     {
@@ -104,8 +95,6 @@ const options = ref([
         ]
     }
 ]);
-
-const isShown = ref(false);
 
 const resolveLinkAttribute = (item) => {
     return item.click ? item.click : {}

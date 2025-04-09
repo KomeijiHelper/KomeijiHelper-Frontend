@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, useTemplateRef } from 'vue'
+import { ref, onMounted, watch, nextTick, useTemplateRef, reactive } from 'vue'
 import { VaTextarea, VaLayout, VaCard, VaButton, VaImage} from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
@@ -48,7 +48,7 @@ const showExtensions = ref(false);
 const scroller = useTemplateRef("scroller");
 let websocket;
 
-const chatBubbleList = ref([])
+const chatBubbleList = reactive([])
 
 onMounted(() => {
     websocket = new WebSocket(localStorage.getItem('chatAddress'));
@@ -56,7 +56,7 @@ onMounted(() => {
       const data = JSON.parse(event.data);
       const content = JSON.parse(data.content);
       const time = new Date(data.timestamp);
-      chatBubbleList.value.push({ avatarSrc: '', avatarName: content.userName, isSelf: false, time: time.toLocaleString(), content: content.content });
+      chatBubbleList.push({ avatarSrc: '', avatarName: content.userName, isSelf: false, time: time.toLocaleString(), content: content.content });
     };
     websocket.onopen = () => {
       console.log("WebSocket connected");
@@ -84,8 +84,7 @@ const sendMessage = async (event) => {
     };
 
     websocket.send(JSON.stringify(message));
-    chatBubbleList.value.push({ avatarSrc: '', avatarName: localStorage.getItem("userName"), isSelf: true, time: time.toLocaleString(), content: messageContent.value })
-    await scrollToBottom();
+    chatBubbleList.push({ avatarSrc: '', avatarName: localStorage.getItem("userName"), isSelf: true, time: time.toLocaleString(), content: messageContent.value })
     messageContent.value = "";
 };
 
@@ -97,6 +96,10 @@ const scrollToBottom = async () => {
       }
     });
 };
+
+watch(()=>chatBubbleList.length,()=>{
+    scrollToBottom();
+});
 
 const addNewLine = (event) => {
     if (event.repeat) return;
