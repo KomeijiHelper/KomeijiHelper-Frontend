@@ -53,7 +53,7 @@ export default {
             alert("您已经取消预约")
             this.waitingForConfirm = false;
         }
-        else if(result.data.code == 407) {
+        else if(result.data.code === 407) {
           alert("咨询师拒绝了请求")
           this.waitingForConfirm = false;
         }
@@ -69,9 +69,6 @@ export default {
       
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
-        // 发送咨询师ID
-        let response = userApi.consulting(this.currentConsultantId)
-        console.log(response)
       }
 
       this.ws.onmessage = (event) => {
