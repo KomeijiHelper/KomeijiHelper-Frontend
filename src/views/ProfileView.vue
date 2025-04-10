@@ -48,10 +48,18 @@ const saveProfile = () => {
 <style scoped>
 .profile-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* 调整为顶部对齐 */
+  padding-top: 20px;
   min-height: 100vh;
   background-color: #f5f5f5;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
 .profile-form {
