@@ -12,6 +12,7 @@ import userApi from "@/api/userApi.js";
 import {ClearLocalStorage} from "@/utils.js";
 import RegisterView from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView.vue";
+import FAQView from "@/views/FAQView.vue";
 
 const routes = [
     {
@@ -112,6 +113,12 @@ const routes = [
         name: "Profile",
         component: ProfileView,
         meta: { needAuth: true, roles: [0, 1, 2, 3] }
+    },
+    {
+        path: "/faq",
+        name: "FAQ",
+        component: FAQView,
+        meta: { needAuth: false }
     }
 ];
 
@@ -140,7 +147,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.needAuth && isAuthenticated === "false") {
         console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
         next('/login');
-    } else if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+    } else if (to.meta.needAuth && isAuthenticated === "true" && to.meta.roles && !to.meta.roles.includes(userRole)) {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
         next('/');
     } else {

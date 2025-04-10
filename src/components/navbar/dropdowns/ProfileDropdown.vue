@@ -73,7 +73,10 @@ const options = ref([
         list: [
             {
                 name: 'FAQ',
-                icon: 'fa-circle-question'
+                icon: 'fa-circle-question',
+                click: {
+                  to: "/faq"
+                }
             },
             {
                 name: 'Help',
