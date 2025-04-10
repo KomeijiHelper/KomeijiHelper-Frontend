@@ -109,7 +109,7 @@ const columnWidths = {
       </template>
 
       <template #cell(password)="{ rowIndex }">
-        <va-button @click="resetPassword(rowIndex)" color="primary" size="small"></va-button>
+        <va-button @click="resetPassword(rowIndex)" color="primary" size="small">重置密码</va-button>
       </template>
 
       <template #cell(userClass)="{ rowIndex }">
