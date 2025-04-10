@@ -1,7 +1,10 @@
 <template>
     <va-layout>
         <va-card>
-            <va-card-title>聊天室</va-card-title>
+          <va-card-title class="chat-title">
+            <div class="title-text">聊天室</div>
+            <va-button class="exit-button" color="danger" @click="leaveChat">退出</va-button>
+          </va-card-title>
             <va-card-content>
                 <div class="chat-container">
                     <VaScrollContainer :items="chatBubbleList" class="chat-messages" ref="scroller" gradient>
@@ -39,7 +42,17 @@
 
 <script setup>
 import {ref, onMounted, watch, nextTick, useTemplateRef, reactive, onUnmounted} from 'vue'
-import { VaTextarea, VaLayout, VaCard, VaButton, VaImage} from 'vuestic-ui';
+import {
+  VaTextarea,
+  VaLayout,
+  VaCard,
+  VaButton,
+  VaImage,
+  VaCardTitle,
+  VaCardContent,
+  VaScrollContainer,
+    useModal
+} from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
 import router from "@/router/index.js";
@@ -133,6 +146,17 @@ const sendImage = () => {
 const sendPosition = () => {
     alert('发送位置功能开发中');
 };
+
+const { confirm } = useModal()
+
+const leaveChat = () => {
+  confirm('确定要离开聊天室吗?').then(
+      (ok) => {
+        if(ok){leave=true;websocket.close()
+        }
+      }
+      )
+}
 </script>
 
 <style scoped>
@@ -165,4 +189,21 @@ const sendPosition = () => {
 .sendline-button {
     height: 40px;
 }
+
+.chat-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.title-text {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.exit-button {
+  min-width: 60px;
+}
+
 </style>
