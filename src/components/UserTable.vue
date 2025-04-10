@@ -10,6 +10,7 @@ import {
   VaInput,
   VaSelect,
   VaPagination,
+  useModal,
 } from "vuestic-ui";
 
 const users = ref([]);
@@ -31,10 +32,11 @@ const fetchUsers = async () => {
   const response = await userApi.getUsersByUserClass(-1);
   users.value = JSON.parse(response.data.data);
   editableUsers.value = users.value.map(user => ({ ...user }));
+  console.log(users.value);
 };
 
 onMounted(fetchUsers);
-
+const { confirm } = useModal()
 const submitUser = async (userIndex) => {
   try {
     const userToSubmit = pagedUsers.value[userIndex]; // 注意这里用 pagedUsers
@@ -60,6 +62,17 @@ const pagedUsers = computed(() => {
   const start = (currentPage.value - 1) * perPage.value;
   return filteredUsers.value.slice(start, start + perPage.value);
 });
+
+const resetPassword = (userIndex) => {
+  confirm('确定将该用户密码重置为123456吗?').then(
+      (ok) => {
+        if(ok){
+          pagedUsers.value[userIndex].password = "123456";
+          submitUser(userIndex);
+        }
+      }
+  )
+}
 
 // 页数
 const pageCount = computed(() => Math.ceil(filteredUsers.value.length / perPage.value));
@@ -96,7 +109,7 @@ const columnWidths = {
       </template>
 
       <template #cell(password)="{ rowIndex }">
-        <va-input v-model="pagedUsers[rowIndex].password" />
+        <va-button @click="resetPassword(rowIndex)" color="primary" size="small"></va-button>
       </template>
 
       <template #cell(userClass)="{ rowIndex }">
