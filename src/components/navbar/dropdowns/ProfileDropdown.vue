@@ -55,14 +55,14 @@ const options = ref([
                 name: 'Profile',
                 icon: 'fa-circle-user',
                 click: {
-                    to: "profile"
+                    to: "/profile"
                 }
             },
             {
                 name: 'Settings',
                 icon: 'fa-gear',
                 click: {
-                    to: "settings"
+                    to: "/settings"
                 }
             }
         ]
@@ -73,7 +73,10 @@ const options = ref([
         list: [
             {
                 name: 'FAQ',
-                icon: 'fa-circle-question'
+                icon: 'fa-circle-question',
+                click: {
+                  to: "/faq"
+                }
             },
             {
                 name: 'Help',
