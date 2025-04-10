@@ -1,7 +1,10 @@
 <template>
     <va-layout>
         <va-card>
-            <va-card-title>聊天室</va-card-title>
+          <va-card-title class="chat-title">
+            <div class="title-text">聊天室</div>
+            <va-button class="exit-button" color="danger" @click="leaveChat">退出</va-button>
+          </va-card-title>
             <va-card-content>
                 <div class="chat-container">
                     <VaScrollContainer :items="chatBubbleList" class="chat-messages" ref="scroller" gradient>
@@ -48,24 +51,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, useTemplateRef, reactive, computed } from 'vue'
-import { VaTextarea, VaLayout, VaCard, VaButton, VaFileUpload } from 'vuestic-ui';
+import {ref, onMounted, watch, nextTick, useTemplateRef, reactive, onUnmounted} from 'vue'
+import {
+  VaTextarea,
+  VaLayout,
+  VaCard,
+  VaButton,
+  VaImage,
+  VaCardTitle,
+  VaCardContent,
+  VaScrollContainer,
+    useModal
+} from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
-import emojiList from '@/services/emoji/emoji';
-import userApi from '@/api/userApi';
+import router from "@/router/index.js";
 
 const messageContent = ref('');
 const showEmoji = ref(false);
 const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 let websocket;
+let leave = false;
 
 const emojis = emojiList;
 const chatBubbleList = reactive([])
 
 onMounted(() => {
     websocket = new WebSocket(localStorage.getItem('chatAddress'));
+    localStorage.removeItem('chatAddress');
     websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const content = JSON.parse(data.content);
@@ -198,6 +212,16 @@ const sendImage = async (file) => {
      }
 };
 
+const { confirm } = useModal()
+
+const leaveChat = () => {
+  confirm('确定要离开聊天室吗?').then(
+      (ok) => {
+        if(ok){leave=true;websocket.close()
+        }
+      }
+      )
+}
 </script>
 
 <style scoped>
@@ -231,6 +255,7 @@ const sendImage = async (file) => {
     height: 40px;
 }
 
+<<<<<<< HEAD
 .spacer {
     text-align: center;
 }
@@ -252,4 +277,22 @@ const sendImage = async (file) => {
   text-align: center;
   line-height: 1.5;
 }
+=======
+.chat-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 20px;
+}
+
+.title-text {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.exit-button {
+  min-width: 60px;
+}
+
+>>>>>>> eafeb11511613f177bd9f4914072ed79c3d0d4c5
 </style>

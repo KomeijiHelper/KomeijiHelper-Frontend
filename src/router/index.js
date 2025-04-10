@@ -25,8 +25,8 @@ const routes = [
         component: LoginView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
@@ -41,8 +41,8 @@ const routes = [
         component: RegisterView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
         beforeEnter: (to, from, next) => {
-            const logged = localStorage.getItem("logged");
-            if (logged === "true") {
+            const logged = localStorage.getItem("logged") === "true";
+            if (logged) {
                 console.log("已登录，进入workbench");
                 next("/workbench");
             }
@@ -115,10 +115,11 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
+    const oldUserRole = localStorage.getItem("userRole");
     try {
         userRole = await userApi.checkSession();
         if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
-        isAuthenticated = localStorage.getItem("logged");
+        isAuthenticated = localStorage.getItem("logged") === "true";
     } catch (e) {
         isAuthenticated = false;
         userRole = -1;
@@ -126,6 +127,8 @@ router.beforeEach(async (to, from, next) => {
         ClearLocalStorage();
     }
     localStorage.setItem("userRole", userRole);
+    localStorage.setItem("displayUserRole", userRole === 0?"普通用户":userRole === 1?"咨询师":userRole === 2?"督导":userRole===3?"管理员":"");
+    if (userRole.toString() !== oldUserRole) { console.log(userRole, "!=", oldUserRole);window.location.reload(); }
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
         console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
