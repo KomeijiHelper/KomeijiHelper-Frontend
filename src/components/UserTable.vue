@@ -65,10 +65,12 @@ const pagedUsers = computed(() => {
 
 const resetPassword = (userIndex) => {
   confirm('确定将该用户密码重置为123456吗?').then(
-      (ok) => {
-        if(ok){
-          pagedUsers.value[userIndex].password = "123456";
-          submitUser(userIndex);
+      async (ok) => {
+        if (ok) {
+          userApi.resetPassword(pagedUsers.value[userIndex].id).then((response) => {
+            if (response.data.code === '200') alert("修改成功")
+          });
+          await fetchUsers();
         }
       }
   )

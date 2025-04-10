@@ -127,12 +127,30 @@ const router = createRouter({
     routes,
 });
 
+const getUserClassCode = (userClass) => {
+    switch (userClass) {
+        case "Normal":{
+            return 0;
+        }
+        case "Assistant":{
+            return 1;
+        }
+        case "Supervisor":{
+            return 2;
+        }
+        case "Manager":{
+            return 3;
+        }
+    }
+    return -1;
+}
 router.beforeEach(async (to, from, next) => {
     let userRole, isAuthenticated;
     const oldUserRole = localStorage.getItem("userRole");
     try {
-        userRole = await userApi.checkSession();
-        if (typeof userRole !== "number") { throw new Error("Invalid user role"); }
+        const userData = await userApi.checkSession();
+        console.log(userData);
+        userRole = getUserClassCode(userData.userClass);
         isAuthenticated = localStorage.getItem("logged") === "true";
     } catch (e) {
         isAuthenticated = false;
