@@ -255,7 +255,6 @@ const leaveChat = () => {
     height: 40px;
 }
 
-<<<<<<< HEAD
 .spacer {
     text-align: center;
 }
@@ -277,7 +276,6 @@ const leaveChat = () => {
   text-align: center;
   line-height: 1.5;
 }
-=======
 .chat-title {
   display: flex;
   justify-content: space-between;
@@ -294,5 +292,4 @@ const leaveChat = () => {
   min-width: 60px;
 }
 
->>>>>>> eafeb11511613f177bd9f4914072ed79c3d0d4c5
 </style>
