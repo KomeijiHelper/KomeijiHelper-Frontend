@@ -11,6 +11,7 @@ import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
 import {ClearLocalStorage} from "@/utils.js";
 import RegisterView from "@/views/RegisterView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 const routes = [
     {
@@ -105,6 +106,12 @@ const routes = [
         name: "Chat",
         component: ChatRoomView,
         meta: { needAuth: false, roles: [0, 1, 2] }
+    },
+    {
+        path: "/profile",
+        name: "Profile",
+        component: ProfileView,
+        meta: { needAuth: true, roles: [0, 1, 2, 3] }
     }
 ];
 
