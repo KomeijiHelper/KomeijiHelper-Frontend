@@ -10,7 +10,7 @@ import {
   VaInput,
   VaSelect,
   VaPagination,
-  useModal,
+  useModal, useToast,
 } from "vuestic-ui";
 
 const users = ref([]);
@@ -37,6 +37,7 @@ const fetchUsers = async () => {
 
 onMounted(fetchUsers);
 const { confirm } = useModal()
+const {notify} = useToast()
 const submitUser = async (userIndex) => {
   try {
     const userToSubmit = pagedUsers.value[userIndex]; // 注意这里用 pagedUsers
@@ -65,10 +66,12 @@ const pagedUsers = computed(() => {
 
 const resetPassword = (userIndex) => {
   confirm('确定将该用户密码重置为123456吗?').then(
-      (ok) => {
-        if(ok){
-          pagedUsers.value[userIndex].password = "123456";
-          submitUser(userIndex);
+      async (ok) => {
+        if (ok) {
+          userApi.resetPassword(pagedUsers.value[userIndex].id).then((response) => {
+            if (response.data.code === '200') notify("修改成功")
+          });
+          await fetchUsers();
         }
       }
   )

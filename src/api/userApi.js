@@ -99,7 +99,23 @@ export default {
     },
 
     submitUserChange(userJson){
-        return apiClient.post('/user/changeInfo', userJson);
+        return apiClient.post('/user/changeUser', userJson);
+    },
+
+    resetPassword(userId){
+        return apiClient.post('/user/resetPassword', userId);
+    },
+
+    changePassword(old, password){
+        const postJson = {
+            oldPassword: old,
+            newPassword: password,
+        }
+        return apiClient.post('/user/changePassword', postJson);
+    },
+
+    changeUserInfo(userJson){
+        return apiClient.post('/user/changeUserInfo', userJson);
     },
 
     fileUpload(formData) {
