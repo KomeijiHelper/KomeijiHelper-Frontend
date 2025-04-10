@@ -99,7 +99,7 @@ export default {
     },
 
     submitUserChange(userJson){
-        return apiClient.post('/user/changeInfo', userJson);
+        return apiClient.post('/user/changeUser', userJson);
     },
 
     resetPassword(userId){
@@ -112,5 +112,9 @@ export default {
             newPassword: password,
         }
         return apiClient.post('/user/changePassword', postJson);
+    },
+
+    changeUserInfo(userJson){
+        return apiClient.post('/user/changeUserInfo', userJson);
     }
 };

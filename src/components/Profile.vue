@@ -4,12 +4,12 @@
     <div class="profile-layout">
       <div class="profile-form">
         <div class="form-group">
-          <label for="name">昵称</label>
-          <input v-model="profile.nickName" type="text" id="name" placeholder="请输入您的姓名" />
+          <label for="userName">用户名</label>
+          <va-content class="displayUserName"> {{profile.userName}} </va-content>
         </div>
         <div class="form-group">
-          <label for="userName">用户名</label>
-          <input v-model="profile.userName" type="text" id="userName" placeholder="请输入您的年龄" />
+          <label for="name">昵称</label>
+          <input v-model="profile.nickName" type="text" id="name" placeholder="请输入您的姓名" />
         </div>
         <div class="form-group">
           <label for="email">邮箱</label>
@@ -33,7 +33,7 @@
 import { reactive, ref } from 'vue';
 import userApi from "@/api/userApi.js";
 import PasswordEditor from "@/components/PasswordEditor.vue";
-import {useModal, useToast} from "vuestic-ui";
+import {useModal, useToast, VaContent} from "vuestic-ui";
 const {notify} = useToast()
 const userData = await userApi.checkSession();
 
@@ -51,9 +51,11 @@ const togglePasswordEditor = () => {
   showPasswordEditor.value = !showPasswordEditor.value;
 };
 
-const saveProfile = () => {
-  console.log('保存个人信息：', profile);
-  notify("保存成功");
+const saveProfile = async () => {
+  const response = await userApi.changeUserInfo(JSON.stringify(profile));
+  console.log(response);
+  if (response.data.code === '200')
+    notify("保存成功");
 };
 
 const handlePasswordChange = async ({oldPassword, newPassword}) => {
@@ -79,6 +81,7 @@ const handlePasswordChange = async ({oldPassword, newPassword}) => {
 .profile-layout {
   display: flex;
   flex-direction: row;
+  padding-top: 20px;
 }
 
 .profile-form {
@@ -104,6 +107,14 @@ input, textarea {
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.displayUserName {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 0px solid #ccc;
   border-radius: 4px;
 }
 
