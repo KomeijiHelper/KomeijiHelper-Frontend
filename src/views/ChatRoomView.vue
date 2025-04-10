@@ -80,12 +80,9 @@ onMounted(() => {
 
     websocket.onclose = () => {
       console.log("WebSocket disconnected");
-      if (!leave){
+      if (!leave)
         alert("对方已退出");
-        router.push("/workbench")
-      } else {
-        console.log("主动退出")
-      }
+      router.push("/workbench")
     };
 });
 
