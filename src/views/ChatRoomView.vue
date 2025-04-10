@@ -66,6 +66,8 @@ import {
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
 import router from "@/router/index.js";
+import emojiList from '@/services/emoji/emoji';
+import userApi from '@/api/userApi';
 
 const messageContent = ref('');
 const showEmoji = ref(false);
@@ -93,8 +95,16 @@ onMounted(() => {
 
     websocket.onclose = () => {
         console.log("WebSocket disconnected");
+        if (!leave)
+            alert("对方已退出");
+        router.push("/workbench")
     };
 });
+
+onUnmounted(() => {
+  leave = true;
+  websocket.close();
+})
 
 const selectEmoji = (emoji) => {
     messageContent.value += emoji
