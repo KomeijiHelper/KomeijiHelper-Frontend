@@ -20,7 +20,12 @@ const search = ref("");
 const perPage = ref(5);
 const currentPage = ref(1);
 
-const userClassOptions = ["Normal", "Assistant", "Supervisor", "Manager"];
+const userClassOptions = [
+  { label: '普通用户', value: 'Normal' },
+  { label: '咨询师', value: 'Assistant' },
+  { label: '督导', value: 'Supervisor' },
+  { label: '管理员', value: 'Manager' },
+];
 
 const fetchUsers = async () => {
   const response = await userApi.getUsersByUserClass(-1);
@@ -98,6 +103,9 @@ const columnWidths = {
         <va-select
             v-model="pagedUsers[rowIndex].userClass"
             :options="userClassOptions"
+            track-by="value"
+            text-by="label"
+            value-by="value"
         />
       </template>
 
