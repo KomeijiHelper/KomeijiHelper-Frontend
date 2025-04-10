@@ -100,5 +100,13 @@ export default {
 
     submitUserChange(userJson){
         return apiClient.post('/user/changeInfo', userJson);
+    },
+
+    fileUpload(formData) {
+        return apiClient.post('/file/upload', formData, {
+            headers: {
+                'Content-Type':'multipart/form-data',
+            },
+        });
     }
 };
