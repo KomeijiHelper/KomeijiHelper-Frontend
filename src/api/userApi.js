@@ -71,6 +71,13 @@ export default {
         return await apiClient.post('/user/getUsersByClass', postJson);
     },
 
+    async getConsultants(){
+        const postJson = {
+            userClassCode: 1,
+        };
+        return await apiClient.get('/online/getUser');
+    },
+
     async checkSession() {
         return (await apiClient.get('/user/checkSession')).data
     },

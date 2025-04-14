@@ -33,7 +33,7 @@ export default {
   },
   async created() {
     try {
-      const response = await userApi.getUsersByUserClass(1);
+      const response = await userApi.getConsultants();
       const parsedConsultantsArray = JSON.parse(response.data.data);
       this.consultants = parsedConsultantsArray.map(item => item.userName);
     } catch (error) {
