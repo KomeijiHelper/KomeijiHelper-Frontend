@@ -5,7 +5,6 @@
       <div class="spinner"></div>
       <p>等待咨询师确认...</p>
       <button @click="cancelRequest" class="cancel-btn">取消请求</button>
-      <informed-consent-form ref="consentForm" />
     </div>
     <div v-else class="consultant-list">
       <div v-for="consultant in consultants" 
@@ -15,6 +14,7 @@
         <h3>咨询师 {{ consultant }}</h3>
       </div>
     </div>
+    <informed-consent-form ref="consentForm" />
   </div>
 </template>
 
