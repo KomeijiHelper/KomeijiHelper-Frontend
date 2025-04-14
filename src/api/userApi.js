@@ -75,7 +75,7 @@ export default {
         const postJson = {
             userClassCode: 1,
         };
-        return await apiClient.get('/online/getUser');
+        return await apiClient.post('/online/getUser', postJson);
     },
 
     async checkSession() {

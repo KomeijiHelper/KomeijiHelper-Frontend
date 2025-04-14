@@ -5,6 +5,7 @@
       <div class="spinner"></div>
       <p>等待咨询师确认...</p>
       <button @click="cancelRequest" class="cancel-btn">取消请求</button>
+      <informed-consent-form ref="consentForm" />
     </div>
     <div v-else class="consultant-list">
       <div v-for="consultant in consultants" 
@@ -20,9 +21,10 @@
 <script>
 import userApi from '@/api/userApi.js'
 import router from "@/router/index.js";
-
+import InformedConsentForm from "@/components/InformedConsentForm.vue";
 export default {
   name: 'SelectConsultant',
+  components: {InformedConsentForm},
   data() {
     return {
       consultants: [],
@@ -44,6 +46,12 @@ export default {
   methods: {
     async selectConsultant(consultantId) {
       try {
+        // 弹出知情同意书
+        const confirmed = await this.$refs.consentForm.open()
+        if (!confirmed) {
+          return // 用户点击了取消
+        }
+
         this.waitingForConfirm = true
         this.currentConsultantId = consultantId
         this.setupWebSocket()
