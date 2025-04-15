@@ -13,6 +13,7 @@ import {ClearLocalStorage} from "@/utils.js";
 import RegisterView from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import FAQView from "@/views/FAQView.vue";
+import LeadIn from "@/views/LeadIn.vue";
 
 const routes = [
     {
@@ -52,6 +53,12 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: "/leadIn",
+        name: "LeadIn",
+        component: LeadIn,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
     },
     {
         path: "/about",
@@ -163,8 +170,8 @@ router.beforeEach(async (to, from, next) => {
     if (userRole.toString() !== oldUserRole) { console.log(userRole, "!=", oldUserRole);window.location.reload(); }
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && isAuthenticated === "false") {
-        console.log("推到login", to.meta.needAuth, isAuthenticated === "false");
-        next('/login');
+        console.log("推到leadIn", to.meta.needAuth, isAuthenticated === "false");
+        next('/leadIn');
     } else if (to.meta.needAuth && isAuthenticated === "true" && to.meta.roles && !to.meta.roles.includes(userRole)) {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
         next('/');

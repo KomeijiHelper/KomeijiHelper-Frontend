@@ -51,7 +51,7 @@ const handleButtonClick1 = async () => {
         <strong>王晨楠</strong> - 需求分析，测试。
       </li>
       <li>
-        <strong>李智</strong> - 关系数据库设计。
+        <strong>李智</strong> - 前端开发，测试。
       </li>
     </ul>
 
