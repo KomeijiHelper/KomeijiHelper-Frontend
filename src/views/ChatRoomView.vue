@@ -74,7 +74,6 @@ const showEmoji = ref(false);
 const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 let websocket;
-let leave = false;
 
 const emojis = emojiList;
 const chatBubbleList = reactive([])
@@ -93,17 +92,24 @@ onMounted(() => {
         console.log("WebSocket connected");
     };
 
-    websocket.onclose = () => {
+    websocket.onclose = (event) => {
         console.log("WebSocket disconnected");
-        if (!leave)
-            alert("对方已退出");
+        console.log(event)
+        if(event.code === 1000) {
+            // normal close, do noting
+        }
+        else if(event.code == 4000) {
+            alert("对方已退出，关闭聊天");
+        }
+        else if(event.code == 4001) {
+            alert("超过十分钟未进行对话，自动关闭聊天");
+        }
         router.push("/workbench")
     };
 });
 
 onUnmounted(() => {
-  leave = true;
-  websocket.close();
+  websocket.close(1000,"normal close");
 })
 
 const selectEmoji = (emoji) => {
@@ -227,7 +233,7 @@ const { confirm } = useModal()
 const leaveChat = () => {
   confirm('确定要离开聊天室吗?').then(
       (ok) => {
-        if(ok){leave=true;websocket.close()
+        if(ok){websocket.close(1000,"normal close")
         }
       }
       )
