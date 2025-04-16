@@ -123,5 +123,17 @@ export default {
 
     changeUserInfo(userJson){
         return apiClient.post('/user/changeUserInfo', userJson);
-    }
+    },
+
+    rating(approve, rank, cid = null){
+        const postJson = cid === null ? {
+            approve: approve,
+            rank: rank,
+        }:{
+            approve: approve,
+            rank: rank,
+            cid: cid,
+        }
+        return apiClient.post('/chatRecord/rating', postJson);
+    },
 };
