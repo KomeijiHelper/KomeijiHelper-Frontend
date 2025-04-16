@@ -157,7 +157,7 @@ const leaveChat = () => {
         if(ok)
         {
           leave=true;
-          //websocket.close()
+          websocket.close()
         }
       })
 }
