@@ -83,9 +83,10 @@ onMounted(() => {
 
     websocket.onclose = () => {
       console.log("WebSocket disconnected");
+      ratingWidget.value.open();
       if (!leave)
         alert("对方已退出");
-      router.push("/workbench")
+      //router.push("/workbench")
     };
 });
 
@@ -155,7 +156,6 @@ const leaveChat = () => {
       {
         if(ok)
         {
-          ratingWidget.value.open();
           leave=true;
           //websocket.close()
         }
