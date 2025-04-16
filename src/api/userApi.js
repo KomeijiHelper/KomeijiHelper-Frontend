@@ -131,5 +131,16 @@ export default {
                 'Content-Type':'multipart/form-data',
             },
         });
-    }
+    },
+    rating(approve, rank, cid = null){
+        const postJson = cid === null ? {
+            approve: approve,
+            rank: rank,
+        }:{
+            approve: approve,
+            rank: rank,
+            cid: cid,
+        }
+        return apiClient.post('/chatRecord/rating', postJson);
+    },
 };

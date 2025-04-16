@@ -47,6 +47,7 @@
                 </div>
             </va-card-content>
         </va-card>
+      <Rating ref="ratingWidget" />
     </va-layout>
 </template>
 
@@ -68,11 +69,13 @@ import MessageType from './Chat/widgets/MessageType.js';
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
 import userApi from '@/api/userApi';
+import Rating from "@/components/Rating.vue";
 
 const messageContent = ref('');
 const showEmoji = ref(false);
 const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
+const ratingWidget = ref()
 let websocket;
 
 const emojis = emojiList;
@@ -232,11 +235,15 @@ const { confirm } = useModal()
 
 const leaveChat = () => {
   confirm('确定要离开聊天室吗?').then(
-      (ok) => {
-        if(ok){websocket.close(1000,"normal close")
+      (ok) =>
+      {
+        if(ok)
+        {
+          ratingWidget.value.open();
+          leave=true;
+          //websocket.close(1000,"normal close")
         }
-      }
-      )
+      })
 }
 </script>
 
