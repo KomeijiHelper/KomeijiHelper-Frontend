@@ -27,7 +27,7 @@
         </VaDropdown>
     </template>
     <template v-else>
-        <router-link to="/login" class="user-icon">
+        <router-link to="/leadIn" class="user-icon">
             <i class="fas fa-sign-in-alt"></i>
         </router-link>
     </template>
