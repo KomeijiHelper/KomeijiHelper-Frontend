@@ -83,37 +83,37 @@ const routes = [
                 next("/")
             }
         },
-        meta: { needAuth: false, roles: [0, 1, 2, 3]}
+        meta: { needAuth: true, roles: [0, 1, 2, 3]}
     },
     {
         path: "/workbench/assistant",
         name: "assistantWorkbench",
         component: AssistantWorkbench,
-        meta: { needAuth: false, roles: [1] }
+        meta: { needAuth: true, roles: [1] }
     },
     {
         path: "/workbench/normal",
         name: "NormalWorkbench",
         component: NormalWorkbench,
-        meta: { needAuth: false, roles: [0] }
+        meta: { needAuth: true, roles: [0] }
     },
     {
         path: "/workbench/manager",
         name: "ManagerWorkbench",
         component: ManagerWorkbench,
-        meta: { needAuth: false, roles: [3] }
+        meta: { needAuth: true, roles: [3] }
     },
     {
         path: "/workbench/supervisor",
         name: "SupervisorWorkbench",
         component: SupervisorWorkbench,
-        meta: { needAuth: false, roles: [2] }
+        meta: { needAuth: true, roles: [2] }
     },
     {
         path: "/chat",
         name: "Chat",
         component: ChatRoomView,
-        meta: { needAuth: false, roles: [0, 1, 2] }
+        meta: { needAuth: true, roles: [0, 1, 2] }
     },
     {
         path: "/profile",
@@ -169,10 +169,10 @@ router.beforeEach(async (to, from, next) => {
     localStorage.setItem("displayUserRole", userRole === 0?"普通用户":userRole === 1?"咨询师":userRole === 2?"督导":userRole===3?"管理员":"");
     if (userRole.toString() !== oldUserRole) { console.log(userRole, "!=", oldUserRole);window.location.reload(); }
     console.log("from", from.path, "to", to.path);
-    if (to.meta.needAuth && isAuthenticated === "false") {
-        console.log("推到leadIn", to.meta.needAuth, isAuthenticated === "false");
+    if (to.meta.needAuth && !isAuthenticated) {
+        console.log("推到leadin", to.meta.needAuth, !isAuthenticated);
         next('/leadIn');
-    } else if (to.meta.needAuth && isAuthenticated === "true" && to.meta.roles && !to.meta.roles.includes(userRole)) {
+    } else if (to.meta.needAuth && isAuthenticated && to.meta.roles && !to.meta.roles.includes(userRole)) {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
         next('/');
     } else {

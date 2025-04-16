@@ -58,6 +58,7 @@
                 </div>
             </va-card-content>
         </va-card>
+      <Rating ref="ratingWidget" />
     </va-layout>
 </template>
 
@@ -77,10 +78,12 @@ import {
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
 import router from "@/router/index.js";
+import Rating from "@/components/Rating.vue";
 
 const messageContent = ref('');
 const showExtensions = ref(false);
 const scroller = useTemplateRef("scroller");
+const ratingWidget = ref()
 let websocket;
 let leave = false;
 
@@ -101,9 +104,10 @@ onMounted(() => {
 
     websocket.onclose = () => {
       console.log("WebSocket disconnected");
+      ratingWidget.value.open();
       if (!leave)
         alert("对方已退出");
-      router.push("/workbench")
+      //router.push("/workbench")
     };
 });
 
@@ -169,11 +173,14 @@ const { confirm } = useModal()
 
 const leaveChat = () => {
   confirm('确定要离开聊天室吗?').then(
-      (ok) => {
-        if(ok){leave=true;websocket.close()
+      (ok) =>
+      {
+        if(ok)
+        {
+          leave=true;
+          websocket.close()
         }
-      }
-      )
+      })
 }
 </script>
 

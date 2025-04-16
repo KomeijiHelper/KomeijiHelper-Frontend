@@ -75,7 +75,7 @@ export default {
         const postJson = {
             userClassCode: 1,
         };
-        return await apiClient.get('/online/getUser');
+        return await apiClient.post('/online/getUser', postJson);
     },
 
     async checkSession() {
@@ -123,5 +123,17 @@ export default {
 
     changeUserInfo(userJson){
         return apiClient.post('/user/changeUserInfo', userJson);
-    }
+    },
+
+    rating(approve, rank, cid = null){
+        const postJson = cid === null ? {
+            approve: approve,
+            rank: rank,
+        }:{
+            approve: approve,
+            rank: rank,
+            cid: cid,
+        }
+        return apiClient.post('/chatRecord/rating', postJson);
+    },
 };
