@@ -124,6 +124,13 @@ export default {
         return apiClient.post('/user/changeUserInfo', userJson);
     },
 
+    fileUpload(formData) {
+        return apiClient.post('/file/upload', formData, {
+            headers: {
+                'Content-Type':'multipart/form-data',
+            },
+        });
+    },
     rating(approve, rank, cid = null){
         const postJson = cid === null ? {
             approve: approve,

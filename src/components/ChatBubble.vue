@@ -7,7 +7,14 @@
       <div class="chat-message">
         <!-- TODO -->
         <template v-if="type === MessageType.Image">
-          <img :src="content" />
+          <VaModal
+            v-model="showBigger"
+            hideDefaultActions
+            size='large'
+          >
+          <img :src="content"  class="image-fit"/>
+        </VaModal>
+          <img :src="content" @click="showBigger = !showBigger" />
         </template>
         <template v-else-if="type === MessageType.Text">
           <slot>{{ content }}</slot>
@@ -19,7 +26,7 @@
 </template>
 
 <script setup>
-import { VaAvatar,VaImage } from "vuestic-ui"
+import { VaAvatar,VaModal } from "vuestic-ui"
 import { computed, onMounted } from "vue"
 import { ref } from "vue"
 import MessageType from "../views/Chat/widgets/MessageType.js";
@@ -56,9 +63,11 @@ const otherAvatarColor = ref("#F4A460");
 const selfAvatarColor = ref("#1E90FF");
 const textColor = ref("#FFFFFF");
 
-onMounted(() => {
-  console.log(props.type);
-})
+const showBigger=ref(false);
+
+// onMounted(() => {
+//   console.log(props.type);
+// })
 
 const avatarStyle = computed(() => {
   const maxSize = 20;
@@ -120,5 +129,11 @@ const avatarStyle = computed(() => {
   font-size: 13px;
   color: #999;
   margin-top: 6px;
+}
+
+.image-fit {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 确保图片自适应且保持比例 */
 }
 </style>

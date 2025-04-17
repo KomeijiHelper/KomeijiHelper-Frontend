@@ -13,7 +13,8 @@ import {ClearLocalStorage} from "@/utils.js";
 import RegisterView from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import FAQView from "@/views/FAQView.vue";
-import LeadIn from "@/views/LeadIn.vue";
+import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
+
 
 const routes = [
     {
@@ -21,6 +22,12 @@ const routes = [
         name: "Home",
         component: HomeView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
+    },
+    {
+        path:"/chatrecord",
+        name:"ChatRecord",
+        component: ChatRecordTestView,
+        meta:{ needAuth:false, roles:[-1,0,1,2,3]}
     },
     {
         path: "/login",
