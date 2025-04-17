@@ -10,6 +10,7 @@
       <input v-model="newPassword" type="password" id="newPassword" placeholder="请输入新的密码"/>
     </div>
     <button @click="submitPassword">提交密码修改</button>
+    <button @click="close">取消</button>
   </div>
 </template>
 
@@ -28,6 +29,10 @@ const submitPassword = () => {
   });
   emit('close');
 };
+
+const close= () => {
+  emit('close');
+}
 </script>
 
 <style scoped>
