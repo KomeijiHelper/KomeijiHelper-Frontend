@@ -8,7 +8,7 @@
 
      <div class="navbar-right">
        <va-content class="user-role">{{ displayName }}</va-content>
-       <NavBarActions :avatar-name="userName" class="user-dropdown" />
+       <NavBarActions :avatar-name="userName" class="user-dropdown navbar" />
      </div>
 
   </nav>

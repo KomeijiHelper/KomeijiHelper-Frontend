@@ -7,8 +7,8 @@
           <div class="subtitle-text">愿这里成为您倾诉的港湾</div>
         </div>
         <va-button class="exit-button" @click="leaveChat">
-          <span class="exit-text">结束会话</span>
-          <span class="exit-icon">👋</span>
+          <span class="exit-text">结束会话&nbsp;</span>
+          <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
         </va-button>
       </va-card-title>
       <va-card-content>
