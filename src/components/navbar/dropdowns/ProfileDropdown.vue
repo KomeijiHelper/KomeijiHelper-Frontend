@@ -28,7 +28,8 @@
     </template>
     <template v-else>
         <router-link to="/leadIn" class="user-icon">
-            <i class="fas fa-sign-in-alt"></i>
+            <span><i class="fa-solid fa-user"></i></span>
+            <span>&nbsp;登录</span>
         </router-link>
     </template>
 </template>
@@ -108,7 +109,7 @@ const resolveLinkAttribute = (item) => {
 <style lang="css" scoped>
 .user-icon {
     color: azure;
-    font-size: 30px;
+    font-size: 20px;
     justify-content: center;
     align-items: center;
     border-radius: 30%;
