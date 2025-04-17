@@ -28,9 +28,11 @@
 import { ref } from "vue";
 import InputBlank from "@/components/InputBlank.vue";
 import userApi from "@/api/userApi.js";
+import {useToast} from "vuestic-ui";
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
+const {notify} = useToast();
 
 const handleLogin = async () => {
   const username = usernameRef.value.getValue();
@@ -43,14 +45,16 @@ const handleLogin = async () => {
 
   try {
     const res = await userApi.login(username, password);
-    if (res.success) {
-      alert("登录成功！");
-      // 你可以跳转页面，比如 router.push("/dashboard");
+    console.log(res)
+    if (res.status === 200) {
+      notify("登陆成功");
+      await (new Promise(resolve => setTimeout(resolve, 1000)));
+      window.location.reload();
     } else {
-      alert(res.message || "登录失败！");
+      notify("登录失败！");
     }
   } catch (err) {
-    alert("登录请求失败！");
+    notify("登录请求失败！请检查控制台");
     console.error(err);
   }
 };
