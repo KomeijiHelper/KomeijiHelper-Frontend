@@ -13,13 +13,7 @@
 
   </nav>
   <main>
-    <nav class="flex items-center">
-      <VaBreadcrumbs v-if="loggedIn">
-      <VaBreadcrumbsItem label="Home" to="/workbench"/>
-      <VaBreadcrumbsItem v-for="item in breadcrumbs" :label="item.label" :to="item.to"></VaBreadcrumbsItem>
-      </VaBreadcrumbs>
-    </nav>
-    <router-view></router-view>
+    <router-view class="global"></router-view>
   </main>
 </template>
 
@@ -106,6 +100,9 @@ body,
   cursor: pointer;
 }
 
+.global{
+  background: linear-gradient(120deg, #fdfbfb 0%, #fff5eb 100%);
+}
 </style>
 
 <style lang="scss">

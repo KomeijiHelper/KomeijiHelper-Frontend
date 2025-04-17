@@ -26,15 +26,15 @@
                   @keydown.enter.exact="sendMessage" />
               </div>
               <div class="button-group">
-                <VaButton class="sendline-button" @click="toggleEmoji" style="width: 3%;">
+                <VaButton class="action-button" @click="toggleEmoji" style="width: 5vh;">
                   😊
                 </VaButton>
-                <VaButton class="sendline-button" @click="openImageDialog">
+                <VaButton class="action-button" @click="openImageDialog" style="width: 6vh;">
                   <input ref="fileInput" type="file" multiple accept="image/*" style="display: none;"
                     @change="handlerFileChange"></input>
                   <VaIcon name="fa-image"></VaIcon>
                 </VaButton>
-                <VaButton class="sendline-button" @click="sendMessage" style="width:8%;">
+                <VaButton class="send-button" @click="sendMessage" style="width:10vh;">
                   发送
                 </VaButton>
               </div>
@@ -50,11 +50,11 @@
                   </div>
                 </VaCard>
               </div>
-              <div>
-                <VaProgressBar v-if="uploadImgCount != 0" indeterminate content-inside size="30px">上传图片中
-                </VaProgressBar>
-              </div>
             </transition>
+          </div>
+          <div>
+            <VaProgressBar v-if="uploadImgCount != 0" indeterminate content-inside size="30px">上传图片中
+            </VaProgressBar>
           </div>
         </div>
       </va-card-content>
@@ -410,8 +410,7 @@ const leaveChat = () => {
   background: linear-gradient(135deg, #ffb74d, #ffa726);
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
+  height: 6vh;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -429,7 +428,7 @@ const leaveChat = () => {
   color: white;
   border: none;
   padding: 0 20px;
-  height: 40px;
+  height: 6vh;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -499,7 +498,7 @@ const leaveChat = () => {
 .input-wrapper {
   flex: 1;
   margin-left: auto;
-  max-width: 80%;
+  max-width: 90%;
 }
 
 @keyframes shimmer {

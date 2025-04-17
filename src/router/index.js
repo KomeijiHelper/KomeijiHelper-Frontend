@@ -14,6 +14,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import FAQView from "@/views/FAQView.vue";
 import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
+import LeadIn from "@/views/LeadIn.vue";
 
 
 const routes = [
