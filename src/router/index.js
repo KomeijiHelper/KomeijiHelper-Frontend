@@ -15,6 +15,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import FAQView from "@/views/FAQView.vue";
 import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
 
+
 const routes = [
     {
         path: "/",
@@ -59,6 +60,12 @@ const routes = [
                 next()
             }
         }
+    },
+    {
+        path: "/leadIn",
+        name: "LeadIn",
+        component: LeadIn,
+        meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]},
     },
     {
         path: "/about",
@@ -170,8 +177,8 @@ router.beforeEach(async (to, from, next) => {
     if (userRole.toString() !== oldUserRole) { console.log(userRole, "!=", oldUserRole);window.location.reload(); }
     console.log("from", from.path, "to", to.path);
     if (to.meta.needAuth && !isAuthenticated) {
-        console.log("推到login", to.meta.needAuth, !isAuthenticated);
-        next('/login');
+        console.log("推到leadin", to.meta.needAuth, !isAuthenticated);
+        next('/leadIn');
     } else if (to.meta.needAuth && isAuthenticated && to.meta.roles && !to.meta.roles.includes(userRole)) {
         console.log("推到主页", to.meta.roles, !to.meta.roles.includes(userRole));
         next('/');
