@@ -44,7 +44,6 @@ export default {
         const result = await apiClient.post('/user/login', postJson);
         localStorage.setItem("userName", username);
         localStorage.setItem("logged", true);
-        window.location.reload();
         return result;
     },
 
