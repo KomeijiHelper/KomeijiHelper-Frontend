@@ -1,6 +1,5 @@
 <template>
     <div>
-        <NotificationDropdown></NotificationDropdown>
         <ProfileDropdown :avatar-name="avatarName"></ProfileDropdown>
     </div>
 </template>
