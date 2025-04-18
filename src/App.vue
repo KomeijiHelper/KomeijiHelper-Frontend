@@ -10,8 +10,9 @@
       <va-content class="user-role">{{ displayName }}</va-content>
       <NavBarActions :avatar-name="userName" class="user-dropdown nav-link" />
     </div>
-
   </nav>
+
+  <AIChatWidget></AIChatWidget>
   <main>
     <router-view class="global"></router-view>
     <!-- <canvas v-if="loggedIn" id="model_view"></canvas> -->
@@ -22,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { onMounted, ref, watchEffect,onBeforeUnmount } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
 import { VaContent } from "vuestic-ui";
@@ -33,6 +34,19 @@ import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
 const displayName = ref(localStorage.getItem("displayUserRole"));
+
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
+function handleBeforeUnload(e) {
+  userApi.logout();
+  console.log('🧹 页面即将关闭，执行清理操作')
+}
 
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";

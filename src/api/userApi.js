@@ -142,4 +142,10 @@ export default {
         }
         return apiClient.post('/chatRecord/rating', postJson);
     },
+    async chatWithAI(content) {
+        const postJson = {
+            message: content,
+        }
+        return await apiClient.post('/ai/chat', postJson);
+    }
 };
