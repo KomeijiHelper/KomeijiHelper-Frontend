@@ -10,14 +10,16 @@
        <va-content class="user-role">{{ displayName }}</va-content>
        <NavBarActions :avatar-name="userName" class="user-dropdown navbar" />
      </div>
-
   </nav>
+
+  <AIChatWidget></AIChatWidget>
   <main>
     <router-view class="global"></router-view>
   </main>
 </template>
 
 <script setup>
+import AIChatWidget from "@/components/AIChatWidget.vue";
 import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
