@@ -35,9 +35,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { VaButton } from 'vuestic-ui/web-components';
 import userApi from '@/api/userApi';
+import {ref} from 'vue';
+import {VaButton} from 'vuestic-ui/web-components';
 
 defineProps({
     avatarName: String,

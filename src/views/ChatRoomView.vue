@@ -64,24 +64,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, useTemplateRef, reactive, onUnmounted } from 'vue'
+import userApi from '@/api/userApi';
+import Rating from "@/components/Rating.vue";
+import router from "@/router/index.js";
+import emojiList from '@/services/emoji/emoji';
+import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
-  VaTextarea,
-  VaLayout,
-  VaCard,
+  useModal,
   VaButton,
-  VaImage,
-  VaCardTitle,
+  VaCard,
   VaCardContent,
+  VaCardTitle,
+  VaLayout,
   VaScrollContainer,
-  useModal
+  VaTextarea
 } from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
-import router from "@/router/index.js";
-import emojiList from '@/services/emoji/emoji';
-import userApi from '@/api/userApi';
-import Rating from "@/components/Rating.vue";
 
 const messageContent = ref('');
 const showEmoji = ref(false);

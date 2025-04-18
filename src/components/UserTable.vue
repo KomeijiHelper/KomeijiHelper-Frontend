@@ -1,16 +1,17 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
 import userApi from "@/api/userApi.js";
+import {computed, onMounted, ref} from "vue";
 import {
+  useModal,
+  useToast,
   VaButton,
   VaCard,
   VaCardContent,
   VaCardTitle,
   VaContent,
   VaInput,
-  VaSelect,
   VaPagination,
-  useModal, useToast,
+  VaSelect,
 } from "vuestic-ui";
 
 const users = ref([]);

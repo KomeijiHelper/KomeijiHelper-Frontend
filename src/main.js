@@ -1,11 +1,11 @@
 import "./scss/main.scss"
 
-import { createApp } from "vue";
+import {createApp} from "vue";
+import {createVuestic} from "vuestic-ui/web-components";
+import 'vuestic-ui/css';
 import App from "./App.vue";
 import router from "./router";
 import '@fortawesome/fontawesome-free/css/all.css';
-import { createVuestic } from "vuestic-ui/web-components";
-import 'vuestic-ui/css';
 import vuesticGlobalConfig from "./services/vuestic-ui/global-config"
 
 const app = createApp(App);

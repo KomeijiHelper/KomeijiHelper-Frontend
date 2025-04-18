@@ -26,9 +26,8 @@
 </template>
 
 <script setup>
-import { VaAvatar,VaModal } from "vuestic-ui"
-import { computed, onMounted } from "vue"
-import { ref } from "vue"
+import {computed, ref} from "vue"
+import {VaAvatar, VaModal} from "vuestic-ui"
 import MessageType from "../views/Chat/widgets/MessageType.js";
 
 const props = defineProps({

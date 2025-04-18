@@ -32,7 +32,7 @@
 
 <script setup>
 import userApi from "@/api/userApi.js";
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 const show = ref(false)
 const logged = ref(localStorage.getItem("logged")==="true"||false);

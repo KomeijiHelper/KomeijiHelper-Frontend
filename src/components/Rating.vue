@@ -30,9 +30,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import {VaCard, VaIcon, VaProgressBar} from "vuestic-ui";
 import userApi from "@/api/userApi.js";
+import {ref} from 'vue'
+import {VaCard, VaIcon, VaProgressBar} from "vuestic-ui";
 
 const rating = ref(0)
 const visible = ref(false)

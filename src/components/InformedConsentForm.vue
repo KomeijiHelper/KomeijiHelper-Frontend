@@ -35,8 +35,8 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
-import { VaButton, VaModal } from 'vuestic-ui'
+import {defineEmits, ref} from 'vue'
+import {VaButton, VaModal} from 'vuestic-ui'
 
 const emit = defineEmits(['confirm', 'cancel'])
 

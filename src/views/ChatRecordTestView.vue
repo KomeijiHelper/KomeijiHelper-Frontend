@@ -13,9 +13,9 @@
 </template>
 
 <script setup>
-import { VaButton, VaModal } from 'vuestic-ui';
-import { ref } from 'vue';
 import ChatRecord from '@/components/ChatRecord.vue';
+import {ref} from 'vue';
+import {VaButton, VaModal} from 'vuestic-ui';
 
 const isLoading = ref(true);
 
