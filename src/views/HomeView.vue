@@ -1,5 +1,5 @@
 <script setup lang="js">
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 
 const isVisible = ref(false);
 const quotes = ref([

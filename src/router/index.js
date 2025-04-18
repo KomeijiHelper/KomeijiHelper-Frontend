@@ -1,20 +1,20 @@
 // src/router/index.js
-import { createRouter, createWebHistory } from "vue-router";
-import LoginView from "@/views/LoginView.vue";
-import AboutView from "@/views/AboutView.vue";
-import HomeView from "@/views/HomeView.vue";
-import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
-import NormalWorkbench from "@/views/NormalWorkbench.vue";
-import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
-import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
-import ChatRoomView from "@/views/ChatRoomView.vue";
 import userApi from "@/api/userApi.js";
 import {ClearLocalStorage} from "@/utils.js";
-import RegisterView from "@/views/RegisterView.vue";
-import ProfileView from "@/views/ProfileView.vue";
-import FAQView from "@/views/FAQView.vue";
+import AboutView from "@/views/AboutView.vue";
+import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
 import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
+import ChatRoomView from "@/views/ChatRoomView.vue";
+import FAQView from "@/views/FAQView.vue";
+import HomeView from "@/views/HomeView.vue";
 import LeadIn from "@/views/LeadIn.vue";
+import LoginView from "@/views/LoginView.vue";
+import ManagerWorkbench from "@/views/ManagerWorkbench.vue";
+import NormalWorkbench from "@/views/NormalWorkbench.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import RegisterView from "@/views/RegisterView.vue";
+import SupervisorWorkbench from "@/views/SupervisorWorkbench.vue";
+import {createRouter, createWebHistory} from "vue-router";
 
 
 const routes = [

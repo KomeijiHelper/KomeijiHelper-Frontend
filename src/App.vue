@@ -19,11 +19,11 @@
 </template>
 
 <script setup>
+import userApi from "@/api/userApi.js";
 import AIChatWidget from "@/components/AIChatWidget.vue";
 import {onBeforeUnmount, onMounted, ref, watchEffect} from "vue";
-import userApi from "@/api/userApi.js";
-import NavBarActions from "./components/navbar/NavBarActions.vue";
 import {VaContent} from "vuestic-ui";
+import NavBarActions from "./components/navbar/NavBarActions.vue";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");

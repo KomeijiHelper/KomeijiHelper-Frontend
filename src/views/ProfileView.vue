@@ -1,5 +1,5 @@
 <script setup>
-import { defineAsyncComponent } from 'vue';
+import {defineAsyncComponent} from 'vue';
 
 const UserProfile = defineAsyncComponent(() => import('../components/Profile.vue'));
 </script>
