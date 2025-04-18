@@ -29,9 +29,9 @@ const handleButtonClick1 = async () => {
     <img src="https://raw.githubusercontent.com/KomeijiHelper/KomeijiHelper-Frontend/refs/heads/master/src/assets/logo.svg" class="link-icon"  alt=""/>
     <h1>关于我们</h1>
     <p class="description">
-      我们是 <strong>软件开发实践小组2</strong>。<br>
-      <a href="https://github.com/orgs/KomeijiHelper/repositories" target="_blank">我们的项目主页</a>。
+      我们是 <strong>软件开发实践小组2</strong>。
     </p>
+    <a href="https://github.com/orgs/KomeijiHelper/repositories" target="_blank">我们的项目主页</a>
 
     <h2>成员介绍</h2>
     <ul class="member-list">
@@ -64,8 +64,10 @@ const handleButtonClick1 = async () => {
 
 <style scoped>
 .about-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  max-width: 800px;
   margin: 0 auto;
 }
 

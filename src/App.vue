@@ -8,40 +8,38 @@
 
      <div class="navbar-right">
        <va-content class="user-role">{{ displayName }}</va-content>
-       <NavBarActions :avatar-name="userName" class="user-dropdown navbar" />
+       <NavBarActions :avatar-name="userName" class="user-dropdown nav-link" />
      </div>
 
   </nav>
   <main>
     <router-view class="global"></router-view>
+    <canvas v-if="loggedIn" id="model_view"></canvas>
   </main>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { computed,nextTick, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
-import { useRoute} from "vue-router";
-import {VaBreadcrumbs, VaBreadcrumbsItem, VaContent} from "vuestic-ui";
+import {VaContent} from "vuestic-ui";
+import {main} from "./assets/live2d/hiyori/runtime/index"
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
 const displayName = ref(localStorage.getItem("displayUserRole"));
 
-const route = useRoute();
-
-const breadcrumbs = computed(()=> {
-  const matched = route.matched.filter(r=>r.name !== 'Home')
-  return matched.map((r,index)=>({
-    label:r.name,
-    to:index < matched.length-1 ? {name:r.name} : undefined,
-  }))
-});
-
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
   loggedIn.value = localStorage.getItem("logged") === "true";
   displayName.value = localStorage.getItem("displayUserRole");
+});
+
+
+onMounted(()=>{
+  nextTick(()=>{
+    main().then();
+  })
 });
 
 </script>
@@ -62,6 +60,7 @@ body,
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: relative;
+  height: 8vh;
 }
 
 .nav-link {
@@ -102,6 +101,17 @@ body,
 
 .global{
   background: linear-gradient(120deg, #fdfbfb 0%, #fff5eb 100%);
+  height: 92vh;
+}
+
+main {
+  position: relative;
+}
+
+#model_view {
+  position: absolute;
+  top: 20%;
+  left:80%;
 }
 </style>
 
@@ -110,5 +120,6 @@ body,
   font-family: 'Inter', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 </style>
