@@ -1,29 +1,34 @@
 <template>
-   <nav class="navbar">
+  <nav class="navbar">
     <router-link to="/" class="nav-link">首页</router-link>
     <span class="separator">|</span>
     <router-link to="/about" class="nav-link">关于</router-link>
-     <span class="separator">|</span>
-     <router-link to="/workbench" class="nav-link">工作台</router-link>
+    <span class="separator">|</span>
+    <router-link to="/workbench" class="nav-link">工作台</router-link>
 
-     <div class="navbar-right">
-       <va-content class="user-role">{{ displayName }}</va-content>
-       <NavBarActions :avatar-name="userName" class="user-dropdown nav-link" />
-     </div>
+    <div class="navbar-right">
+      <va-content class="user-role">{{ displayName }}</va-content>
+      <NavBarActions :avatar-name="userName" class="user-dropdown nav-link" />
+    </div>
 
   </nav>
   <main>
     <router-view class="global"></router-view>
-    <canvas v-if="loggedIn" id="model_view"></canvas>
+    <!-- <canvas v-if="loggedIn" id="model_view"></canvas> -->
+    <Vue3DraggableResizable :parent="true" :resizable="false" class="draggable">
+      <Live2d v-if="loggedIn"></Live2d>
+    </Vue3DraggableResizable>
   </main>
 </template>
 
 <script setup>
-import { computed,nextTick, onMounted, onUnmounted, ref, watchEffect } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watchEffect } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
-import {VaContent} from "vuestic-ui";
-import {main} from "./assets/live2d/hiyori/runtime/index"
+import { VaContent } from "vuestic-ui";
+import Live2d from "./components/Live2d.vue";
+import Vue3DraggableResizable from 'vue3-draggable-resizable'
+import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
@@ -35,13 +40,6 @@ watchEffect(() => {
   displayName.value = localStorage.getItem("displayUserRole");
 });
 
-
-onMounted(()=>{
-  nextTick(()=>{
-    main().then();
-  })
-});
-
 </script>
 
 <style scoped>
@@ -51,6 +49,7 @@ body,
   height: 100%;
   margin: 0;
 }
+
 .navbar {
   background-color: #333;
   padding: 10px 20px;
@@ -88,8 +87,10 @@ body,
   right: 20px;
   display: flex;
   align-items: center;
-  gap: 2vw; /* 以百分比控制它们之间的间距 */
-  min-width: 20%; /* 你可以按需调整宽度 */
+  gap: 2vw;
+  /* 以百分比控制它们之间的间距 */
+  min-width: 20%;
+  /* 你可以按需调整宽度 */
   justify-content: flex-end;
 }
 
@@ -99,19 +100,20 @@ body,
   cursor: pointer;
 }
 
-.global{
+.global {
   background: linear-gradient(120deg, #fdfbfb 0%, #fff5eb 100%);
   height: 92vh;
 }
 
+
+.draggable{
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: transparent !important;
+}
 main {
   position: relative;
-}
-
-#model_view {
-  position: absolute;
-  top: 20%;
-  left:80%;
 }
 </style>
 
