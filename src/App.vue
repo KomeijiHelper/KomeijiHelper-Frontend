@@ -1,15 +1,15 @@
 <template>
-   <nav class="navbar">
+  <nav class="navbar">
     <router-link to="/" class="nav-link">首页</router-link>
     <span class="separator">|</span>
     <router-link to="/about" class="nav-link">关于</router-link>
-     <span class="separator">|</span>
-     <router-link to="/workbench" class="nav-link">工作台</router-link>
+    <span class="separator">|</span>
+    <router-link to="/workbench" class="nav-link">工作台</router-link>
 
-     <div class="navbar-right">
-       <va-content class="user-role">{{ displayName }}</va-content>
-       <NavBarActions :avatar-name="userName" class="user-dropdown navbar" />
-     </div>
+    <div class="navbar-right">
+      <va-content class="user-role">{{ displayName }}</va-content>
+      <NavBarActions :avatar-name="userName" class="user-dropdown navbar"/>
+    </div>
   </nav>
 
   <AIChatWidget></AIChatWidget>
@@ -20,25 +20,27 @@
 
 <script setup>
 import AIChatWidget from "@/components/AIChatWidget.vue";
-import { computed, onMounted, onUnmounted, ref, watchEffect } from "vue";
+import {onBeforeUnmount, onMounted, ref, watchEffect} from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
-import { useRoute} from "vue-router";
-import {VaBreadcrumbs, VaBreadcrumbsItem, VaContent} from "vuestic-ui";
+import {VaContent} from "vuestic-ui";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userName = ref(localStorage.getItem("userName") || "");
 const displayName = ref(localStorage.getItem("displayUserRole"));
 
-const route = useRoute();
+onMounted(() => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+})
 
-const breadcrumbs = computed(()=> {
-  const matched = route.matched.filter(r=>r.name !== 'Home')
-  return matched.map((r,index)=>({
-    label:r.name,
-    to:index < matched.length-1 ? {name:r.name} : undefined,
-  }))
-});
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
+function handleBeforeUnload(e) {
+  userApi.logout();
+  console.log('🧹 页面即将关闭，执行清理操作')
+}
 
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
@@ -55,6 +57,7 @@ body,
   height: 100%;
   margin: 0;
 }
+
 .navbar {
   background-color: #333;
   padding: 10px 20px;
@@ -102,7 +105,7 @@ body,
   cursor: pointer;
 }
 
-.global{
+.global {
   background: linear-gradient(120deg, #fdfbfb 0%, #fff5eb 100%);
 }
 </style>
