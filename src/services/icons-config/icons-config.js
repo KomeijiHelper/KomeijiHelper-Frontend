@@ -1,4 +1,4 @@
-import { createIconsConfig } from 'vuestic-ui'
+import {createIconsConfig} from 'vuestic-ui'
 import aliases from './aliases'
 
 export default createIconsConfig({

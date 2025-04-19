@@ -30,10 +30,11 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
 import userApi from "@/api/userApi.js";
 import PasswordEditor from "@/components/PasswordEditor.vue";
-import {useModal, useToast, VaContent} from "vuestic-ui";
+import {reactive, ref} from 'vue';
+import {useToast, VaContent} from "vuestic-ui";
+
 const {notify} = useToast()
 const userData = await userApi.checkSession();
 

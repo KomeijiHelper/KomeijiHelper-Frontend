@@ -20,8 +20,9 @@
 
 <script>
 import userApi from '@/api/userApi.js'
-import router from "@/router/index.js";
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
+import router from "@/router/index.js";
+
 export default {
   name: 'SelectConsultant',
   components: {InformedConsentForm},
