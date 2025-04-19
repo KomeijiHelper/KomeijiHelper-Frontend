@@ -249,8 +249,7 @@ const leaveChat = () => {
   confirm('确定要离开聊天室吗?').then(
     (ok) => {
       if (ok) {
-        leave = true;
-        websocket.close()
+        websocket.close(1000,"normal close");
       }
     })
 }
