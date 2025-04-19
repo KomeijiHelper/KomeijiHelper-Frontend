@@ -18,7 +18,7 @@
         <span>AI Chat</span>
         <button class="chat-close" @click="show = false">✖️</button>
       </div>
-      <div class="chat-body">
+      <div class="chat-body" ref="chatBody">
         <div v-for="(msg, idx) in messages" :key="idx" class="chat-message" :class="msg.role">
           <div class="chat-bubble">{{ msg.content }}</div>
         </div>
@@ -32,7 +32,7 @@
 
 <script setup>
 import userApi from "@/api/userApi.js";
-import { ref } from 'vue'
+import { nextTick, ref, useTemplateRef, watch } from 'vue'
 
 const show = ref(false)
 const logged = ref(localStorage.getItem("logged")==="true"||false);
@@ -41,6 +41,19 @@ const loading = ref(false)
 const messages = ref([
   { role: 'system', content: '你好？我是KomeijiHelper平台的AI咨询师，请问有什么可以帮助您的？' }
 ])
+const chatBody = useTemplateRef('chatBody');
+
+const thinking = ()=> {
+  let count = 1;
+  const thinkingMessage = {role:"assistant",content:""}
+  messages.value.push(thinkingMessage);
+
+  return setInterval(()=>{
+    count = (count %3) + 1;
+    thinkingMessage.content = ".".repeat(count);
+    messages.value = [...messages.value];
+  },500);
+}
 
 const send = async () => {
   const content = input.value.trim()
@@ -50,15 +63,29 @@ const send = async () => {
   loading.value = true
 
   try {
+    const intervalId = thinking();
     const reply = await userApi.chatWithAI(content)
-    console.log(reply)
+    clearInterval(intervalId);
+    messages.value.pop();
     messages.value.push({ role: 'assistant', content: reply.data.data })
+    scrollToBottom();
   } catch (e) {
     console.error(e)
   } finally {
     loading.value = false
   }
 }
+
+const scrollToBottom = async ()=> {
+  await nextTick(()=>{
+    const el = chatBody.value;
+    if(el) el.scrollTop = el.scrollHeight;
+  });
+}
+
+watch(()=> messages.value.length,()=>{
+  scrollToBottom();
+});
 
 </script>
 

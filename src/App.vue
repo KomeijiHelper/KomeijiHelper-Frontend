@@ -15,38 +15,31 @@
   <AIChatWidget></AIChatWidget>
   <main>
     <router-view class="global"></router-view>
-    <!-- <canvas v-if="loggedIn" id="model_view"></canvas> -->
-    <Vue3DraggableResizable :parent="true" :resizable="false" class="draggable">
-      <Live2d v-if="loggedIn"></Live2d>
-    </Vue3DraggableResizable>
+    <Live2d v-if="loggedIn && userRole === '0'"></Live2d>
   </main>
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect,onBeforeUnmount } from "vue";
+import { onMounted, ref, watchEffect, onBeforeUnmount } from "vue";
 import userApi from "@/api/userApi.js";
 import NavBarActions from "./components/navbar/NavBarActions.vue";
 import { VaContent } from "vuestic-ui";
 import Live2d from "./components/Live2d.vue";
-import Vue3DraggableResizable from 'vue3-draggable-resizable'
-import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
+import AIChatWidget from "./components/AIChatWidget.vue";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
+const userRole = ref(localStorage.getItem("userRole") || "-1");
 const userName = ref(localStorage.getItem("userName") || "");
 const displayName = ref(localStorage.getItem("displayUserRole"));
 
 onMounted(() => {
-  window.addEventListener('beforeunload', handleBeforeUnload)
+  // 禁用右键拖拽
+  window.addEventListener('mousedown', (e) => {
+    if (e.button === 2 || e.target.closest('.vdr')) {
+      e.stopPropagation()
+    }
+  }, true)
 })
-
-onBeforeUnmount(() => {
-  window.removeEventListener('beforeunload', handleBeforeUnload)
-})
-
-function handleBeforeUnload(e) {
-  userApi.logout();
-  console.log('🧹 页面即将关闭，执行清理操作')
-}
 
 watchEffect(() => {
   userName.value = localStorage.getItem("userName") || "";
@@ -120,12 +113,8 @@ body,
 }
 
 
-.draggable{
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  background: transparent !important;
-}
+
+
 main {
   position: relative;
 }
