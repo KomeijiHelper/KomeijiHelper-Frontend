@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, onUnmounted, ref } from 'vue';
+import {onMounted, onUnmounted, reactive, ref} from 'vue';
 
 // FAQ数据
 const faqs = reactive([

@@ -25,9 +25,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import InputBlank from "@/components/InputBlank.vue";
 import userApi from "@/api/userApi.js";
+import InputBlank from "@/components/InputBlank.vue";
+import {ref} from "vue";
 import {useToast} from "vuestic-ui";
 
 const usernameRef = ref(null);
