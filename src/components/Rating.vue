@@ -38,19 +38,31 @@ const rating = ref(0)
 const visible = ref(false)
 const loading = ref(false)
 const submitted = ref(false)
-
-function handleRating(star) {
+let resolveAfterClose = null
+async function handleRating(star) {
   if (loading.value) return
 
   rating.value = star
   loading.value = true
   submitted.value = false
 
-  userApi.rating(rating.value===0?0:1, rating.value)
+  await userApi.rating(rating.value === 0 ? 0 : 1, rating.value)
+  submitted.value = true
+  visible.value = false
+  resolveAfterClose?.(rating.value) // 👉 通知外部评分已完成
+  resolveAfterClose = null
+  loading.value = false
 }
 
 function open() {
+  rating.value = 0
+  loading.value = false
+  submitted.value = false
   visible.value = true
+
+  return new Promise((resolve) => {
+    resolveAfterClose = resolve
+  })
 }
 
 function close() {
