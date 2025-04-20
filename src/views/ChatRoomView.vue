@@ -70,7 +70,7 @@ import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
-  useModal,
+  useModal, useToast,
   VaButton,
   VaCard,
   VaCardContent,
@@ -87,6 +87,7 @@ const showEmoji = ref(false);
 const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 const ratingWidget = ref()
+const {notify} = useToast();
 let websocket;
 
 const emojis = emojiList;
@@ -114,11 +115,12 @@ onMounted(() => {
       // normal close, do noting
     }
     else if (event.code === 4000) {
-      alert("对方已退出，关闭聊天");
+      notify("对方已退出，关闭聊天");
     }
     else if (event.code === 4001) {
-      alert("超过十分钟未进行对话，自动关闭聊天");
+      notify("超过十分钟未进行对话，自动关闭聊天");
     }
+    await (new Promise(resolve => setTimeout(resolve, 1000)));
     router.push("/workbench")
   };
 });
@@ -141,16 +143,16 @@ const imgType = ['jpg', 'png', 'jpeg'];
 const checkImage = (files) => {
   for (const file of files) {
     if (file.size / 1024 / 1024 >= 10) {
-      alert("单个最大上传图片大小不超过10MB")
+      notify("单个最大上传图片大小不超过10MB")
       return false;
     }
     if (!file.type.startsWith('image/')) {
-      alert("发送的文件存在不为图片类型的文件")
+      notify("发送的文件存在不为图片类型的文件")
       return false;
     }
     const type = file.type.split('/')[1].toLowerCase();
     if (!imgType.includes(type)) {
-      alert("发送图片仅支持PNG和JPG格式");
+      notify("发送图片仅支持PNG和JPG格式");
       return false;
     }
   }
@@ -239,7 +241,7 @@ const sendImage = async (file) => {
     }
   } catch (error) {
     console.error('error uploading file:', error);
-    alert("上传图片错误")
+    notify("上传图片错误")
   }
 };
 

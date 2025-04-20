@@ -117,10 +117,6 @@ const resolveLinkAttribute = (item) => {
     font-weight: bold;
     transition: background-color 0.3s;
 }
-
-.user-icon:hover {
-    background-color: #0056b3;
-}
 </style>
 
 <style lang="scss">

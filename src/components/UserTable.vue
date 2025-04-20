@@ -47,7 +47,7 @@ const submitUser = async (userIndex) => {
     await fetchUsers()
   } catch (err) {
     console.error(err);
-    alert("提交失败");
+    notify("提交失败");
   }
 };
 
