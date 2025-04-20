@@ -8,10 +8,13 @@
     </div>
     <div v-else class="consultant-list">
       <div v-for="consultant in consultants" 
-           :key="consultant"
+           :key="consultant.consultantId"
            class="consultant-card"
-           @click="selectConsultant(consultant)">
-        <h3>咨询师 {{ consultant }}</h3>
+           @click="selectConsultant(consultant.consultantName)">
+        <h3>咨询师 {{ consultant.consultantName }}</h3>
+        <StarWithPercent :score="consultant.avgScore" />
+        <p>咨询数：{{ consultant.totalRecord }}</p>
+        <p>有评分咨询数：{{ consultant.scoreRecord }}</p>
       </div>
     </div>
     <informed-consent-form ref="consentForm" />
@@ -21,11 +24,12 @@
 <script>
 import userApi from '@/api/userApi.js'
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
+import StarWithPercent from "@/components/StarWithPercent.vue";
 import router from "@/router/index.js";
 
 export default {
   name: 'SelectConsultant',
-  components: {InformedConsentForm},
+  components: {StarWithPercent, InformedConsentForm},
   data() {
     return {
       consultants: [],
@@ -36,9 +40,9 @@ export default {
   },
   async created() {
     try {
-      const response = await userApi.getUsersByUserClass(1);
-      const parsedConsultantsArray = JSON.parse(response.data.data);
-      this.consultants = parsedConsultantsArray.map(item => item.userName);
+      const response = await userApi.getConsultants();
+      this.consultants = response.data.data;
+      console.log(response.data.data)
     } catch (error) {
       console.error('获取咨询师列表失败:', error)
       alert('获取咨询师列表失败')

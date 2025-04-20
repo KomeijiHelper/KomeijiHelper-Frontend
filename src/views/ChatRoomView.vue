@@ -106,16 +106,17 @@ onMounted(() => {
     console.log("WebSocket connected");
   };
 
-  websocket.onclose = (event) => {
+  websocket.onclose = async (event) => {
     console.log("WebSocket disconnected");
-    ratingWidget.value.open();
+    if (localStorage.getItem("userRole") === "0")
+      await ratingWidget.value.open();
     if (event.code === 1000) {
       // normal close, do noting
     }
-    else if (event.code == 4000) {
+    else if (event.code === 4000) {
       alert("对方已退出，关闭聊天");
     }
-    else if (event.code == 4001) {
+    else if (event.code === 4001) {
       alert("超过十分钟未进行对话，自动关闭聊天");
     }
     router.push("/workbench")
