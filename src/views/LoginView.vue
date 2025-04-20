@@ -39,7 +39,7 @@ const handleLogin = async () => {
   const password = passwordRef.value.getValue();
 
   if (!username || !password) {
-    alert("请输入用户名和密码！");
+    notify("请输入用户名和密码！");
     return;
   }
 

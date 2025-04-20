@@ -26,6 +26,9 @@ import userApi from '@/api/userApi.js'
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
 import StarWithPercent from "@/components/StarWithPercent.vue";
 import router from "@/router/index.js";
+import {useToast} from "vuestic-ui";
+
+const {notify} = useToast();
 
 export default {
   name: 'SelectConsultant',
@@ -45,7 +48,7 @@ export default {
       console.log(response.data.data)
     } catch (error) {
       console.error('获取咨询师列表失败:', error)
-      alert('获取咨询师列表失败')
+      notify('获取咨询师列表失败')
     }
   },
   methods: {
@@ -63,16 +66,16 @@ export default {
         const result = await userApi.consulting(consultantId)
         console.log(result.data)
         if(result.data.code === 406) {
-            alert("您已经取消预约")
+            notify("您已经取消预约")
             this.waitingForConfirm = false;
         }
         else if(result.data.code === 407) {
-          alert("咨询师拒绝了请求")
+          notify("咨询师拒绝了请求")
           this.waitingForConfirm = false;
         }
       } catch (error) {
         console.error('选择咨询师失败:', error)
-        alert('选择咨询师失败')
+        notify('选择咨询师失败')
         this.waitingForConfirm = false
       }
     },
@@ -96,7 +99,7 @@ export default {
 
       this.ws.onerror = (error) => {
         console.error('WebSocket错误:', error)
-        alert('连接错误')
+        notify('连接错误')
         this.waitingForConfirm = false
       }
 
