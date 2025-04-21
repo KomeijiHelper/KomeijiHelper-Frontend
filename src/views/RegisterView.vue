@@ -11,6 +11,8 @@
           <InputBlank ref="usernameRef" placeholder="用户名" />
           <InputBlank ref="passwordRef" placeholder="密码" type="password" />
           <InputBlank ref="passwordRepeatRef" placeholder="请重复你的密码" type="password" />
+          <SelectBox ref="userClassRef" placeholder="请选择你要注册的身份" :options="['普通用户', '咨询师', '督导']" @change="handleChange" />
+          <InputBlank v-if="qualificationVisible" ref="qualificationRef" placeholder="请输入资质证书编号" />
         </div>
 
         <button class="register-button" @click="handleRegister">
@@ -30,17 +32,29 @@ import userApi from "@/api/userApi.js";
 import InputBlank from "@/components/InputBlank.vue";
 import {ref} from "vue";
 import {useToast} from "vuestic-ui";
+import SelectBox from "@/components/SelectBox.vue";
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
 const passwordRepeatRef = ref(null);
+const userClassRef = ref(null);
+const qualificationRef = ref(null);
+const qualificationVisible = ref(false);
 const {notify} = useToast();
+const userClass = ref(0);
+
+const handleChange = (value) => {
+  userClass.value = value==="普通用户"?0:value==="咨询师"?1:value==="督导"?2:0;
+  qualificationVisible.value = userClass.value !== 0;
+  console.log("选择了：", userClass.value);
+};
 
 const handleRegister = async () => {
   const username = usernameRef.value.getValue();
   const password = passwordRef.value.getValue();
-  const passwordRepeat = passwordRef.value.getValue();
-
+  const passwordRepeat = passwordRepeatRef.value.getValue();
+  const qualification = qualificationRef.value===null?0:qualificationRef.value.getValue();
+  const userClassCode = userClass.value;
   if (!username || !password || !passwordRepeat) {
     notify("请输入用户名和密码！");
     return;
@@ -51,7 +65,24 @@ const handleRegister = async () => {
     return;
   }
 
-  await userApi.register(username, password);
+  if (qualificationVisible.value && !qualification) {
+    notify("请输入资质证书编号");
+    return;
+  }
+  try
+  {
+    const res = await userApi.register(username, password, userClassCode, qualification);
+    if (res.status === 200) {
+      notify("注册成功");
+      await (new Promise(resolve => setTimeout(resolve, 1000)));
+      window.location.reload();
+    } else {
+      notify("登录失败！");
+    }
+  } catch (err) {
+    notify("注册失败，请检查控制台")
+    console.log(err)
+  }
 };
 </script>
 
