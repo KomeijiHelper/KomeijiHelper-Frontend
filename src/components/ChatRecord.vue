@@ -16,13 +16,14 @@
 </template>
 
 <script setup>
-import {onMounted} from 'vue';
+import {ref,onMounted} from 'vue';
 import ChatBubble from './ChatBubble.vue';
 
 
+const isLoading = ref(true);
+
 const props = defineProps({
   jsondata:String,
-  isLoading:Boolean,
 });
 
 
@@ -58,6 +59,7 @@ onMounted(() => {
     chatBubbleList.push(...chatBubbleList);
     chatBubbleList.push(...chatBubbleList);
     chatBubbleList.push(...chatBubbleList);
+    isLoading.value = false;
 })
 
 </script>
