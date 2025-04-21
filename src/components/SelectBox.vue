@@ -15,7 +15,7 @@ const props = defineProps({
   options: { type: Array, required: true } // 👈 需要传入选项
 });
 const emit = defineEmits(["change"]);
-const selectedValue = ref("");
+const selectedValue = ref(props.options[0] || "");
 const handleChange = () => {
   emit("change", selectedValue.value);
 };
