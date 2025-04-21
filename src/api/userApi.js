@@ -47,7 +47,7 @@ export default {
         return result;
     },
 
-    async register(username, password, userClass, q) {
+    async register(username, password, userClass, q, emergencyContact) {
         const postJson = userClass!==0?{
             userName: username,
             password: password,
@@ -57,6 +57,7 @@ export default {
             userName: username,
             password: password,
             userClass: userClass,
+            emergencyContact: emergencyContact,
         };
         const result = await apiClient.post('/user/register', postJson);
         localStorage.setItem("userName", username);

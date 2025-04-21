@@ -13,6 +13,7 @@
           <InputBlank ref="passwordRepeatRef" placeholder="请重复你的密码" type="password" />
           <SelectBox ref="userClassRef" placeholder="请选择你要注册的身份" :options="['普通用户', '咨询师', '督导']" @change="handleChange" />
           <InputBlank v-if="qualificationVisible" ref="qualificationRef" placeholder="请输入资质证书编号" />
+          <InputBlank v-if="emergencyContactVisible" ref="emergencyContactRef" placeholder="请输入紧急联系人" />
         </div>
 
         <button class="register-button" @click="handleRegister">
@@ -39,13 +40,18 @@ const passwordRef = ref(null);
 const passwordRepeatRef = ref(null);
 const userClassRef = ref(null);
 const qualificationRef = ref(null);
+const emergencyContactRef = ref(null);
+
 const qualificationVisible = ref(false);
+const emergencyContactVisible = ref(true);
+
 const {notify} = useToast();
 const userClass = ref(0);
 
 const handleChange = (value) => {
   userClass.value = value==="普通用户"?0:value==="咨询师"?1:value==="督导"?2:0;
   qualificationVisible.value = userClass.value !== 0;
+  emergencyContactVisible.value = userClass.value === 0;
   console.log("选择了：", userClass.value);
 };
 
@@ -54,6 +60,7 @@ const handleRegister = async () => {
   const password = passwordRef.value.getValue();
   const passwordRepeat = passwordRepeatRef.value.getValue();
   const qualification = qualificationRef.value===null?0:qualificationRef.value.getValue();
+  const emergencyContact = emergencyContactRef.value===null?0:emergencyContactRef.value.getValue();
   const userClassCode = userClass.value;
   if (!username || !password || !passwordRepeat) {
     notify("请输入用户名和密码！");
@@ -69,9 +76,21 @@ const handleRegister = async () => {
     notify("请输入资质证书编号");
     return;
   }
+
+  if (emergencyContactVisible.value) {
+    if (!emergencyContact) {
+      notify("请输入紧急联系人");
+      return;
+    }
+    if (!/^1[3-9]\d{9}$/.test(emergencyContact)) {
+      notify("紧急联系人格式不正确");
+      return;
+    }
+  }
+
   try
   {
-    const res = await userApi.register(username, password, userClassCode, qualification);
+    const res = await userApi.register(username, password, userClassCode, qualification, emergencyContact);
     if (res.status === 200) {
       notify("注册成功");
       await (new Promise(resolve => setTimeout(resolve, 1000)));
