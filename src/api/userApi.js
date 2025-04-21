@@ -47,15 +47,20 @@ export default {
         return result;
     },
 
-    async register(username, password) {
-        const postJson = {
+    async register(username, password, userClass, q) {
+        const postJson = userClass!==0?{
             userName: username,
             password: password,
+            userClass: userClass,
+            qualification: q,
+        }:{
+            userName: username,
+            password: password,
+            userClass: userClass,
         };
         const result = await apiClient.post('/user/register', postJson);
         localStorage.setItem("userName", username);
         localStorage.setItem("logged", true);
-        window.location.reload();
         return result;
     },
 
