@@ -90,6 +90,7 @@ import {
 } from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
+import { useRoute } from 'vue-router'
 
 const messageContent = ref('');
 const showEmoji = ref(false);
@@ -97,7 +98,10 @@ const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 const ratingWidget = ref()
 const {notify} = useToast();
+const route = useRoute()
 const showHelpBtn = ref(false);
+const from = route.query.from || ''
+const to = route.query.to || ''
 let websocket;
 
 const emojis = emojiList;
@@ -108,7 +112,7 @@ const onClick = async () => {
 }
 
 onMounted(() => {
-  websocket = new WebSocket(localStorage.getItem('chatAddress'));
+  websocket = new WebSocket("ws://127.0.0.1:54950/ws?from="+from+"&to="+to);
   localStorage.removeItem('chatAddress');
   showHelpBtn.value = localStorage.getItem('userRole') === "1";
   websocket.onmessage = (event) => {

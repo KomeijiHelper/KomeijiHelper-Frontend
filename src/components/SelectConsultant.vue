@@ -89,9 +89,9 @@ export default {
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.type === 'chat_connect') {
-          const newSocketAddress = "ws://127.0.0.1:54950/ws?from=" + JSON.parse(data.content).from + "&to=" + JSON.parse(data.content).to;
-          localStorage.setItem('chatAddress', newSocketAddress)
-          router.push("/chat/room")
+          const from = JSON.parse(data.content).from
+          const to = JSON.parse(data.content).to
+          router.push({ path: "/chat/room", query: { from, to } })
         }
       }
 
