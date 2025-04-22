@@ -153,5 +153,16 @@ export default {
             message: content,
         }
         return await apiClient.post('/ai/chat', postJson);
+    },
+    getHistoryChat() {
+        return apiClient.get('/chatRecord/getHistoryChat')
+    },
+    downloadChat(chatId){
+        return apiClient.get('/chatRecord/downloadFile', {
+            params:{
+                chatId:chatId,
+            }
+        })
+
     }
 };
