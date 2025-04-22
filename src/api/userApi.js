@@ -83,6 +83,13 @@ export default {
         return await apiClient.post('/online/getUser', postJson);
     },
 
+    async getSupervisors(){
+        const postJson = {
+            userClassCode: 2,
+        };
+        return await apiClient.post('/online/getUser', postJson);
+    },
+
     async checkSession() {
         return (await apiClient.get('/user/checkSession')).data
     },
