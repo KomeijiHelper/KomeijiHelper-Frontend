@@ -1,21 +1,15 @@
 <template>
-    <VaButton preset="primary" @click="toggle">test</VaButton>
-        <VaModal 
-            v-model="show" 
-            fixed-layout
-            no-dismiss
-            blur
-            cancel-text=""
-            ok-text="关闭"
-        >
-            <ChatRecord :jsondata="mockChatJsonString" :is-loading="isLoading" ></ChatRecord>
-        </VaModal>
+  <ChatBubble avatar-name="test" time="test" content="test"></ChatBubble>
+  <ChatBubble avatar-name="test" time="test" :type="ImageType.Image"
+    content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu1wK2MlTz_9k7zKtRn2gf_BdirdeyLT9rOw&s"></ChatBubble>
+  <ChatBubble avatar-name="test" time="test" :type="ImageType.ChatRecord"
+    :content="mockChatJsonString"></ChatBubble>
 </template>
 
 <script setup>
-import ChatRecord from '@/components/ChatRecord.vue';
-import {ref} from 'vue';
-import {VaButton, VaModal} from 'vuestic-ui';
+import ChatBubble from '@/components/ChatBubble.vue';
+import { ref } from 'vue';
+import ImageType from "./Chat/widgets/MessageType"
 
 const isLoading = ref(true);
 
@@ -59,10 +53,10 @@ const mockChatJsonString = `{
 const show = ref(false);
 
 const toggle = () => {
-    show.value = !show.value;
-    setTimeout(()=>{
-        isLoading.value = false;
-    },2000);
+  show.value = !show.value;
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 2000);
 }
 
 </script>

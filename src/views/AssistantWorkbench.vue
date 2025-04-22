@@ -15,10 +15,6 @@
     <div v-else class="no-request">
       <p>等待新的咨询请求...</p>
     </div>
-
-    <div v-else class="no-request">
-      <p>等待新的咨询请求...</p>
-    </div>
   </div>
 </template>
 
@@ -61,9 +57,10 @@ export default {
             message: requestJson.message,
           });
         } else if (data.type === 'chat_connect') {
-          const newSocketAddress = "wss://komeiji.cyou:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
-          localStorage.setItem('chatAddress', newSocketAddress)
-          router.push("/chat")
+          const from =JSON.parse(data.content).from
+          const to=JSON.parse(data.content).to
+          const url = `/chat/room?from=${from}&to=${to}`
+          window.open(url, '_blank')
         }
       }
 

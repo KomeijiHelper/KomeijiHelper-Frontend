@@ -6,10 +6,20 @@
           <div class="title-text">温暖对话空间</div>
           <div class="subtitle-text">愿这里成为您倾诉的港湾</div>
         </div>
-        <va-button class="exit-button" @click="leaveChat">
-          <span class="exit-text">结束会话&nbsp;</span>
-          <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
-        </va-button>
+        <div class="exit-button">
+          <va-button v-if="showHelpBtn" @click="onClick">
+            <span class="exit-text">求助督导&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+          </va-button>
+          <va-button v-if="load!==''" @click="onClickSyncMessage">
+            <span class="exit-text">同步记录&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+          </va-button>
+          <va-button @click="leaveChat">
+            <span class="exit-text">结束会话&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
+          </va-button>
+        </div>
       </va-card-title>
       <va-card-content>
         <div class="chat-container">
@@ -61,6 +71,7 @@
     </va-card>
     <Rating ref="ratingWidget" />
   </va-layout>
+  <SelectSupervisorPopup :show="showPopup" @close="showPopup = false" />
 </template>
 
 <script setup>
@@ -68,6 +79,7 @@ import userApi from '@/api/userApi';
 import Rating from "@/components/Rating.vue";
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
+import SelectSupervisorPopup from "@/views/SelectSupervisor.vue";
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
   useModal, useToast,
@@ -76,11 +88,13 @@ import {
   VaCardContent,
   VaCardTitle,
   VaLayout,
+  VaProgressBar,
   VaScrollContainer,
   VaTextarea
 } from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
+import { useRoute } from 'vue-router'
 
 const messageContent = ref('');
 const showEmoji = ref(false);
@@ -88,15 +102,29 @@ const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 const ratingWidget = ref()
 const {notify} = useToast();
+const route = useRoute()
+const showHelpBtn = ref(false);
+const from = route.query.from || ''
+const to = route.query.to || ''
+const load = ref(route.query.load || '')
 let websocket;
 
 const emojis = emojiList;
 const chatBubbleList = reactive([])
+const showPopup = ref(false);
+const onClick = async () => {
+  showPopup.value = true;
+}
+const onClickSyncMessage = async () => {
+  const messageObj = (await userApi.getTempChat(localStorage.getItem("userName"))).data.data
+  sendTextToWebSocket(MessageType.ChatRecord, messageObj)
+}
 
 onMounted(() => {
-  websocket = new WebSocket(localStorage.getItem('chatAddress'));
-  localStorage.removeItem('chatAddress');
+  websocket = new WebSocket("ws://127.0.0.1:54950/ws?from="+from+"&to="+to);
+  showHelpBtn.value = localStorage.getItem('userRole') === "1" && load.value === '';
   websocket.onmessage = (event) => {
+    console.log(event.data);
     const data = JSON.parse(event.data);
     const content = JSON.parse(data.content);
     const time = new Date(data.timestamp);
@@ -105,6 +133,7 @@ onMounted(() => {
   };
   websocket.onopen = () => {
     console.log("WebSocket connected");
+    if (load.value !== '') onClickSyncMessage();
   };
 
   websocket.onclose = async (event) => {

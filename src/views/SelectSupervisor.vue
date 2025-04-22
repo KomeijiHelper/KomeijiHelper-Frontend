@@ -2,12 +2,12 @@
   <div v-if="show" class="overlay">
     <div class="popup">
       <div class="popup-header">
-        <h2>选择咨询师</h2>
+        <h2>选择督导</h2>
         <button class="close-btn" @click="$emit('close')">×</button>
       </div>
       <div v-if="waitingForConfirm" class="waiting-message">
         <div class="spinner"></div>
-        <p>等待咨询师确认...</p>
+        <p>等待督导确认...</p>
         <button @click="cancelRequest" class="cancel-btn">取消请求</button>
       </div>
       <div v-else class="consultant-list">
@@ -15,7 +15,7 @@
              :key="consultant.consultantId"
              class="consultant-card"
              @click="selectConsultant(consultant.consultantId)">
-          <h3>咨询师 {{ consultant.consultantName }}</h3>
+          <h3>督导 {{ consultant.consultantName }}</h3>
           <StarWithPercent :score="consultant.avgScore" />
           <p>咨询数：{{ consultant.totalRecord }}</p>
           <p>有评分咨询数：{{ consultant.scoreRecord }}</p>
@@ -35,7 +35,7 @@ import { useToast } from "vuestic-ui";
 const { notify } = useToast();
 
 export default {
-  name: 'SelectConsultantPopup',
+  name: 'SelectSupervisorPopup',
   props: {
     show: Boolean
   },
@@ -50,8 +50,9 @@ export default {
   },
   async created() {
     try {
-      const response = await userApi.getConsultants();
+      const response = await userApi.getSupervisors();
       this.consultants = response.data.data;
+      console.log(this.consultants);
     } catch (error) {
       console.error('获取咨询师列表失败:', error)
       notify('获取咨询师列表失败')
@@ -69,18 +70,18 @@ export default {
           notify("您已经取消预约")
           this.waitingForConfirm = false;
         } else if (result.data.code === 407) {
-          notify("咨询师拒绝了请求")
+          notify("督导拒绝了请求")
           this.waitingForConfirm = false;
         }
       } catch (error) {
-        console.error('选择咨询师失败:', error)
-        notify('选择咨询师失败')
+        console.error('选择督导失败:', error)
+        notify('选择督导失败')
         this.waitingForConfirm = false
       }
     },
     setupWebSocket() {
       const id = localStorage.getItem('userName');
-      this.ws = new WebSocket('wss://komeiji.cyou:54950/ws?id='+id)
+      this.ws = new WebSocket('ws://127.0.0.1:54950/ws?id=' + id)
 
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
@@ -91,7 +92,7 @@ export default {
         if (data.type === 'chat_connect') {
           const from = JSON.parse(data.content).from
           const to = JSON.parse(data.content).to
-          const url = `/chat/room?from=${from}&to=${to}`
+          const url = `/chat/room?from=${from}&to=${to}&load=yes`
           window.open(url, '_blank')
         }
       }

@@ -4,7 +4,7 @@
     <VaAvatar class="chat-avatar" :src="avatarSrc" :fallback-text="avatarName" :style="avatarStyle"
               :color="isSelf ? selfAvatarColor : otherAvatarColor" :text-color="textColor"></VaAvatar>
     <div class="chat-content">
-      <div class="chat-message">
+      <div class="chat-message" @click="showBigger = !showBigger">
         <!-- TODO -->
         <template v-if="type === MessageType.Image">
           <VaModal
@@ -14,10 +14,23 @@
           >
           <img :src="content"  class="image-fit"/>
         </VaModal>
-          <img :src="content" @click="showBigger = !showBigger" />
+          <img :src="content"/>
         </template>
         <template v-else-if="type === MessageType.Text">
           <slot>{{ content }}</slot>
+        </template>
+        <template v-else-if="type == MessageType.ChatRecord">
+          <span><i class="fa-solid fa-clock-rotate-left">{{ "聊天记录" }}</i></span>
+          <VaModal
+            v-model="showBigger"
+            fixed-layout
+            no-dismiss
+            blur
+            cancel-text=""
+            ok-text="关闭" 
+          >
+          <ChatRecord :jsondata="content"></ChatRecord>
+        </VaModal>
         </template>
       </div>
       <div class="chat-time">{{ time }}</div>
@@ -29,6 +42,7 @@
 import {computed, ref} from "vue"
 import {VaAvatar, VaModal} from "vuestic-ui"
 import MessageType from "../views/Chat/widgets/MessageType.js";
+import ChatRecord from "./ChatRecord.vue";
 
 const props = defineProps({
   avatarSrc: {
@@ -63,10 +77,6 @@ const selfAvatarColor = ref("#1E90FF");
 const textColor = ref("#FFFFFF");
 
 const showBigger=ref(false);
-
-// onMounted(() => {
-//   console.log(props.type);
-// })
 
 const avatarStyle = computed(() => {
   const maxSize = 20;

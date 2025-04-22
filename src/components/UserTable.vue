@@ -1,6 +1,6 @@
 <script setup>
 import userApi from "@/api/userApi.js";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch, watchEffect} from "vue";
 import {
   useModal,
   useToast,
@@ -13,6 +13,13 @@ import {
   VaPagination,
   VaSelect,
 } from "vuestic-ui";
+
+const {queryUserClass} = defineProps({
+  queryUserClass: {
+    type: [Number],
+    default: -1
+  }
+})
 
 const users = ref([]);
 const editableUsers = ref([]);
@@ -30,20 +37,27 @@ const userClassOptions = [
 ];
 
 const fetchUsers = async () => {
-  const response = await userApi.getUsersByUserClass(-1);
+  console.log("fetching", queryUserClass);
+  const response = await userApi.getUsersByUserClass(queryUserClass);
   users.value = JSON.parse(response.data.data);
   editableUsers.value = users.value.map(user => ({ ...user }));
   console.log(users.value);
 };
 
 onMounted(fetchUsers);
+
+watchEffect(() => {
+  fetchUsers();  // 每次 defaultUserClass 变化时都会触发
+});
+
 const { confirm } = useModal()
 const {notify} = useToast()
 const submitUser = async (userIndex) => {
   try {
-    const userToSubmit = pagedUsers.value[userIndex]; // 注意这里用 pagedUsers
-    console.log(JSON.stringify(userToSubmit));
-    await userApi.submitUserChange(userToSubmit);
+    const copiedUser = { ...pagedUsers.value[userIndex] };
+    copiedUser.userClass = copiedUser.userClass==='Normal'?0:copiedUser.userClass==="Assistant"?1:copiedUser.userClass==="Supervisor"?2:copiedUser.userClass==="Manager"?3:0;
+    console.log(JSON.stringify(copiedUser));
+    await userApi.submitUserChange(copiedUser);
     await fetchUsers()
   } catch (err) {
     console.error(err);
@@ -89,6 +103,36 @@ const columnWidths = {
   userClass: '150px',
   operation: '100px',
 };
+
+const dynamicColumns = computed(() => {
+  const baseColumns = [
+    { key: 'id', label: 'ID', style: { width: columnWidths.id } },
+    { key: 'userName', label: '用户名', style: { width: columnWidths.userName } },
+    { key: 'password', label: '密码', style: { width: columnWidths.password } },
+    { key: 'email', label: '邮箱', style: { width: '200px' } },
+    { key: 'userClass', label: '身份类别', sortable: true, style: { width: columnWidths.userClass } },
+  ];
+
+  // 根据 userClassCode 决定显示哪些列
+  if (queryUserClass === -1 || queryUserClass === 0) {
+    return baseColumns.concat([
+      { key: 'operation', label: '操作', style: { width: columnWidths.operation } },
+    ]);
+  } else if (queryUserClass === 1) {
+    return baseColumns.concat([
+      { key: 'qualification', label: '资质编号', style: { width: '150px' } },
+      { key: 'operation', label: '操作', style: { width: columnWidths.operation } },
+    ]);
+  } else if (queryUserClass === 2) {
+    return baseColumns.concat([
+      { key: 'qualification', label: '资质编号', style: { width: '150px' } },
+      { key: 'operation', label: '操作', style: { width: columnWidths.operation } },
+    ]);
+  }
+
+  return baseColumns;
+});
+
 </script>
 
 <template>
@@ -99,13 +143,7 @@ const columnWidths = {
 
       <va-data-table
           :items="pagedUsers"
-          :columns="[
-          { key: 'id', label: 'ID', style: { width: columnWidths.id } },
-          { key: 'userName', label: '用户名', style: { width: columnWidths.userName } },
-          { key: 'password', label: '密码', style: { width: columnWidths.password } },
-          { key: 'userClass', label: '身份类别', sortable: true, style: { width: columnWidths.userClass } },
-          { key: 'operation', label: '操作', style: { width: columnWidths.operation } },
-        ]"
+          :columns="dynamicColumns"
           :filter="''"
       >
       <template #cell(userName)="{ rowIndex }">
@@ -116,6 +154,10 @@ const columnWidths = {
         <va-button @click="resetPassword(rowIndex)" color="primary" size="small">重置密码</va-button>
       </template>
 
+        <template #cell(email)="{ rowIndex }">
+          <va-content>{{ pagedUsers[rowIndex].email }}</va-content>
+        </template>
+
       <template #cell(userClass)="{ rowIndex }">
         <va-select
             v-model="pagedUsers[rowIndex].userClass"
@@ -125,7 +167,9 @@ const columnWidths = {
             value-by="value"
         />
       </template>
-
+        <template #cell(qualification)="{ rowIndex }" v-if="dynamicColumns.some(col => col.key === 'qualification')">
+          <va-content>{{ pagedUsers[rowIndex].qualification }}</va-content>
+        </template>
       <template v-slot:cell(operation)="{ rowIndex }">
         <va-button @click="submitUser(rowIndex)" color="primary" size="small">
           提交

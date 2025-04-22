@@ -16,13 +16,14 @@
 </template>
 
 <script setup>
-import {onMounted} from 'vue';
+import {ref,onMounted} from 'vue';
 import ChatBubble from './ChatBubble.vue';
 
 
+const isLoading = ref(true);
+
 const props = defineProps({
   jsondata:String,
-  isLoading:Boolean,
 });
 
 
@@ -35,29 +36,56 @@ const isFirstCharacter = (meta,message)=> {
 }
 
 onMounted(() => {
-    const conversation = JSON.parse(props.jsondata);
+    if(props.jsondata == null) {
+        return;
+    }
+    let conversation
+    try
+    {
+      conversation = JSON.parse(props.jsondata);
+    } catch (e) {
+      conversation = props.jsondata;
+    }
+
+  console.log(conversation);
     const localUserName = localStorage.getItem("userName");
     const meta = conversation.meta;
-    for (const message of conversation.messages) {
+    if (conversation.messages) {
+      for (const message of conversation.messages) {
         const data = JSON.parse(message.data);
         let isSelf = data.userName === localUserName;
         const userRole = localStorage.getItem("userRole");
-        if (!isSelf && [2,3].includes(userRole)) {
-            isSelf = isFirstCharacter(meta,message);
+        if (!isSelf && [2, 3].includes(userRole)) {
+          isSelf = isFirstCharacter(meta, message);
         }
         chatBubbleList.push({
-            avatarSrc: '',
-            avatarName: data.userName,
-            isSelf: isSelf,
-            time: new Date(message.timestamp).toLocaleString(),
-            type: message.type,
-            content: data.content
+          avatarSrc: '',
+          avatarName: data.userName,
+          isSelf: isSelf,
+          time: new Date(message.timestamp).toLocaleString(),
+          type: message.type,
+          content: data.content
         })
+      }
+    } else if (conversation.message) {
+      for (const message of conversation.message) {
+        const data = JSON.parse(message.data);
+        let isSelf = data.userName === localUserName;
+        const userRole = localStorage.getItem("userRole");
+        if (!isSelf && [2, 3].includes(userRole)) {
+          isSelf = isFirstCharacter(meta, message);
+        }
+        chatBubbleList.push({
+          avatarSrc: '',
+          avatarName: data.userName,
+          isSelf: isSelf,
+          time: new Date(message.timestamp).toLocaleString(),
+          type: message.type,
+          content: data.content
+        })
+      }
     }
-    // for mock
-    chatBubbleList.push(...chatBubbleList);
-    chatBubbleList.push(...chatBubbleList);
-    chatBubbleList.push(...chatBubbleList);
+    isLoading.value = false;
 })
 
 </script>
