@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import UserTable from "@/components/UserTable.vue";
+import {VaCard, VaTab, VaTabs} from "vuestic-ui";
 
 // tab 对应的用户类型值
 const userClassTabs = [
