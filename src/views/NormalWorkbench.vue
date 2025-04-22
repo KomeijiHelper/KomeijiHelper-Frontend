@@ -6,58 +6,6 @@ import { VaButton } from "vuestic-ui";
 
 const showPopup = ref(false)
 const consentFormRef = ref(null)
-const isVisible = ref(false)
-
-// 粒子动画配置
-const createParticle = () => ({
-  x: Math.random() * 100,
-  y: 100 + (Math.random() * 20),
-  size: Math.random() * 4 + 2,
-  speed: Math.random() * 0.1 + 0.05,
-  opacity: Math.random() * 0.15 + 0.05,
-  life: 0,
-  maxLife: Math.random() * 300 + 200
-});
-
-const particles = ref(Array(20).fill().map(createParticle));
-let animationFrame = null;
-
-const animateParticles = () => {
-  particles.value = particles.value.map(particle => {
-    particle.life += 1;
-    const newY = particle.y - particle.speed;
-    const newX = particle.x + Math.sin(newY / 50) * 0.1;
-    
-    let newOpacity = particle.opacity;
-    if (particle.y < 60) {
-      newOpacity = particle.opacity * (particle.y / 60);
-    }
-
-    if (particle.life >= particle.maxLife || newY < 20) {
-      return createParticle();
-    }
-
-    return {
-      ...particle,
-      y: newY,
-      x: newX,
-      opacity: newOpacity
-    };
-  });
-  
-  animationFrame = requestAnimationFrame(animateParticles);
-};
-
-onMounted(() => {
-  isVisible.value = true;
-  animateParticles();
-});
-
-onUnmounted(() => {
-  if (animationFrame) {
-    cancelAnimationFrame(animationFrame);
-  }
-});
 
 const onClick = async () => {
   const confirmed = await consentFormRef.value.open()
@@ -68,35 +16,13 @@ const onClick = async () => {
 
 <template>
   <div class="workbench-page">
-    <!-- 背景层 -->
-    <div class="background-layers">
-      <div class="layer layer-1"></div>
-      <div class="layer layer-2"></div>
-      <div class="layer layer-3"></div>
-    </div>
 
-    <!-- 粒子背景 -->
-    <div class="particles-container">
-      <div v-for="(particle, index) in particles" 
-           :key="index" 
-           class="particle"
-           :style="{ 
-             left: particle.x + '%', 
-             top: particle.y + '%',
-             width: particle.size + 'px',
-             height: particle.size + 'px',
-             opacity: particle.opacity
-           }">
-      </div>
-    </div>
-
-    <!-- 主要内容 -->
     <div class="content-container">
-      <h1 class="page-title">工作台</h1>
+      <h1 class="page-title"></h1>
       
       <div class="button-container">
         <router-link to="/chat/history" class="button-link">
-          <va-button class="primary-button history-button">
+          <va-button class="primary-button consult-button">
             咨询记录
           </va-button>
         </router-link>
@@ -118,58 +44,6 @@ const onClick = async () => {
   padding-top: 60px;
   background: linear-gradient(135deg, #fff5eb 0%, #ffecd2 100%);
   position: relative;
-}
-
-.background-layers {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-.layer {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0.2;
-}
-
-.layer-1 {
-  background: linear-gradient(135deg, #fff5eb 0%, #ffecd2 100%);
-  animation: layer1Move 30s ease-in-out infinite;
-}
-
-.layer-2 {
-  background: radial-gradient(circle at 30% 70%, #ffcc80 0%, transparent 70%);
-  animation: layer2Move 25s ease-in-out infinite alternate;
-}
-
-.layer-3 {
-  background: radial-gradient(circle at 70% 30%, #ffe0b2 0%, transparent 70%);
-  animation: layer3Move 35s ease-in-out infinite alternate;
-}
-
-.particles-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, 
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 183, 77, 0.1));
-  box-shadow: 0 0 8px rgba(255, 183, 77, 0.05);
-  pointer-events: none;
-  transition: opacity 0.5s ease;
 }
 
 .content-container {
@@ -221,11 +95,6 @@ const onClick = async () => {
   box-shadow: 0 6px 20px rgba(255, 167, 38, 0.3);
 }
 
-.history-button {
-  background: linear-gradient(135deg, #ffe0b2, #ffcc80) !important;
-  color: #5d4037 !important;
-}
-
 .consult-button {
   background: linear-gradient(135deg, #ffb74d, #ffa726) !important;
   color: white !important;
@@ -269,4 +138,3 @@ const onClick = async () => {
   }
 }
 </style>
-``` 
