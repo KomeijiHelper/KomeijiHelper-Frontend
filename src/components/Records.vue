@@ -29,7 +29,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import userApi from '@/api/userApi'
-import { VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect } from "vuestic-ui";
+import { VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect, VaDataTable } from "vuestic-ui";
 import ChatRecord from './ChatRecord.vue';
 
 const chatRecords = ref([])

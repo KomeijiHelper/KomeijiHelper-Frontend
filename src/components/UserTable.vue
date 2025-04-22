@@ -12,6 +12,7 @@ import {
   VaInput,
   VaPagination,
   VaSelect,
+    VaDataTable
 } from "vuestic-ui";
 
 const {queryUserClass} = defineProps({
