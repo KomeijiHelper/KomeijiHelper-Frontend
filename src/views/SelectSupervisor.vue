@@ -92,7 +92,7 @@ export default {
         if (data.type === 'chat_connect') {
           const from = JSON.parse(data.content).from
           const to = JSON.parse(data.content).to
-          const url = `/chat/room?from=${from}&to=${to}`
+          const url = `/chat/room?from=${from}&to=${to}&load=yes`
           window.open(url, '_blank')
         }
       }
