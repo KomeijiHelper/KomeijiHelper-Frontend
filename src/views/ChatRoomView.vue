@@ -6,10 +6,16 @@
           <div class="title-text">温暖对话空间</div>
           <div class="subtitle-text">愿这里成为您倾诉的港湾</div>
         </div>
-        <va-button class="exit-button" @click="leaveChat">
-          <span class="exit-text">结束会话&nbsp;</span>
-          <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
-        </va-button>
+        <div class="exit-button">
+          <va-button v-if="showHelpBtn" @click="onClick">
+            <span class="exit-text">求助督导&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+          </va-button>
+          <va-button @click="leaveChat">
+            <span class="exit-text">结束会话&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
+          </va-button>
+        </div>
       </va-card-title>
       <va-card-content>
         <div class="chat-container">
@@ -61,6 +67,7 @@
     </va-card>
     <Rating ref="ratingWidget" />
   </va-layout>
+  <SelectSupervisorPopup :show="showPopup" @close="showPopup = false" />
 </template>
 
 <script setup>
@@ -68,6 +75,7 @@ import userApi from '@/api/userApi';
 import Rating from "@/components/Rating.vue";
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
+import SelectSupervisorPopup from "@/views/SelectSupervisor.vue";
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
   useModal, useToast,
@@ -89,14 +97,20 @@ const scroller = useTemplateRef("scroller");
 const fileInput = useTemplateRef('fileInput');
 const ratingWidget = ref()
 const {notify} = useToast();
+const showHelpBtn = ref(false);
 let websocket;
 
 const emojis = emojiList;
 const chatBubbleList = reactive([])
+const showPopup = ref(false);
+const onClick = async () => {
+  showPopup.value = true;
+}
 
 onMounted(() => {
   websocket = new WebSocket(localStorage.getItem('chatAddress'));
   localStorage.removeItem('chatAddress');
+  showHelpBtn.value = localStorage.getItem('userRole') === "1";
   websocket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const content = JSON.parse(data.content);
