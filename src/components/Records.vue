@@ -4,32 +4,23 @@
       聊天记录
     </va-card-title>
     <va-card-content>
-      <va-select
-          v-model="perPage"
-          :options="[5, 10, 20, 50]"
-          label="每页数量"
-          class="w-32"
-      />
-      <va-data-table
-          :columns="columns"
-          :items="chatRecords"
-          :per-page="perPage"
-          :current-page="currentPage"
-          @update:current-page="currentPage = $event"
-          :loading="isLoading"
-          loading-text="加载中..."
-      >
+      <va-select v-model="perPage" :options="[5, 10, 20, 50]" label="每页数量" class="w-32" />
+      <va-data-table :columns="columns" :items="chatRecords" :per-page="perPage" :current-page="currentPage"
+        @update:current-page="currentPage = $event" :loading="isLoading" loading-text="加载中...">
         <template #cell(actions)="{ row }">
-          <va-button @click="handleAction(row.id)" color="primary">
-            传送ID
+          <va-button @click="viewChat(row.rowData.id)" color="primary">
+            流览记录
+          </va-button>
+          <va-button @click="downloadChat(row.rowData.id)" color="primary">
+            导出记录
           </va-button>
         </template>
       </va-data-table>
+      <VaModal v-model="showRecord" fixed-layout no-dismiss blur cancel-text="关闭" @cancel="closeModal">
+        <ChatRecord :jsondata="recordContent"></ChatRecord>
+      </VaModal>
       <div class="flex justify-between items-center mt-2">
-        <va-pagination
-            v-model="currentPage"
-            :pages="totalPages"
-        />
+        <va-pagination v-model="currentPage" :pages="totalPages" />
       </div>
     </va-card-content>
   </va-card>
@@ -38,17 +29,21 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import userApi from '@/api/userApi'
-import {VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect} from "vuestic-ui";
+import { VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect } from "vuestic-ui";
+import ChatRecord from './ChatRecord.vue';
 
 const chatRecords = ref([])
 const isLoading = ref(false)
 const currentPage = ref(1)
 const perPage = ref(5)
 
+const recordContent = ref();
+const showRecord = ref(false);
+
 const columns = [
   { key: 'patientName', label: '咨询者' },
   { key: 'consultantName', label: '咨询师' },
-  { key: 'timeStamp', label: '时间戳' },
+  { key: 'timeStamp', label: '时间' },
   { key: 'actions', label: '操作' },
 ]
 
@@ -68,17 +63,34 @@ onMounted(async () => {
 })
 
 const totalPages = computed(() =>
-    Math.ceil(chatRecords.value.length / perPage.value)
+  Math.ceil(chatRecords.value.length / perPage.value)
 )
 
-const handleAction = async (id) => {
+const downloadChat = async (id) => {
+  console.log(id);
   try {
-    await userApi.sendId(id)
-    alert(`已成功传送ID: ${id}`)
+    userApi.downloadChat(id)
   } catch (err) {
     console.error(err)
     alert('操作失败')
   }
+}
+
+const viewChat = async (id) => {
+  try {
+    const response = await userApi.getChatContent(id);
+    console.log(response);
+    recordContent.value = response.data.data;
+    showRecord.value = true;
+  }
+  catch (err) {
+    console.error(err);
+  }
+}
+
+const closeModal = () => {
+  showRecord.value = false;
+  recordContent.value = null;
 }
 </script>
 
