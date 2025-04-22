@@ -101,7 +101,7 @@ export default {
   methods: {
     setupWebSocket() {
       const id = localStorage.getItem('userName');
-      this.ws = new WebSocket('ws://127.0.0.1:54950/ws?id='+id)
+      this.ws = new WebSocket('wss://komeiji.cyou:54950/ws?id='+id)
       
       this.ws.onopen = () => {
         console.log('WebSocket连接已建立')
