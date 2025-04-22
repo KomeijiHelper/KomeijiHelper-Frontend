@@ -91,7 +91,8 @@ export default {
         if (data.type === 'chat_connect') {
           const from = JSON.parse(data.content).from
           const to = JSON.parse(data.content).to
-          router.push({ path: "/chat/room", query: { from, to } })
+          const url = `/chat/room?from=${from}&to=${to}`
+          window.open(url, '_blank')
         }
       }
 
