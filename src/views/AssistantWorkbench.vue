@@ -15,10 +15,6 @@
     <div v-else class="no-request">
       <p>等待新的咨询请求...</p>
     </div>
-
-    <div v-else class="no-request">
-      <p>等待新的咨询请求...</p>
-    </div>
   </div>
 </template>
 

@@ -76,6 +76,7 @@ import {
   VaCardContent,
   VaCardTitle,
   VaLayout,
+  VaProgressBar,
   VaScrollContainer,
   VaTextarea
 } from 'vuestic-ui';
