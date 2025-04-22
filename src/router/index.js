@@ -3,6 +3,7 @@ import userApi from "@/api/userApi.js";
 import {ClearLocalStorage} from "@/utils.js";
 import AboutView from "@/views/AboutView.vue";
 import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
+import ChatRecordsView from "@/views/ChatRecordsView.vue";
 import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import FAQView from "@/views/FAQView.vue";
@@ -118,10 +119,16 @@ const routes = [
         meta: { needAuth: true, roles: [2] }
     },
     {
-        path: "/chat",
-        name: "Chat",
+        path: "/chat/room",
+        name: "ChatRoom",
         component: ChatRoomView,
         meta: { needAuth: true, roles: [0, 1, 2] }
+    },
+    {
+        path: "/chat/history",
+        name: "ChatHistory",
+        component: ChatRecordsView,
+        meta: { needAuth: true, roles: [0, 1, 2]}
     },
     {
         path: "/profile",

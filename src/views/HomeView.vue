@@ -12,7 +12,7 @@ const particles = ref(Array(25).fill().map(() => ({
   x: Math.random() * 100,
   y: Math.random() * 100,
   size: Math.random() * 4 + 1,
-  speed: Math.random() * 1 + 0.5,
+  speed: Math.random() + 0.5,
   opacity: Math.random() * 0.3 + 0.1,
   type: Math.random() > 0.5 ? 'circle' : 'square'
 })));
