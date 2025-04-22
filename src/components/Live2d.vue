@@ -90,10 +90,8 @@ const doActions = (node) => {
 }
 
 const onDragging = (position) => {
-    console.log(position)
     const maxWidth = window.innerWidth
     const maxHeight = window.innerHeight
-    console.log(maxWidth,maxHeight)
 
     // 防止越界
     // if (left < 0) x.value = 0
