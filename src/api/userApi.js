@@ -164,6 +164,9 @@ export default {
     getHistoryChat() {
         return apiClient.get('/chatRecord/getHistoryChat')
     },
+    async getTempChat(name){
+        return await apiClient.get('/chatRecord/getTempChat?consultantName='+name)
+    },
     getChatContent(chatId) {
         return apiClient.get('/chatRecord/getChatContent',{
             params:{
