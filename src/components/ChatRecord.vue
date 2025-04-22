@@ -36,6 +36,9 @@ const isFirstCharacter = (meta,message)=> {
 }
 
 onMounted(() => {
+    if(props.jsondata == null) {
+        return;
+    }
     const conversation = JSON.parse(props.jsondata);
     const localUserName = localStorage.getItem("userName");
     const meta = conversation.meta;
@@ -55,10 +58,6 @@ onMounted(() => {
             content: data.content
         })
     }
-    // for mock
-    chatBubbleList.push(...chatBubbleList);
-    chatBubbleList.push(...chatBubbleList);
-    chatBubbleList.push(...chatBubbleList);
     isLoading.value = false;
 })
 
