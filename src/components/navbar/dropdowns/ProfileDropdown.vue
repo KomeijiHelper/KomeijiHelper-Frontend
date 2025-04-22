@@ -37,6 +37,7 @@
 <script setup>
 import userApi from '@/api/userApi';
 import {ref} from 'vue';
+import {VaDropdown, VaDropdownContent, VaList, VaListItem, VaListSeparator} from "vuestic-ui";
 import {VaButton} from 'vuestic-ui/web-components';
 
 defineProps({
