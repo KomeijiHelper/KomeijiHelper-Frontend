@@ -106,6 +106,7 @@ export default {
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.type === 'chat_connect') {
+          this.waitingForConfirm = false
           const from = JSON.parse(data.content).from
           const to = JSON.parse(data.content).to
           const url = `/chat/room?from=${from}&to=${to}`
