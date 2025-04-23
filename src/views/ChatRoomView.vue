@@ -79,7 +79,7 @@ import userApi from '@/api/userApi';
 import Rating from "@/components/Rating.vue";
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
-import SelectSupervisorPopup from "@/views/SelectSupervisor.vue";
+import SelectSupervisorPopup from "@/components/SelectSupervisor.vue";
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
   useModal, useToast,
