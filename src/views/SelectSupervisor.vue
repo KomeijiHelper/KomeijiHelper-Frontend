@@ -14,7 +14,7 @@
         <div v-for="consultant in consultants"
              :key="consultant.consultantId"
              class="consultant-card"
-             @click="selectConsultant(consultant.consultantId)">
+             @click="selectConsultant(consultant.consultantName)">
           <h3>督导 {{ consultant.consultantName }}</h3>
           <StarWithPercent :score="consultant.avgScore" />
           <p>咨询数：{{ consultant.totalRecord }}</p>
