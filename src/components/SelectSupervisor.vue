@@ -49,16 +49,32 @@ export default {
     }
   },
   async created() {
-    try {
-      const response = await userApi.getSupervisors();
-      this.consultants = response.data.data;
-      console.log(this.consultants);
-    } catch (error) {
-      console.error('获取咨询师列表失败:', error)
-      notify('获取咨询师列表失败')
+    await this.fetchSupervisors();
+  },
+  watch: {
+    show: {
+      immediate: false, // 是否在初始时立即执行
+      handler(newVal) {
+        if (newVal) {
+          this.onShow();
+          console.log("show")
+        }
+      }
     }
   },
   methods: {
+    async onShow(){
+      await this.fetchSupervisors();
+    },
+    async fetchSupervisors() {
+      try {
+        const response = await userApi.getSupervisors();
+        this.consultants = response.data.data;
+      } catch (error) {
+        console.error('获取咨询师列表失败:', error)
+        notify('获取咨询师列表失败')
+      }
+    },
     async selectConsultant(consultantId) {
       try {
         this.waitingForConfirm = true
