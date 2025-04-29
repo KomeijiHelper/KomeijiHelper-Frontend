@@ -39,24 +39,51 @@ onMounted(() => {
     if(props.jsondata == null) {
         return;
     }
-    const conversation = JSON.parse(props.jsondata);
+    let conversation
+    try
+    {
+      conversation = JSON.parse(props.jsondata);
+    } catch (e) {
+      conversation = props.jsondata;
+    }
+
+  console.log(conversation);
     const localUserName = localStorage.getItem("userName");
     const meta = conversation.meta;
-    for (const message of conversation.messages) {
+    if (conversation.messages) {
+      for (const message of conversation.messages) {
         const data = JSON.parse(message.data);
         let isSelf = data.userName === localUserName;
         const userRole = localStorage.getItem("userRole");
-        if (!isSelf && [2,3].includes(userRole)) {
-            isSelf = isFirstCharacter(meta,message);
+        if (!isSelf && [2, 3].includes(userRole)) {
+          isSelf = isFirstCharacter(meta, message);
         }
         chatBubbleList.push({
-            avatarSrc: '',
-            avatarName: data.userName,
-            isSelf: isSelf,
-            time: new Date(message.timestamp).toLocaleString(),
-            type: message.type,
-            content: data.content
+          avatarSrc: '',
+          avatarName: data.userName,
+          isSelf: isSelf,
+          time: new Date(message.timestamp).toLocaleString(),
+          type: message.type,
+          content: data.content
         })
+      }
+    } else if (conversation.message) {
+      for (const message of conversation.message) {
+        const data = JSON.parse(message.data);
+        let isSelf = data.userName === localUserName;
+        const userRole = localStorage.getItem("userRole");
+        if (!isSelf && [2, 3].includes(userRole)) {
+          isSelf = isFirstCharacter(meta, message);
+        }
+        chatBubbleList.push({
+          avatarSrc: '',
+          avatarName: data.userName,
+          isSelf: isSelf,
+          time: new Date(message.timestamp).toLocaleString(),
+          type: message.type,
+          content: data.content
+        })
+      }
     }
     isLoading.value = false;
 })

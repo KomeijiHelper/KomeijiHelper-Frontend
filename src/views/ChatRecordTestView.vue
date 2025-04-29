@@ -3,7 +3,7 @@
   <ChatBubble avatar-name="test" time="test" :type="ImageType.Image"
     content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu1wK2MlTz_9k7zKtRn2gf_BdirdeyLT9rOw&s"></ChatBubble>
   <ChatBubble avatar-name="test" time="test" :type="ImageType.ChatRecord"
-    :content="{ 'header': '测试聊天记录', 'src': mockChatJsonString }"></ChatBubble>
+    :content="mockChatJsonString"></ChatBubble>
 </template>
 
 <script setup>

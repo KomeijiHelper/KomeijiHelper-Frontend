@@ -11,6 +11,10 @@
             <span class="exit-text">求助督导&nbsp;</span>
             <span class="exit-icon"><i class="fa-solid fa-handshake-angle"></i></span>
           </va-button>
+          <va-button v-if="load!==''" @click="onClickSyncMessage">
+            <span class="exit-text">同步记录&nbsp;</span>
+            <span class="exit-icon"><i class="fa-solid fa-handshake-angle"></i></span>
+          </va-button>
           <va-button @click="leaveChat">
             <span class="exit-text">结束会话&nbsp;</span>
             <span class="exit-icon"><i class="fa-solid fa-comment-slash"></i></span>
@@ -75,7 +79,7 @@ import userApi from '@/api/userApi';
 import Rating from "@/components/Rating.vue";
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
-import SelectSupervisorPopup from "@/views/SelectSupervisor.vue";
+import SelectSupervisorPopup from "@/components/SelectSupervisor.vue";
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
 import {
   useModal, useToast,
@@ -102,6 +106,7 @@ const route = useRoute()
 const showHelpBtn = ref(false);
 const from = route.query.from || ''
 const to = route.query.to || ''
+const load = ref(route.query.load || '')
 let websocket;
 
 const emojis = emojiList;
@@ -110,12 +115,16 @@ const showPopup = ref(false);
 const onClick = async () => {
   showPopup.value = true;
 }
+const onClickSyncMessage = async () => {
+  const messageObj = (await userApi.getTempChat(localStorage.getItem("userName"))).data.data
+  sendTextToWebSocket(MessageType.ChatRecord, messageObj)
+}
 
 onMounted(() => {
   websocket = new WebSocket("ws://127.0.0.1:54950/ws?from="+from+"&to="+to);
-  localStorage.removeItem('chatAddress');
-  showHelpBtn.value = localStorage.getItem('userRole') === "1";
+  showHelpBtn.value = localStorage.getItem('userRole') === "1" && load.value === '';
   websocket.onmessage = (event) => {
+    console.log(event.data);
     const data = JSON.parse(event.data);
     const content = JSON.parse(data.content);
     const time = new Date(data.timestamp);
@@ -124,6 +133,7 @@ onMounted(() => {
   };
   websocket.onopen = () => {
     console.log("WebSocket connected");
+    if (load.value !== '') onClickSyncMessage();
   };
 
   websocket.onclose = async (event) => {

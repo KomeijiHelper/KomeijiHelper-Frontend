@@ -20,7 +20,7 @@
           <slot>{{ content }}</slot>
         </template>
         <template v-else-if="type == MessageType.ChatRecord">
-          <span><i class="fa-solid fa-clock-rotate-left">{{ content.header }}</i></span>
+          <span><i class="fa-solid fa-clock-rotate-left">{{ "聊天记录" }}</i></span>
           <VaModal
             v-model="showBigger"
             fixed-layout
@@ -29,7 +29,7 @@
             cancel-text=""
             ok-text="关闭" 
           >
-          <ChatRecord :jsondata="content.src"></ChatRecord>
+          <ChatRecord :jsondata="content"></ChatRecord>
         </VaModal>
         </template>
       </div>

@@ -38,7 +38,9 @@ const rating = ref(0)
 const visible = ref(false)
 const loading = ref(false)
 const submitted = ref(false)
+const cidRef = ref(null)
 let resolveAfterClose = null
+
 async function handleRating(star) {
   if (loading.value) return
 
@@ -46,7 +48,7 @@ async function handleRating(star) {
   loading.value = true
   submitted.value = false
 
-  await userApi.rating(rating.value === 0 ? 0 : 1, rating.value)
+  await userApi.rating(rating.value === 0 ? 0 : 1, rating.value, cidRef.value)
   submitted.value = true
   visible.value = false
   resolveAfterClose?.(rating.value) // 👉 通知外部评分已完成
@@ -54,11 +56,12 @@ async function handleRating(star) {
   loading.value = false
 }
 
-function open() {
+function open(cid = null) {
   rating.value = 0
   loading.value = false
   submitted.value = false
   visible.value = true
+  cidRef.value = cid
 
   return new Promise((resolve) => {
     resolveAfterClose = resolve
