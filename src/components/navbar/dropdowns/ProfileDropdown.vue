@@ -27,16 +27,18 @@
         </VaDropdown>
     </template>
     <template v-else>
-        <router-link to="/login" class="user-icon">
-            <i class="fas fa-sign-in-alt"></i>
+        <router-link to="/leadIn" class="user-icon">
+            <span><i class="fa-solid fa-user"></i></span>
+            <span>&nbsp;登录</span>
         </router-link>
     </template>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { VaButton } from 'vuestic-ui/web-components';
 import userApi from '@/api/userApi';
+import {ref} from 'vue';
+import {VaDropdown, VaDropdownContent, VaList, VaListItem, VaListSeparator} from "vuestic-ui";
+import {VaButton} from 'vuestic-ui/web-components';
 
 defineProps({
     avatarName: String,
@@ -55,14 +57,14 @@ const options = ref([
                 name: 'Profile',
                 icon: 'fa-circle-user',
                 click: {
-                    to: "profile"
+                    to: "/profile"
                 }
             },
             {
                 name: 'Settings',
                 icon: 'fa-gear',
                 click: {
-                    to: "settings"
+                    to: "/settings"
                 }
             }
         ]
@@ -73,7 +75,10 @@ const options = ref([
         list: [
             {
                 name: 'FAQ',
-                icon: 'fa-circle-question'
+                icon: 'fa-circle-question',
+                click: {
+                  to: "/faq"
+                }
             },
             {
                 name: 'Help',
@@ -105,17 +110,13 @@ const resolveLinkAttribute = (item) => {
 <style lang="css" scoped>
 .user-icon {
     color: azure;
-    font-size: 30px;
+    font-size: 20px;
     justify-content: center;
     align-items: center;
     border-radius: 30%;
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s;
-}
-
-.user-icon:hover {
-    background-color: #0056b3;
 }
 </style>
 

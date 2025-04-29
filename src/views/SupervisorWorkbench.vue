@@ -1,13 +1,15 @@
 <template>
   <div class="supervisor-workbench">
     <h2>督导工作台</h2>
-    <div v-if="currentRequest" class="request-panel">
-      <h3>新的求助请求</h3>
-      <p>用户ID: {{ currentRequest.userId }}</p>
-      <p>消息: {{currentRequest.message}}</p>
-      <div class="button-group">
-        <button @click="handleRequest(true)" class="accept-btn">接受</button>
-        <button @click="handleRequest(false)" class="reject-btn">拒绝</button>
+    <div v-if="requests.length" class="request-list">
+      <div v-for="(request, index) in requests" :key="index" class="request-panel">
+        <h3>新的咨询请求</h3>
+        <p>用户ID: {{ request.userId }}</p>
+        <p>消息: {{ request.message }}</p>
+        <div class="button-group">
+          <button @click="handleRequest(true, index)" class="accept-btn">接受</button>
+          <button @click="handleRequest(false, index)" class="reject-btn">拒绝</button>
+        </div>
       </div>
     </div>
     <div v-else class="no-request">
@@ -25,7 +27,7 @@ export default {
   data() {
     return {
       ws: null,
-      currentRequest: null
+      requests: []
     }
   },
   created() {
@@ -47,16 +49,18 @@ export default {
 
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
+        console.log(data)
         if (data.type === 'chat_request') {
           const requestJson = JSON.parse(data.content)
-          this.currentRequest = {
+          this.requests.push({
             userId: requestJson.patientId,
             message: requestJson.message,
-          }
+          });
         } else if (data.type === 'chat_connect') {
-          const newSocketAddress = "wss://komeiji.cyou:54950/ws?from="+JSON.parse(data.content).from+"&to="+JSON.parse(data.content).to;
-          localStorage.setItem('chatAddress', newSocketAddress)
-          router.push("/chat")
+          const from =JSON.parse(data.content).from
+          const to=JSON.parse(data.content).to
+          const url = `/chat/room?from=${from}&to=${to}`
+          window.open(url, '_blank')
         }
       }
 
@@ -69,10 +73,14 @@ export default {
         console.log('WebSocket连接已关闭')
       }
     },
-    handleRequest(accept) {
-      if (!this.currentRequest) return
-      userApi.responseToRequest(this.currentRequest.userId, accept)
-      this.currentRequest = null
+    handleRequest(accept, index) {
+      const request = this.requests[index]
+      if (!request) return
+
+      userApi.responseToRequest(request.userId, accept)
+      if (accept) {
+      }
+      this.requests.splice(index, 1)
     }
   }
 }
@@ -81,7 +89,6 @@ export default {
 <style scoped>
 .supervisor-workbench {
   padding: 20px;
-  max-width: 800px;
   margin: 0 auto;
 }
 

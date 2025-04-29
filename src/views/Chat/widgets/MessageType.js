@@ -1,7 +1,9 @@
-import { ProxyEnum } from "@/utils";
+import {ProxyEnum} from "@/utils";
+
 const MessageType = ProxyEnum({
     Text:'text',
-    Image:'image'
+    Image:'img_src',
+    ChatRecord:"chat_record",
 });
 
 export default MessageType;

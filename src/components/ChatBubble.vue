@@ -4,13 +4,33 @@
     <VaAvatar class="chat-avatar" :src="avatarSrc" :fallback-text="avatarName" :style="avatarStyle"
               :color="isSelf ? selfAvatarColor : otherAvatarColor" :text-color="textColor"></VaAvatar>
     <div class="chat-content">
-      <div class="chat-message">
+      <div class="chat-message" @click="showBigger = !showBigger">
         <!-- TODO -->
         <template v-if="type === MessageType.Image">
-          <img :src="content" />
+          <VaModal
+            v-model="showBigger"
+            hideDefaultActions
+            size='large'
+          >
+          <img :src="content"  class="image-fit"/>
+        </VaModal>
+          <img :src="content"/>
         </template>
         <template v-else-if="type === MessageType.Text">
           <slot>{{ content }}</slot>
+        </template>
+        <template v-else-if="type == MessageType.ChatRecord">
+          <span><i class="fa-solid fa-clock-rotate-left">{{ "聊天记录" }}</i></span>
+          <VaModal
+            v-model="showBigger"
+            fixed-layout
+            no-dismiss
+            blur
+            cancel-text=""
+            ok-text="关闭" 
+          >
+          <ChatRecord :jsondata="content"></ChatRecord>
+        </VaModal>
         </template>
       </div>
       <div class="chat-time">{{ time }}</div>
@@ -19,10 +39,10 @@
 </template>
 
 <script setup>
-import { VaAvatar,VaImage } from "vuestic-ui"
-import { computed, onMounted } from "vue"
-import { ref } from "vue"
+import {computed, ref} from "vue"
+import {VaAvatar, VaModal} from "vuestic-ui"
 import MessageType from "../views/Chat/widgets/MessageType.js";
+import ChatRecord from "./ChatRecord.vue";
 
 const props = defineProps({
   avatarSrc: {
@@ -56,9 +76,7 @@ const otherAvatarColor = ref("#F4A460");
 const selfAvatarColor = ref("#1E90FF");
 const textColor = ref("#FFFFFF");
 
-onMounted(() => {
-  console.log(props.type);
-})
+const showBigger=ref(false);
 
 const avatarStyle = computed(() => {
   const maxSize = 20;
@@ -120,5 +138,11 @@ const avatarStyle = computed(() => {
   font-size: 13px;
   color: #999;
   margin-top: 6px;
+}
+
+.image-fit {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 确保图片自适应且保持比例 */
 }
 </style>
