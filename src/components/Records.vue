@@ -117,7 +117,6 @@ const closeModal = () => {
 
 <style scoped>
 .custom-card {
-  max-width: 1000px;
   margin: auto;
   background-color: transparent;
   box-shadow: none;
