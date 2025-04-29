@@ -14,7 +14,7 @@
         <div v-for="consultant in consultants"
              :key="consultant.consultantId"
              class="consultant-card"
-             @click="selectConsultant(consultant.consultantId)">
+             @click="selectConsultant(consultant.consultantName)">
           <h3>督导 {{ consultant.consultantName }}</h3>
           <StarWithPercent :score="consultant.avgScore" />
           <p>咨询数：{{ consultant.totalRecord }}</p>
@@ -49,16 +49,32 @@ export default {
     }
   },
   async created() {
-    try {
-      const response = await userApi.getSupervisors();
-      this.consultants = response.data.data;
-      console.log(this.consultants);
-    } catch (error) {
-      console.error('获取咨询师列表失败:', error)
-      notify('获取咨询师列表失败')
+    await this.fetchSupervisors();
+  },
+  watch: {
+    show: {
+      immediate: false, // 是否在初始时立即执行
+      handler(newVal) {
+        if (newVal) {
+          this.onShow();
+          console.log("show")
+        }
+      }
     }
   },
   methods: {
+    async onShow(){
+      await this.fetchSupervisors();
+    },
+    async fetchSupervisors() {
+      try {
+        const response = await userApi.getSupervisors();
+        this.consultants = response.data.data;
+      } catch (error) {
+        console.error('获取咨询师列表失败:', error)
+        notify('获取咨询师列表失败')
+      }
+    },
     async selectConsultant(consultantId) {
       try {
         this.waitingForConfirm = true
@@ -90,9 +106,10 @@ export default {
       this.ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
         if (data.type === 'chat_connect') {
+          this.waitingForConfirm = false
           const from = JSON.parse(data.content).from
           const to = JSON.parse(data.content).to
-          const url = `/chat/room?from=${from}&to=${to}`
+          const url = `/chat/room?from=${from}&to=${to}&load=yes`
           window.open(url, '_blank')
         }
       }

@@ -12,6 +12,7 @@ import {
   VaInput,
   VaPagination,
   VaSelect,
+    VaDataTable
 } from "vuestic-ui";
 
 const {queryUserClass} = defineProps({
@@ -54,9 +55,10 @@ const { confirm } = useModal()
 const {notify} = useToast()
 const submitUser = async (userIndex) => {
   try {
-    const userToSubmit = pagedUsers.value[userIndex]; // 注意这里用 pagedUsers
-    console.log(JSON.stringify(userToSubmit));
-    await userApi.submitUserChange(userToSubmit);
+    const copiedUser = { ...pagedUsers.value[userIndex] };
+    copiedUser.userClass = copiedUser.userClass==='Normal'?0:copiedUser.userClass==="Assistant"?1:copiedUser.userClass==="Supervisor"?2:copiedUser.userClass==="Manager"?3:0;
+    console.log(JSON.stringify(copiedUser));
+    await userApi.submitUserChange(copiedUser);
     await fetchUsers()
   } catch (err) {
     console.error(err);

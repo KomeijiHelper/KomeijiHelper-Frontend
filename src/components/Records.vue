@@ -9,10 +9,20 @@
         @update:current-page="currentPage = $event" :loading="isLoading" loading-text="加载中...">
         <template #cell(actions)="{ row }">
           <va-button @click="viewChat(row.rowData.id)" color="primary">
+<<<<<<< HEAD
             流览记录
           </va-button>
           <va-button @click="downloadChat(row.rowData.id)" color="primary">
             导出记录
+=======
+            查看记录
+          </va-button>
+          <va-button @click="downloadChat(row.rowData.id)" color="primary">
+            导出记录
+          </va-button>
+          <va-button v-if="row.rowData.score===0" @click="rating(row.rowData.id)" color="primary">
+            打分
+>>>>>>> 54749769f3b2375af4a938eebb7e12599488b515
           </va-button>
         </template>
       </va-data-table>
@@ -24,12 +34,18 @@
       </div>
     </va-card-content>
   </va-card>
+  <Rating ref="ratingWidget" />
 </template>
 
 <script setup>
+import Rating from "@/components/Rating.vue";
 import { ref, computed, onMounted } from 'vue'
 import userApi from '@/api/userApi'
+<<<<<<< HEAD
 import { VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect } from "vuestic-ui";
+=======
+import {VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect, VaDataTable, useToast} from "vuestic-ui";
+>>>>>>> 54749769f3b2375af4a938eebb7e12599488b515
 import ChatRecord from './ChatRecord.vue';
 
 const chatRecords = ref([])
@@ -40,10 +56,20 @@ const perPage = ref(5)
 const recordContent = ref();
 const showRecord = ref(false);
 
+<<<<<<< HEAD
+=======
+const ratingWidget = ref()
+const {notify} = useToast()
+
+>>>>>>> 54749769f3b2375af4a938eebb7e12599488b515
 const columns = [
   { key: 'patientName', label: '咨询者' },
   { key: 'consultantName', label: '咨询师' },
   { key: 'timeStamp', label: '时间' },
+<<<<<<< HEAD
+=======
+  { key: "score", label: "评分"},
+>>>>>>> 54749769f3b2375af4a938eebb7e12599488b515
   { key: 'actions', label: '操作' },
 ]
 
@@ -54,6 +80,7 @@ onMounted(async () => {
     console.log(response)
     if (response.data.code === '200') {
       chatRecords.value = response.data.data
+      console.log(chatRecords.value)
     }
   } catch (error) {
     console.error('加载失败', error)
@@ -88,6 +115,20 @@ const viewChat = async (id) => {
   }
 }
 
+<<<<<<< HEAD
+=======
+const rating = async(id) => {
+  try{
+    await ratingWidget.value.open(id)
+    notify("打分成功")
+    await (new Promise(resolve => setTimeout(resolve, 1000)));
+    window.location.reload();
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+>>>>>>> 54749769f3b2375af4a938eebb7e12599488b515
 const closeModal = () => {
   showRecord.value = false;
   recordContent.value = null;
