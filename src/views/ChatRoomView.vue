@@ -363,6 +363,7 @@ const leaveChat = () => {
   background:
     linear-gradient(to right, #fffaf6 0%, #fff8f3 100%);
   border: 1px solid rgba(255, 167, 38, 0.1);
+  overflow-y: scroll;
   padding: 25px;
   margin: 15px;
   border-radius: 16px;
