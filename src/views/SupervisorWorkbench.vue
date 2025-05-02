@@ -1,6 +1,13 @@
 <template>
   <div class="supervisor-workbench">
     <h2>督导工作台</h2>
+    <div style="display: flex;">
+      <ConsultantChart :data="recentChats" />
+      <div>
+        <p>总咨询数: {{totalChats}}</p>
+        <va-button @click="jumpTo('/chat/history')">对话记录</va-button>
+      </div>
+    </div>
     <div v-if="requests.length" class="request-list">
       <div v-for="(request, index) in requests" :key="index" class="request-panel">
         <h3>新的咨询请求</h3>
@@ -21,17 +28,25 @@
 <script>
 import userApi from "@/api/userApi.js";
 import router from "@/router/index.js";
+import ConsultantChart from "@/components/dashboards/ConsultantChart.vue";
+import StarWithPercent from "@/components/StarWithPercent.vue";
+import {VaButton} from "vuestic-ui";
 
 export default {
   name: 'SupervisorWorkbench',
+  components: {VaButton, StarWithPercent, ConsultantChart},
   data() {
     return {
       ws: null,
-      requests: []
+      requests: [],
+      totalChats: 0,
+      recentChats: [],
     }
   },
-  created() {
+  async created() {
     this.setupWebSocket()
+    this.recentChats = (await userApi.getDashboardInfo()).data.data
+    this.totalChats = (await userApi.getConsultantInfo()).data.data.totalRecord
   },
   beforeUnmount() {
     if (this.ws) {
@@ -81,6 +96,9 @@ export default {
       if (accept) {
       }
       this.requests.splice(index, 1)
+    },
+    jumpTo(path) {
+      window.location.href = path;
     }
   }
 }
