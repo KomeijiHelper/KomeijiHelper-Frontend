@@ -52,7 +52,6 @@ export default {
     this.avgScore = (await userApi.getConsultantInfo()).data.data.avgScore
     this.totalChats = (await userApi.getConsultantInfo()).data.data.totalRecord
     this.totalRecordedChats = (await userApi.getConsultantInfo()).data.data.scoreRecord
-    console.log((await userApi.getConsultantInfo()).data.data)
   },
   beforeUnmount() {
     if (this.ws) {
