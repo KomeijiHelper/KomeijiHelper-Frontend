@@ -200,5 +200,11 @@ export default {
             a.remove();
             window.URL.revokeObjectURL(url); // 释放 blob 对象
         })
+    },
+    async getDashboardInfo(){
+        return await apiClient.get('/dashboard/consultant/chatRecordCount')
+    },
+    async getConsultantInfo(){
+        return await apiClient.get('/dashboard/consultant/getInfo')
     }
 };
