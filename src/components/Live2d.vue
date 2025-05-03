@@ -32,6 +32,7 @@ import { Live2DModel } from 'pixi-live2d-display';
 import userApi from '@/api/userApi';
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
+import { VaPopover, VaTreeView  } from 'vuestic-ui';
 
 window.PIXI = PIXI;
 
@@ -357,7 +358,7 @@ onBeforeMount(() => {
 }
 
 
-.bubble::after {
+/* .bubble::after {
     content: ' ';
     position: absolute;
     right: -20px;
@@ -369,7 +370,7 @@ onBeforeMount(() => {
     background: linear-gradient(135deg, transparent 50%, currentColor 50%);
     transform: rotate(45deg);
     border-radius: 2px;
-}
+} */
 
 /* Chrome, Edge, Safari */
 .bubble::-webkit-scrollbar {

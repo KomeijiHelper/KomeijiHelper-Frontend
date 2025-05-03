@@ -184,7 +184,6 @@ export default {
             const blob = new Blob([response.data]);
 
             const disposition = response.headers['content-disposition'];
-            console.log(response);
             let fileName;
             if (disposition && disposition.includes('filename=')) {
                 fileName = decodeURIComponent(disposition.split('filename=')[1].replace(/"/g, ''));
@@ -200,5 +199,17 @@ export default {
             a.remove();
             window.URL.revokeObjectURL(url); // 释放 blob 对象
         })
+    },
+    async getDashboardInfo(){
+        return await apiClient.get('/dashboard/consultant/chatRecordCount')
+    },
+    async getConsultantInfo(){
+        return await apiClient.get('/dashboard/consultant/getInfo')
+    },
+    async getUserCount(){
+        return await apiClient.get('/dashboard/manager/userCount');
+    },
+    async getOnlineCount(){
+        return await apiClient.get('/dashboard/manager/onlineUserCount')
     }
 };
