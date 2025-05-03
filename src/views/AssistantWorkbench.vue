@@ -1,6 +1,15 @@
 <template>
   <div class="assistant-workbench">
     <h2>咨询师工作台</h2>
+    <div style="display: flex;">
+      <ConsultantChart :data="recentChats" />
+      <div>
+        <StarWithPercent :score="avgScore" />
+        <p>总咨询数: {{totalChats}}</p>
+        <p>被评价次数: {{totalRecordedChats}}</p>
+        <va-button @click="jumpTo('/chat/history')">对话记录</va-button>
+      </div>
+    </div>
     <div v-if="requests.length" class="request-list">
       <div v-for="(request, index) in requests" :key="index" class="request-panel">
         <h3>新的咨询请求</h3>
@@ -20,18 +29,29 @@
 
 <script>
 import userApi from "@/api/userApi.js";
-import router from "@/router/index.js";
+import ConsultantChart from "@/components/dashboards/ConsultantChart.vue"
+import StarWithPercent from "@/components/StarWithPercent.vue";
+import {VaButton} from "vuestic-ui";
 
 export default {
   name: 'AssistantWorkbench',
+  components: {VaButton, StarWithPercent, ConsultantChart},
   data() {
     return {
       ws: null,
-      requests: []
+      requests: [],
+      recentChats: [],
+      avgScore: 0,
+      totalChats: 0,
+      totalRecordedChats: 0,
     }
   },
-  created() {
+  async created() {
     this.setupWebSocket()
+    this.recentChats = (await userApi.getDashboardInfo()).data.data
+    this.avgScore = (await userApi.getConsultantInfo()).data.data.avgScore
+    this.totalChats = (await userApi.getConsultantInfo()).data.data.totalRecord
+    this.totalRecordedChats = (await userApi.getConsultantInfo()).data.data.scoreRecord
   },
   beforeUnmount() {
     if (this.ws) {
@@ -81,6 +101,9 @@ export default {
       if (accept) {
       }
       this.requests.splice(index, 1)
+    },
+    jumpTo(location){
+      window.location.href=location;
     }
   }
 }

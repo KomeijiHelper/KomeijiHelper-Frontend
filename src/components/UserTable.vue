@@ -38,11 +38,9 @@ const userClassOptions = [
 ];
 
 const fetchUsers = async () => {
-  console.log("fetching", queryUserClass);
   const response = await userApi.getUsersByUserClass(queryUserClass);
   users.value = JSON.parse(response.data.data);
   editableUsers.value = users.value.map(user => ({ ...user }));
-  console.log(users.value);
 };
 
 onMounted(fetchUsers);
@@ -57,7 +55,6 @@ const submitUser = async (userIndex) => {
   try {
     const copiedUser = { ...pagedUsers.value[userIndex] };
     copiedUser.userClass = copiedUser.userClass==='Normal'?0:copiedUser.userClass==="Assistant"?1:copiedUser.userClass==="Supervisor"?2:copiedUser.userClass==="Manager"?3:0;
-    console.log(JSON.stringify(copiedUser));
     await userApi.submitUserChange(copiedUser);
     await fetchUsers()
   } catch (err) {
