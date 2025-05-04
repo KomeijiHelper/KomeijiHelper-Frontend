@@ -249,5 +249,15 @@ export default {
             email:mail,
             captcha:captcha
         });
+    },
+    bindSupervisor(conName, supName){
+        const postJson = {
+            conName: conName,
+            supName: supName
+        }
+        return apiClient.post('/bind_supervisor/manager/bind', postJson);
+    },
+    async queryMySupervisor() {
+        return await apiClient.get('/bind_supervisor/consultant/check')
     }
 };
