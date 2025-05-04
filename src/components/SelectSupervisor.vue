@@ -29,8 +29,7 @@
 import userApi from '@/api/userApi.js'
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
 import StarWithPercent from "@/components/StarWithPercent.vue";
-import router from "@/router/index.js";
-import { useToast } from "vuestic-ui";
+import {useToast} from "vuestic-ui";
 
 const { notify } = useToast();
 
@@ -76,6 +75,10 @@ export default {
       try {
         const response = await userApi.getSupervisors();
         this.consultants = response.data.data;
+        this.consultants = [
+          ...this.consultants.filter(c => c.consultantName === this.mySupervisor),      // 满足条件的
+          ...this.consultants.filter(c => c.consultantName !== this.mySupervisor)      // 其他的
+        ];
       } catch (error) {
         console.error('获取咨询师列表失败:', error)
         notify('获取咨询师列表失败')
