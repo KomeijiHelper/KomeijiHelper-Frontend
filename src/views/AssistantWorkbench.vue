@@ -4,10 +4,13 @@
     <div style="display: flex;">
       <ConsultantChart :data="recentChats" />
       <div>
+        <h3>您的评分</h3>
         <StarWithPercent :score="avgScore" />
         <p>总咨询数: {{totalChats}}</p>
         <p>被评价次数: {{totalRecordedChats}}</p>
         <va-button @click="jumpTo('/chat/history')">对话记录</va-button>
+        <h3 v-if="mySupervisor!==null">您的导师</h3>
+        <p v-if="mySupervisor!==null">{{mySupervisor}}</p>
       </div>
     </div>
     <div v-if="requests.length" class="request-list">
@@ -44,6 +47,7 @@ export default {
       avgScore: 0,
       totalChats: 0,
       totalRecordedChats: 0,
+      mySupervisor: null
     }
   },
   async created() {
@@ -52,6 +56,14 @@ export default {
     this.avgScore = (await userApi.getConsultantInfo()).data.data.avgScore
     this.totalChats = (await userApi.getConsultantInfo()).data.data.totalRecord
     this.totalRecordedChats = (await userApi.getConsultantInfo()).data.data.scoreRecord
+    try
+    {
+      this.mySupervisor = (
+          await userApi.queryMySupervisor()
+      ).data.data
+    } catch{
+      this.mySupervisor = null
+    }
   },
   beforeUnmount() {
     if (this.ws) {

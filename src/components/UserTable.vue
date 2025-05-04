@@ -14,6 +14,7 @@ import {
   VaSelect,
     VaDataTable
 } from "vuestic-ui";
+import BindSupervisorWindow from "@/components/BindSupervisorWindow.vue";
 
 const {queryUserClass} = defineProps({
   queryUserClass: {
@@ -39,6 +40,7 @@ const userClassOptions = [
 
 const fetchUsers = async () => {
   const response = await userApi.getUsersByUserClass(queryUserClass);
+  console.log(response);
   users.value = JSON.parse(response.data.data);
   editableUsers.value = users.value.map(user => ({ ...user }));
 };
@@ -62,6 +64,13 @@ const submitUser = async (userIndex) => {
     notify("提交失败");
   }
 };
+
+const showWindow = ref(false)
+const valueToPass = ref('')
+function OpenBindWindow(val){
+  valueToPass.value = val;
+  showWindow.value = true;
+}
 
 // 搜索过滤后的数据
 const filteredUsers = computed(() => {
@@ -134,6 +143,11 @@ const dynamicColumns = computed(() => {
 </script>
 
 <template>
+  <BindSupervisorWindow
+      v-if="showWindow"
+      :init-value="valueToPass"
+      @close="showWindow = false"
+  />
   <va-card>
     <va-card-title>用户列表</va-card-title>
     <va-card-content>
@@ -171,6 +185,9 @@ const dynamicColumns = computed(() => {
       <template v-slot:cell(operation)="{ rowIndex }">
         <va-button @click="submitUser(rowIndex)" color="primary" size="small">
           提交
+        </va-button>
+        <va-button v-if="pagedUsers[rowIndex].userClass === 'Assistant'" @click="OpenBindWindow(pagedUsers[rowIndex].userName)" color="primary" size="small">
+          绑定督导
         </va-button>
       </template>
       </va-data-table>
