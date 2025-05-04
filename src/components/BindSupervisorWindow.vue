@@ -27,7 +27,6 @@ const nameRef = ref(null)
 const storedValue = ref('')
 const {notify} = useToast();
 
-// 监听初始值并赋给 storedValue
 watch(() => props.initValue, (newVal) => {
   storedValue.value = newVal
 }, { immediate: true })

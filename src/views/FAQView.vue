@@ -294,18 +294,6 @@ const toggleAnswer = (index) => {
   margin-top: 2px;
 }
 
-/* 动画效果 */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
 @media (max-width: 768px) {
   .faq-container {
     padding: 20px 15px;
