@@ -1,6 +1,6 @@
 <script setup>
 import userApi from "@/api/userApi.js";
-import {computed, onMounted, ref, watch, watchEffect} from "vue";
+import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import {
   useModal,
   useToast,
@@ -12,11 +12,11 @@ import {
   VaInput,
   VaPagination,
   VaSelect,
-    VaDataTable
+  VaDataTable
 } from "vuestic-ui";
 import BindSupervisorWindow from "@/components/BindSupervisorWindow.vue";
 
-const {queryUserClass} = defineProps({
+const { queryUserClass } = defineProps({
   queryUserClass: {
     type: [Number],
     default: -1
@@ -52,11 +52,11 @@ watchEffect(() => {
 });
 
 const { confirm } = useModal()
-const {notify} = useToast()
+const { notify } = useToast()
 const submitUser = async (userIndex) => {
   try {
     const copiedUser = { ...pagedUsers.value[userIndex] };
-    copiedUser.userClass = copiedUser.userClass==='Normal'?0:copiedUser.userClass==="Assistant"?1:copiedUser.userClass==="Supervisor"?2:copiedUser.userClass==="Manager"?3:0;
+    copiedUser.userClass = copiedUser.userClass === 'Normal' ? 0 : copiedUser.userClass === "Assistant" ? 1 : copiedUser.userClass === "Supervisor" ? 2 : copiedUser.userClass === "Manager" ? 3 : 0;
     await userApi.submitUserChange(copiedUser);
     await fetchUsers()
   } catch (err) {
@@ -67,7 +67,7 @@ const submitUser = async (userIndex) => {
 
 const showWindow = ref(false)
 const valueToPass = ref('')
-function OpenBindWindow(val){
+function OpenBindWindow(val) {
   valueToPass.value = val;
   showWindow.value = true;
 }
@@ -76,7 +76,7 @@ function OpenBindWindow(val){
 const filteredUsers = computed(() => {
   if (!search.value) return editableUsers.value;
   return editableUsers.value.filter(user =>
-      user.userName.toLowerCase().includes(search.value.toLowerCase())
+    user.userName.toLowerCase().includes(search.value.toLowerCase())
   );
 });
 
@@ -87,15 +87,15 @@ const pagedUsers = computed(() => {
 });
 
 const resetPassword = (userIndex) => {
-  confirm('确定将该用户密码重置为123456吗?').then(
-      async (ok) => {
-        if (ok) {
-          userApi.resetPassword(pagedUsers.value[userIndex].id).then((response) => {
-            if (response.data.code === '200') notify("修改成功")
-          });
-          await fetchUsers();
-        }
+  confirm('确定为该用户重置密码吗?').then(
+    async (ok) => {
+      if (ok) {
+        userApi.resetPassword(pagedUsers.value[userIndex].id).then((response) => {
+          if (response.data.code === '200') notify("修改成功")
+        });
+        await fetchUsers();
       }
+    }
   )
 }
 
@@ -143,61 +143,48 @@ const dynamicColumns = computed(() => {
 </script>
 
 <template>
-  <BindSupervisorWindow
-      v-if="showWindow"
-      :init-value="valueToPass"
-      @close="showWindow = false"
-  />
+  <BindSupervisorWindow v-if="showWindow" :init-value="valueToPass" @close="showWindow = false" />
   <va-card>
     <va-card-title>用户列表</va-card-title>
     <va-card-content>
       <va-input v-model="search" placeholder="搜索用户..." class="mb-3" />
 
-      <va-data-table
-          :items="pagedUsers"
-          :columns="dynamicColumns"
-          :filter="''"
-      >
-      <template #cell(userName)="{ rowIndex }">
-        <va-content>{{ pagedUsers[rowIndex].userName }}</va-content>
-      </template>
+      <va-data-table :items="pagedUsers" :columns="dynamicColumns" :filter="''">
+        <template #cell(userName)="{ rowIndex }">
+          <va-content>{{ pagedUsers[rowIndex].userName }}</va-content>
+        </template>
 
-      <template #cell(password)="{ rowIndex }">
-        <va-button @click="resetPassword(rowIndex)" color="primary" size="small">重置密码</va-button>
-      </template>
+        <template #cell(password)="{ rowIndex }">
+          <va-button @click="resetPassword(rowIndex)" color="primary" size="small">重置密码</va-button>
+        </template>
 
         <template #cell(email)="{ rowIndex }">
           <va-content>{{ pagedUsers[rowIndex].email }}</va-content>
         </template>
 
-      <template #cell(userClass)="{ rowIndex }">
-        <va-select
-            v-model="pagedUsers[rowIndex].userClass"
-            :options="userClassOptions"
-            track-by="value"
-            text-by="label"
-            value-by="value"
-        />
-      </template>
+        <template #cell(userClass)="{ rowIndex }">
+          <va-select v-model="pagedUsers[rowIndex].userClass" :options="userClassOptions" track-by="value"
+            text-by="label" value-by="value" />
+        </template>
         <template #cell(qualification)="{ rowIndex }" v-if="dynamicColumns.some(col => col.key === 'qualification')">
           <va-content>{{ pagedUsers[rowIndex].qualification }}</va-content>
         </template>
-      <template v-slot:cell(operation)="{ rowIndex }">
-        <va-button @click="submitUser(rowIndex)" color="primary" size="small">
-          提交
-        </va-button>
-        <va-button v-if="pagedUsers[rowIndex].userClass === 'Assistant'" @click="OpenBindWindow(pagedUsers[rowIndex].userName)" color="primary" size="small">
-          绑定督导
-        </va-button>
-      </template>
+        <template v-slot:cell(operation)="{ rowIndex }">
+          <div class="button-group">
+            <va-button @click="submitUser(rowIndex)" color="primary" size="small">
+              提交
+            </va-button>
+            <va-button v-if="pagedUsers[rowIndex].userClass === 'Assistant'"
+              @click="OpenBindWindow(pagedUsers[rowIndex].userName)" color="primary" size="small">
+              绑定督导
+            </va-button>
+          </div>
+        </template>
       </va-data-table>
 
       <!-- 手动分页器 -->
       <div class="mt-4 flex justify-center">
-        <va-pagination
-            v-model="currentPage"
-            :pages="pageCount"
-        />
+        <va-pagination v-model="currentPage" :pages="pageCount" />
       </div>
     </va-card-content>
   </va-card>
@@ -206,5 +193,10 @@ const dynamicColumns = computed(() => {
 <style scoped>
 .va-card {
   padding: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
 }
 </style>

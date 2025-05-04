@@ -60,13 +60,14 @@ const options = ref([
                     to: "/profile"
                 }
             },
-            {
-                name: 'Settings',
-                icon: 'fa-gear',
-                click: {
-                    to: "/settings"
-                }
-            }
+            // 没有setting了
+            // {
+            //     name: 'Settings',
+            //     icon: 'fa-gear',
+            //     click: {
+            //         to: "/settings"
+            //     }
+            // }
         ]
     },
     {
