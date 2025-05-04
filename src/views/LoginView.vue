@@ -54,7 +54,7 @@ const handleLogin = async () => {
       notify("登录失败！");
     }
   } catch (err) {
-    notify("登录请求失败！请检查控制台");
+    notify(`登录请求失败！${err.response.data.msg}`);
     console.error(err);
   }
 };

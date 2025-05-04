@@ -78,7 +78,7 @@ const pagedUsers = computed(() => {
 });
 
 const resetPassword = (userIndex) => {
-  confirm('确定将该用户密码重置为123456吗?').then(
+  confirm('确定为该用户重置密码吗?').then(
       async (ok) => {
         if (ok) {
           userApi.resetPassword(pagedUsers.value[userIndex].id).then((response) => {

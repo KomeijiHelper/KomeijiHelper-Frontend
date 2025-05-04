@@ -47,16 +47,18 @@ export default {
         return result;
     },
 
-    async register(username, password, userClass, q, emergencyContact) {
+    async register(username, password, userClass, email,q, emergencyContact) {
         const postJson = userClass !== 0 ? {
             userName: username,
             password: password,
             userClass: userClass,
+            email:email,
             qualification: q,
         } : {
             userName: username,
             password: password,
             userClass: userClass,
+            email:email,
             emergencyContact: emergencyContact,
         };
         const result = await apiClient.post('/user/register', postJson);
@@ -211,5 +213,41 @@ export default {
     },
     async getOnlineCount(){
         return await apiClient.get('/dashboard/manager/onlineUserCount')
+    },
+    async getPeriodChatRecord(start,end) {
+        const postJson = {
+            start:start,
+            end:end
+        };
+        return await apiClient.post('/dashboard/consultant/period/chatRecord',postJson);
+    },
+    async sendCaptcha(type) {
+        switch (type) {
+            case "changePwd":
+                return await apiClient.get('/mail/sendCaptcha/changePwd');
+            case "resetPwd":
+                return await apiClient.get('/mail/sendCaptcha/resetPwd')
+        }
+    },
+    async sendRegisterCaptcha(name,email) {
+        return await apiClient.get('/mail/sendCaptcha/register',{
+            params:{
+                name:name,
+                email:email
+            }
+        });
+    },
+    async checkCaptcha(captcha,type) {
+        const postJson = {
+            captcha:captcha,
+            type:type
+        }
+        return await apiClient.post('/mail/checkCaptcha',postJson);
+    },
+    async checkRegisterCaptcha(mail,captcha) {
+        return await apiClient.post('/mail/checkCaptcha/register',{
+            email:mail,
+            captcha:captcha
+        });
     }
 };
