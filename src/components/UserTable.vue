@@ -1,6 +1,7 @@
 <script setup>
 import userApi from "@/api/userApi.js";
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import BindSupervisorWindow from "@/components/BindSupervisorWindow.vue";
+import {computed, onMounted, ref, watchEffect} from "vue";
 import {
   useModal,
   useToast,
@@ -9,12 +10,11 @@ import {
   VaCardContent,
   VaCardTitle,
   VaContent,
+  VaDataTable,
   VaInput,
   VaPagination,
-  VaSelect,
-  VaDataTable
+  VaSelect
 } from "vuestic-ui";
-import BindSupervisorWindow from "@/components/BindSupervisorWindow.vue";
 
 const { queryUserClass } = defineProps({
   queryUserClass: {

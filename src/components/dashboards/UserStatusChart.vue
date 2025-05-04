@@ -3,8 +3,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
 import * as echarts from 'echarts'
+import {onBeforeUnmount, onMounted, ref, watch} from 'vue'
 
 const props = defineProps({
   onlineCounts: {

@@ -1,9 +1,9 @@
 <script setup>
-import {onMounted, ref} from "vue";
-import UserTable from "@/components/UserTable.vue";
-import {VaCard, VaTab, VaTabs} from "vuestic-ui";
 import userApi from "@/api/userApi.js";
 import UserStatusChart from "@/components/dashboards/UserStatusChart.vue";
+import UserTable from "@/components/UserTable.vue";
+import {onMounted, ref} from "vue";
+import {VaCard, VaTab, VaTabs} from "vuestic-ui";
 
 const userClassTabs = [
   { label: "全部", value: -1 },

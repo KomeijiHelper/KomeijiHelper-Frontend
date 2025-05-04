@@ -1,8 +1,7 @@
+import {Live2DModel} from "pixi-live2d-display";
 import * as PIXI from "pixi.js";
 
 window.PIXI = PIXI
-
-import { Live2DModel,MotionPreloadStrategy,InternalModel } from "pixi-live2d-display";
 
 // Live2DModel.registerTicker(PIXI.Ticker);
 
