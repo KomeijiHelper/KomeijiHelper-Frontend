@@ -23,7 +23,7 @@ import ChatBubble from './ChatBubble.vue';
 const isLoading = ref(true);
 
 const props = defineProps({
-  jsondata:String,
+  jsondata: String,
 });
 
 

@@ -191,10 +191,6 @@ const dynamicColumns = computed(() => {
 </template>
 
 <style scoped>
-.va-card {
-  padding: 20px;
-}
-
 .button-group {
   display: flex;
   gap: 10px;
