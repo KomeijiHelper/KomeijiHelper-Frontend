@@ -211,5 +211,12 @@ export default {
     },
     async getOnlineCount(){
         return await apiClient.get('/dashboard/manager/onlineUserCount')
+    },
+    bindSupervisor(conName, supName){
+        const postJson = {
+            conName: conName,
+            supName: supName
+        }
+        return apiClient.post('/bind_supervisor/manager/bind', postJson);
     }
 };
