@@ -8,10 +8,19 @@
         </div>
 
         <div class="form-group">
-          <InputBlank ref="usernameRef" placeholder="用户名" />
+          <InputBlank ref="usernameRef" placeholder="用户名" title="大小写字母和数字组合，字母开头且5-19位" />
           <InputBlank ref="passwordRef" placeholder="密码" type="password" />
           <InputBlank ref="passwordRepeatRef" placeholder="请重复你的密码" type="password" />
-          <SelectBox ref="userClassRef" placeholder="请选择你要注册的身份" :options="['普通用户', '咨询师', '督导']" @change="handleChange" />
+          <InputBlank ref="emailRef" placeholder="请输入你的邮箱" />
+          <div class="mail-container">
+            <button class="email-button" @click="emailVerify">进行邮箱验证</button>
+            <div class="mail-check" style="width: 60%;">
+              <InputBlank ref="captchaRef" v-if="showEmailInput" placeholder="请输入邮箱验证码"/>
+              <p v-if="showTimeOut">请在{{ remainTime }}秒后重试</p>
+            </div>
+          </div>
+          <SelectBox ref="userClassRef" placeholder="请选择你要注册的身份" :options="['普通用户', '咨询师', '督导']"
+            @change="handleChange" />
           <InputBlank v-if="qualificationVisible" ref="qualificationRef" placeholder="请输入资质证书编号" />
           <InputBlank v-if="emergencyContactVisible" ref="emergencyContactRef" placeholder="请输入紧急联系人" />
         </div>
@@ -31,13 +40,14 @@
 <script setup>
 import userApi from "@/api/userApi.js";
 import InputBlank from "@/components/InputBlank.vue";
-import {ref} from "vue";
-import {useToast} from "vuestic-ui";
+import { ref } from "vue";
+import { useToast } from "vuestic-ui";
 import SelectBox from "@/components/SelectBox.vue";
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
 const passwordRepeatRef = ref(null);
+const emailRef = ref(null);
 const userClassRef = ref(null);
 const qualificationRef = ref(null);
 const emergencyContactRef = ref(null);
@@ -45,32 +55,98 @@ const emergencyContactRef = ref(null);
 const qualificationVisible = ref(false);
 const emergencyContactVisible = ref(true);
 
-const {notify} = useToast();
+// email
+const showEmailInput = ref(false);
+const showTimeOut = ref(false);
+let checkMaiButtonValid = true;
+let emailChecked = false;
+const remainTime = ref(60);
+const captchaRef = ref(null);
+
+const { notify } = useToast();
 const userClass = ref(0);
 
+
 const handleChange = (value) => {
-  userClass.value = value==="普通用户"?0:value==="咨询师"?1:value==="督导"?2:0;
+  userClass.value = value === "普通用户" ? 0 : value === "咨询师" ? 1 : value === "督导" ? 2 : 0;
   qualificationVisible.value = userClass.value !== 0;
   emergencyContactVisible.value = userClass.value === 0;
   console.log("选择了：", userClass.value);
 };
 
+const emailVerify = async ()=>{
+  console.log("emailVerify");
+  if(!checkMaiButtonValid) return;
+
+  const username = usernameRef.value.getValue();
+  const email = emailRef.value.getValue();
+  if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    notify("邮件格式错误")
+    return;
+  }
+  const response = await userApi.sendRegisterCaptcha(username,email);
+  if(response.data.code !== '200') {
+    notify(response.data.msg);
+    return;
+  }
+  showEmailInput.value = true;
+  showTimeOut.value = true;
+  checkMaiButtonValid = false;
+  emailChecked = true;
+  const intervalId = setInterval(()=>{
+    remainTime.value--;
+    if(remainTime.value <= 0) {
+      checkMaiButtonValid = true;
+      clearInterval(intervalId);
+      showTimeOut.value = false;
+      remainTime.value = 60;
+    }
+  },1000);
+}
+
 const handleRegister = async () => {
   const username = usernameRef.value.getValue();
   const password = passwordRef.value.getValue();
   const passwordRepeat = passwordRepeatRef.value.getValue();
-  const qualification = qualificationRef.value===null?0:qualificationRef.value.getValue();
-  const emergencyContact = emergencyContactRef.value===null?0:emergencyContactRef.value.getValue();
+  const qualification = qualificationRef.value === null ? 0 : qualificationRef.value.getValue();
+  const emergencyContact = emergencyContactRef.value === null ? 0 : emergencyContactRef.value.getValue();
   const userClassCode = userClass.value;
+  const email = emailRef.value.getValue();
+  let captcha;
+  if(captchaRef.value) {
+     captcha = captchaRef.value.getValue();
+  }
   if (!username || !password || !passwordRepeat) {
     notify("请输入用户名和密码！");
     return;
   }
 
+
   if (passwordRepeat !== password) {
     notify("密码似乎不一致呢");
     return;
   }
+
+  if(!email) {
+    notify("请输入邮箱");
+    return;
+  }
+
+  if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    notify("邮件格式错误")
+    return;
+  }
+
+  if(!emailChecked) {
+    notify("请验证邮箱");
+    return;
+  }
+
+  if(!captcha) {
+    notify("请输入邮箱验证码")
+    return;
+  }
+
 
   if (qualificationVisible.value && !qualification) {
     notify("请输入资质证书编号");
@@ -88,18 +164,28 @@ const handleRegister = async () => {
     }
   }
 
-  try
-  {
-    const res = await userApi.register(username, password, userClassCode, qualification, emergencyContact);
+  try {
+    const emailRes = await userApi.checkRegisterCaptcha(email,captcha);
+    if(emailRes.data.code !== '200') {
+      notify(emailRes.data.msg);
+      return;
+    }
+  } catch(err) {
+    console.log(err);
+  }
+
+  try {
+    const res = await userApi.register(username, password, userClassCode,email,qualification, emergencyContact);
     if (res.status === 200) {
       notify("注册成功");
       await (new Promise(resolve => setTimeout(resolve, 1000)));
       window.location.reload();
     } else {
-      notify("登录失败！");
+      console.log(res);
+      notify(`注册失败！${res}.data.msg`);
     }
   } catch (err) {
-    notify("注册失败，请检查控制台")
+    notify(`注册失败，${err.response.data.msg}`)
     console.log(err)
   }
 };
@@ -164,6 +250,16 @@ const handleRegister = async () => {
 .form-group :deep(input:focus) {
   border-color: #ffb74d;
   background: white;
+}
+
+.email-button {
+  width: 40%;
+  background-color: #ffb74d;
+  color: white;
+  border: none;
+  border-radius: 15px ;
+  font-size: 0.8em;
+  padding: 25px;
 }
 
 .register-button {
@@ -239,6 +335,7 @@ const handleRegister = async () => {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -249,6 +346,7 @@ const handleRegister = async () => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -262,5 +360,24 @@ const handleRegister = async () => {
   .register-title {
     font-size: 1.8em;
   }
+}
+
+.mail-container{
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  gap: 15px;
+}
+
+.mail-check {
+  display: flex;
+  flex-direction: column;
+}
+
+.mail-check p {
+  align-self: flex-end;
+  font-size: 8px;
+  color: #888;
+  margin: 0;
 }
 </style>
