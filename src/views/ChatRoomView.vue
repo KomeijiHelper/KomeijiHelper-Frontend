@@ -63,7 +63,7 @@
             </transition>
           </div>
           <div>
-            <VaProgressBar v-if="uploadImgCount != 0" indeterminate content-inside size="30px">上传图片中
+            <VaProgressBar v-if="uploadImgCount !== 0" indeterminate content-inside size="30px">上传图片中
             </VaProgressBar>
           </div>
         </div>
