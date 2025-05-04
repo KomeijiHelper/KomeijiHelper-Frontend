@@ -93,7 +93,7 @@ watch(()=> messages.value.length,()=>{
 <style scoped>
 .chat-wrapper {
   position: fixed;
-  bottom: 20px;
+  bottom: 60px;
   left: 20px;
   z-index: 9999;
 }
