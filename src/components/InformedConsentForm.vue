@@ -1,8 +1,9 @@
 <template>
-  <va-modal v-model="isVisible" hide-default-actions no-padding>
-    <div class="p-4">
-      <h3 class="text-lg font-bold mb-2">知情同意书</h3>
-      <div class="mb-4">
+  <va-modal v-model="isVisible" hide-default-actions no-padding class="consent-modal">
+    <div class="consent-container">
+      <h2 class="consent-title">知情同意书</h2>
+      
+      <div class="consent-content">
         <p>亲爱的来访者：</p>
         <p>欢迎您来到心理咨询室！请您在咨询开始前，认真阅读以下内容，这将帮助您更好地了解心理咨询，并在充分知情的基础上，决定是否进行咨询。</p>
         <p><strong>一、心理咨询的目标与过程</strong></p>
@@ -26,9 +27,14 @@
         <p>我已阅读并充分理解上述内容，同意在知情、自愿的基础上接受心理咨询服务。如有任何疑问，我会及时与咨询师沟通。</p>
         <p>感谢您的信任，祝您在心理成长的旅程中收获力量与希望！</p>
       </div>
-      <div class="flex justify-end gap-2">
-        <va-button @click="cancel" color="secondary">取消</va-button>
-        <va-button @click="confirm" color="primary">确认</va-button>
+
+      <div class="consent-actions">
+        <va-button @click="cancel" class="cancel-btn">
+          暂不同意
+        </va-button>
+        <va-button @click="confirm" class="confirm-btn">
+          已阅读并同意
+        </va-button>
       </div>
     </div>
   </va-modal>
@@ -64,5 +70,97 @@ defineExpose({
   }
 })
 </script>
+
+<style scoped>
+.consent-modal {
+  :deep(.va-modal__container) {
+    background: linear-gradient(135deg, #fff5eb 0%, #fff 100%);
+    border-radius: 16px;
+    max-width: 800px;
+    max-height: 90vh;
+  }
+}
+
+.consent-container {
+  padding: 30px;
+}
+
+.consent-title {
+  font-size: 2em;
+  color: #5d4037;
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.consent-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, #ffb74d, #ffa726);
+  border-radius: 2px;
+}
+
+.consent-content {
+  max-height: calc(90vh - 200px);
+  overflow-y: auto;
+  padding: 20px;
+  line-height: 1.8;
+  color: #5d4037;
+
+  p {
+    margin-bottom: 15px;
+  }
+
+  strong {
+    color: #d84315;
+  }
+
+  ul {
+    margin: 15px 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.consent-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 167, 38, 0.2);
+}
+
+.cancel-btn {
+  background: #f5f5f5 !important;
+  color: #8d6e63 !important;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #ffb74d, #ffa726) !important;
+  color: white !important;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.cancel-btn:hover,
+.confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 167, 38, 0.2);
+}
+</style>
 
 
