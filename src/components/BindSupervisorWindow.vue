@@ -3,9 +3,9 @@
   <div class="modal-overlay" @click.self="$emit('close')">
     <!-- 弹窗内容 -->
     <div class="modal-content">
-      <input-blank ref="nameRef" placeholder="请输入要绑定的督导"></input-blank>
-      <p>收到的初始值：{{ storedValue }}</p>
-      <input v-model="storedValue" placeholder="可以修改的值" />
+      <p>请输入要绑定的督导</p>
+      <br>
+      <input-blank ref="nameRef" placeholder=""></input-blank>
       <div style="margin-top: 10px;">
         <va-button @click="submit">提交</va-button>
         <va-button @click="$emit('close')">关闭</va-button>
