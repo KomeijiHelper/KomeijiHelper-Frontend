@@ -27,7 +27,6 @@
 
 <script>
 import userApi from "@/api/userApi.js";
-import router from "@/router/index.js";
 import ConsultantChart from "@/components/dashboards/ConsultantChart.vue";
 import StarWithPercent from "@/components/StarWithPercent.vue";
 import {VaButton} from "vuestic-ui";

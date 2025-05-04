@@ -1,5 +1,5 @@
 import router from "@/router/index.js";
-import { ClearLocalStorage } from "@/utils.js";
+import {ClearLocalStorage} from "@/utils.js";
 import axios from 'axios';
 
 const apiClient = axios.create({

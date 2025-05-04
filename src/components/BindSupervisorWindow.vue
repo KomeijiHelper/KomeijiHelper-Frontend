@@ -17,7 +17,7 @@
 <script setup>
 import userApi from "@/api/userApi.js";
 import InputBlank from "@/components/InputBlank.vue";
-import { ref, watch } from 'vue'
+import {ref, watch} from 'vue'
 import {useToast, VaButton} from "vuestic-ui";
 
 const props = defineProps({

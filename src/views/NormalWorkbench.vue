@@ -1,8 +1,8 @@
 <script setup>
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
-import { ref, onMounted, onUnmounted } from 'vue'
 import SelectConsultantPopup from "@/components/SelectConsultant.vue";
-import { VaButton } from "vuestic-ui";
+import {ref} from 'vue'
+import {VaButton} from "vuestic-ui";
 
 const showPopup = ref(false)
 const consentFormRef = ref(null)

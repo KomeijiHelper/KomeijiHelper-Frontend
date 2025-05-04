@@ -8,7 +8,7 @@
 
 <script setup>
 import ChatBubble from '@/components/ChatBubble.vue';
-import { ref } from 'vue';
+import {ref} from 'vue';
 import ImageType from "./Chat/widgets/MessageType"
 
 const isLoading = ref(true);

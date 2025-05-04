@@ -20,12 +20,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, onBeforeUnmount } from "vue";
-import userApi from "@/api/userApi.js";
-import NavBarActions from "./components/navbar/NavBarActions.vue";
-import { VaContent } from "vuestic-ui";
-import Live2d from "./components/Live2d.vue";
+import {onMounted, ref, watchEffect} from "vue";
+import {VaContent} from "vuestic-ui";
 import AIChatWidget from "./components/AIChatWidget.vue";
+import Live2d from "./components/Live2d.vue";
+import NavBarActions from "./components/navbar/NavBarActions.vue";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userRole = ref(localStorage.getItem("userRole") || "-1");

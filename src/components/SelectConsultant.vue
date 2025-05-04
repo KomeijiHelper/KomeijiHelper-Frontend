@@ -29,8 +29,7 @@
 import userApi from '@/api/userApi.js'
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
 import StarWithPercent from "@/components/StarWithPercent.vue";
-import router from "@/router/index.js";
-import { useToast } from "vuestic-ui";
+import {useToast} from "vuestic-ui";
 
 const { notify } = useToast();
 
