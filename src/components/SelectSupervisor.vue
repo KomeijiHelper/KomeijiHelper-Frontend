@@ -13,7 +13,7 @@
       <div v-else class="consultant-list">
         <div v-for="consultant in consultants"
              :key="consultant.consultantId"
-             class="consultant-card"
+             :class="(consultant.consultantName === mySupervisor) ? 'myconsultant-card' : 'consultant-card'"
              @click="selectConsultant(consultant.consultantName)">
           <h3>督导 {{ consultant.consultantName }}</h3>
           <StarWithPercent :score="consultant.avgScore" />
@@ -45,10 +45,16 @@ export default {
       consultants: [],
       waitingForConfirm: false,
       currentConsultantId: null,
-      ws: null
+      ws: null,
+      mySupervisor: null
     }
   },
   async created() {
+    try{
+      this.mySupervisor = (await userApi.queryMySupervisor()).data.data;
+    } catch{
+      this.mySupervisor = null;
+    }
     await this.fetchSupervisors();
   },
   watch: {
@@ -195,7 +201,22 @@ export default {
   transition: all 0.3s ease;
 }
 
+.myconsultant-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid darkgoldenrod;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .consultant-card:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.myconsultant-card:hover {
   background-color: #e0e0e0;
   transform: translateY(-2px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
