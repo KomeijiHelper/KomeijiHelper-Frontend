@@ -17,7 +17,7 @@
 <script setup>
 import userApi from "@/api/userApi.js";
 import InputBlank from "@/components/InputBlank.vue";
-import { ref, watch } from 'vue'
+import {ref, watch} from 'vue'
 import {useToast, VaButton} from "vuestic-ui";
 
 const props = defineProps({
@@ -27,7 +27,6 @@ const nameRef = ref(null)
 const storedValue = ref('')
 const {notify} = useToast();
 
-// 监听初始值并赋给 storedValue
 watch(() => props.initValue, (newVal) => {
   storedValue.value = newVal
 }, { immediate: true })

@@ -40,9 +40,9 @@
 <script setup>
 import userApi from "@/api/userApi.js";
 import InputBlank from "@/components/InputBlank.vue";
-import { ref } from "vue";
-import { useToast } from "vuestic-ui";
 import SelectBox from "@/components/SelectBox.vue";
+import {ref} from "vue";
+import {useToast} from "vuestic-ui";
 
 const usernameRef = ref(null);
 const passwordRef = ref(null);
