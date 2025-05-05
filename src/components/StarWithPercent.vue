@@ -49,7 +49,6 @@ function getStarWidth(score, starIndex) {
 
 <style scoped>
 .star-rating {
-  display: inline-flex;
   align-items: center;
   font-size: 1.4em;
   gap: 6px;

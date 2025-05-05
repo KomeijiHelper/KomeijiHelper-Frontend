@@ -69,6 +69,9 @@ export default {
       try {
         const response = await userApi.getConsultants();
         this.consultants = response.data.data;
+        if(!this.consultants || this.consultants.length === 0) {
+          console.log("empty")
+        }
       } catch (error) {
         console.error('获取咨询师列表失败:', error)
         notify('获取咨询师列表失败')
@@ -174,6 +177,9 @@ export default {
 }
 
 .popup-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 2px solid rgba(255, 167, 38, 0.2);
@@ -205,6 +211,7 @@ export default {
 .consultant-card {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
+  width: 300px;
   padding: 25px;
   cursor: pointer;
   transition: all 0.3s ease;

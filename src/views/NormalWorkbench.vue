@@ -1,7 +1,7 @@
 <script setup>
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
 import SelectConsultantPopup from "@/components/SelectConsultant.vue";
-import {ref} from 'vue'
+import {ref,onMounted} from 'vue'
 import {VaButton} from "vuestic-ui";
 
 const showPopup = ref(false)
@@ -32,7 +32,6 @@ onMounted(() => {
       <transition name="fade-up">
         <div v-show="isVisible">
           <h1 class="page-title">心理咨询室</h1>
-          
           <div class="welcome-section">
             <p class="welcome-text">欢迎来到心理咨询室，这里是一个安全、温暖的空间</p>
             <p class="sub-text">我们随时准备倾听您的故事</p>
