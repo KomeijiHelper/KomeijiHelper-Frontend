@@ -91,11 +91,14 @@ export default {
         this.setupWebSocket()
         const result = await userApi.consulting(consultantId)
 
-        if (result.data.code === 406) {
+        if (result.data.code === '406') {
           notify("您已经取消预约")
           this.waitingForConfirm = false;
-        } else if (result.data.code === 407) {
+        } else if (result.data.code === '407') {
           notify("督导拒绝了请求")
+          this.waitingForConfirm = false;
+        } else if(result.data.code === '408') {
+          notify("请求超时");
           this.waitingForConfirm = false;
         }
       } catch (error) {
@@ -138,7 +141,7 @@ export default {
       if (this.ws) {
         this.ws.close()
       }
-      userApi.cancelConsulting()
+      userApi.cancelConsulting(this.currentConsultantId)
       this.waitingForConfirm = false
       this.currentConsultantId = null
     }

@@ -88,6 +88,9 @@ export default {
         } else if (result.data.code === '407') {
           notify("咨询师拒绝了请求")
           this.waitingForConfirm = false;
+        } else if(result.data.code === '408') {
+          notify("请求超时")
+          this.waitingForConfirm = false;
         }
       } catch (error) {
         console.error('选择咨询师失败:', error)
