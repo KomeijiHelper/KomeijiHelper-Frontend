@@ -8,7 +8,7 @@
 
     <div class="navbar-right">
       <va-content class="user-role">{{ displayName }}</va-content>
-      <NavBarActions :avatar-name="userName" class="user-dropdown nav-link" />
+      <NavBarActions :avatar-name="userData.nickName" class="user-dropdown nav-link" />
     </div>
   </nav>
 
@@ -20,25 +20,27 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watchEffect, onBeforeUnmount } from "vue";
-import userApi from "@/api/userApi.js";
-import NavBarActions from "./components/navbar/NavBarActions.vue";
-import { VaContent } from "vuestic-ui";
-import Live2d from "./components/Live2d.vue";
+import {onMounted, ref, watchEffect} from "vue";
+import {VaContent} from "vuestic-ui";
 import AIChatWidget from "./components/AIChatWidget.vue";
+import Live2d from "./components/Live2d.vue";
+import NavBarActions from "./components/navbar/NavBarActions.vue";
+import userApi from "./api/userApi";
 
 const loggedIn = ref(localStorage.getItem("logged") === "true");
 const userRole = ref(localStorage.getItem("userRole") || "-1");
 const userName = ref(localStorage.getItem("userName") || "");
 const displayName = ref(localStorage.getItem("displayUserRole"));
+const userData = ref("");
 
-onMounted(() => {
+onMounted(async () => {
   // 禁用右键拖拽
   window.addEventListener('mousedown', (e) => {
     if (e.button === 2 || e.target.closest('.vdr')) {
       e.stopPropagation()
     }
   }, true)
+  userData.value = await userApi.checkSession()
 })
 
 watchEffect(() => {
@@ -109,7 +111,7 @@ body,
 
 .global {
   background: linear-gradient(120deg, #fdfbfb 0%, #fff5eb 100%);
-  height: 92vh;
+  height: 100%;
 }
 
 

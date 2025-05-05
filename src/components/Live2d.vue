@@ -26,10 +26,10 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, onMounted, computed } from 'vue';
-import * as PIXI from "pixi.js";
-import { Live2DModel } from 'pixi-live2d-display';
 import userApi from '@/api/userApi';
+import {Live2DModel} from 'pixi-live2d-display';
+import * as PIXI from "pixi.js";
+import {computed, onBeforeMount, onMounted, ref} from 'vue';
 import Vue3DraggableResizable from 'vue3-draggable-resizable'
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css'
 import { VaPopover, VaTreeView  } from 'vuestic-ui';

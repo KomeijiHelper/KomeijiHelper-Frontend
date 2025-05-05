@@ -1,40 +1,59 @@
 <script setup>
 import InformedConsentForm from "@/components/InformedConsentForm.vue";
-import { ref, onMounted, onUnmounted } from 'vue'
 import SelectConsultantPopup from "@/components/SelectConsultant.vue";
-import { VaButton } from "vuestic-ui";
+import {ref,onMounted} from 'vue'
+import {VaButton} from "vuestic-ui";
 
 const showPopup = ref(false)
 const consentFormRef = ref(null)
+const isVisible = ref(false)
 
 const onClick = async () => {
   const confirmed = await consentFormRef.value.open()
   if (!confirmed) return
   showPopup.value = true;
 }
+
+onMounted(() => {
+  isVisible.value = true
+})
 </script>
 
 <template>
   <div class="workbench-page">
+    <!-- 背景层 -->
+    <div class="background-layers">
+      <div class="layer layer-1"></div>
+      <div class="layer layer-2"></div>
+      <div class="layer layer-3"></div>
+    </div>
 
     <div class="content-container">
-      <h1 class="page-title"></h1>
-      
-      <div class="button-container">
-        <router-link to="/chat/history" class="button-link">
-          <va-button class="primary-button consult-button">
-            咨询记录
-          </va-button>
-        </router-link>
+      <transition name="fade-up">
+        <div v-show="isVisible">
+          <h1 class="page-title">心理咨询室</h1>
+          <div class="welcome-section">
+            <p class="welcome-text">欢迎来到心理咨询室，这里是一个安全、温暖的空间</p>
+            <p class="sub-text">我们随时准备倾听您的故事</p>
+          </div>
+          
+          <div class="button-container">
+            <router-link to="/chat/history" class="button-link">
+              <va-button class="primary-button history-button">
+                咨询记录
+              </va-button>
+            </router-link>
 
-        <va-button class="primary-button consult-button" @click="onClick">
-          选择咨询师
-        </va-button>
-      </div>
-
-      <SelectConsultantPopup :show="showPopup" @close="showPopup = false" />
-      <informed-consent-form ref="consentFormRef" />
+            <va-button class="primary-button consult-button" @click="onClick">
+              开始咨询
+            </va-button>
+          </div>
+        </div>
+      </transition>
     </div>
+
+    <SelectConsultantPopup :show="showPopup" @close="showPopup = false" />
+    <informed-consent-form ref="consentFormRef" />
   </div>
 </template>
 
@@ -96,6 +115,44 @@ const onClick = async () => {
 .consult-button {
   background: linear-gradient(135deg, #ffb74d, #ffa726) !important;
   color: white !important;
+}
+
+.welcome-section {
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease-out;
+}
+
+.welcome-text {
+  font-size: 1.4em;
+  color: #5d4037;
+  margin-bottom: 10px;
+}
+
+.sub-text {
+  font-size: 1.1em;
+  color: #8d6e63;
+}
+
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: all 0.8s ease;
+}
+
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes layer1Move {

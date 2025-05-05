@@ -1,5 +1,5 @@
 import router from "@/router/index.js";
-import { ClearLocalStorage } from "@/utils.js";
+import {ClearLocalStorage} from "@/utils.js";
 import axios from 'axios';
 
 const apiClient = axios.create({
@@ -47,16 +47,18 @@ export default {
         return result;
     },
 
-    async register(username, password, userClass, q, emergencyContact) {
+    async register(username, password, userClass, email,q, emergencyContact) {
         const postJson = userClass !== 0 ? {
             userName: username,
             password: password,
             userClass: userClass,
+            email:email,
             qualification: q,
         } : {
             userName: username,
             password: password,
             userClass: userClass,
+            email:email,
             emergencyContact: emergencyContact,
         };
         const result = await apiClient.post('/user/register', postJson);
@@ -105,8 +107,12 @@ export default {
         return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
     },
 
-    cancelConsulting() {
-        return apiClient.get('/consult/cancel_request');
+    cancelConsulting(consult_id) {
+        return apiClient.get('/consult/cancel_request',{
+            params:{
+                consult_id:consult_id
+            }
+        });
     },
 
     responseToRequest(patientId, accept) {
@@ -184,7 +190,6 @@ export default {
             const blob = new Blob([response.data]);
 
             const disposition = response.headers['content-disposition'];
-            console.log(response);
             let fileName;
             if (disposition && disposition.includes('filename=')) {
                 fileName = decodeURIComponent(disposition.split('filename=')[1].replace(/"/g, ''));
@@ -200,5 +205,63 @@ export default {
             a.remove();
             window.URL.revokeObjectURL(url); // 释放 blob 对象
         })
+    },
+    async getDashboardInfo(){
+        return await apiClient.get('/dashboard/consultant/chatRecordCount')
+    },
+    async getConsultantInfo(){
+        return await apiClient.get('/dashboard/consultant/getInfo')
+    },
+    async getUserCount(){
+        return await apiClient.get('/dashboard/manager/userCount');
+    },
+    async getOnlineCount(){
+        return await apiClient.get('/dashboard/manager/onlineUserCount')
+    },
+    async getPeriodChatRecord(start,end) {
+        const postJson = {
+            start:start,
+            end:end
+        };
+        return await apiClient.post('/dashboard/consultant/period/chatRecord',postJson);
+    },
+    async sendCaptcha(type) {
+        switch (type) {
+            case "changePwd":
+                return await apiClient.get('/mail/sendCaptcha/changePwd');
+            case "resetPwd":
+                return await apiClient.get('/mail/sendCaptcha/resetPwd')
+        }
+    },
+    async sendRegisterCaptcha(name,email) {
+        return await apiClient.get('/mail/sendCaptcha/register',{
+            params:{
+                name:name,
+                email:email
+            }
+        });
+    },
+    async checkCaptcha(captcha,type) {
+        const postJson = {
+            captcha:captcha,
+            type:type
+        }
+        return await apiClient.post('/mail/checkCaptcha',postJson);
+    },
+    async checkRegisterCaptcha(mail,captcha) {
+        return await apiClient.post('/mail/checkCaptcha/register',{
+            email:mail,
+            captcha:captcha
+        });
+    },
+    bindSupervisor(conName, supName){
+        const postJson = {
+            conName: conName,
+            supName: supName
+        }
+        return apiClient.post('/bind_supervisor/manager/bind', postJson);
+    },
+    async queryMySupervisor() {
+        return await apiClient.get('/bind_supervisor/consultant/check')
     }
 };

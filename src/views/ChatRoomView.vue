@@ -63,7 +63,7 @@
             </transition>
           </div>
           <div>
-            <VaProgressBar v-if="uploadImgCount != 0" indeterminate content-inside size="30px">上传图片中
+            <VaProgressBar v-if="uploadImgCount !== 0" indeterminate content-inside size="30px">上传图片中
             </VaProgressBar>
           </div>
         </div>
@@ -77,12 +77,14 @@
 <script setup>
 import userApi from '@/api/userApi';
 import Rating from "@/components/Rating.vue";
+import SelectSupervisorPopup from "@/components/SelectSupervisor.vue";
 import router from "@/router/index.js";
 import emojiList from '@/services/emoji/emoji';
-import SelectSupervisorPopup from "@/components/SelectSupervisor.vue";
 import {nextTick, onMounted, onUnmounted, reactive, ref, useTemplateRef, watch} from 'vue'
+import {useRoute} from 'vue-router'
 import {
-  useModal, useToast,
+  useModal,
+  useToast,
   VaButton,
   VaCard,
   VaCardContent,
@@ -94,7 +96,6 @@ import {
 } from 'vuestic-ui';
 import ChatBubble from '../components/ChatBubble.vue';
 import MessageType from './Chat/widgets/MessageType.js';
-import { useRoute } from 'vue-router'
 
 const messageContent = ref('');
 const showEmoji = ref(false);

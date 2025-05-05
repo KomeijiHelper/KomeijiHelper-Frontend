@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-  <va-card class="p-4 w-96 mx-auto mt-20 text-center">
+  <va-card class="p-4 w-96 mx-40 mt-20 text-center">
     <h2 class="text-xl font-bold mb-4">请为我们的服务打分</h2>
     <div class="flex justify-center space-x-2 mb-4">
       <va-icon
@@ -8,7 +8,7 @@
           :key="star"
           :name="star <= rating ? 'mdi-star' : 'mdi-star-outline'"
           color="warning"
-          size="36px"
+          size="24px"
           class="cursor-pointer transition"
           :class="{ 'opacity-50': loading }"
           @click="handleRating(star)"
@@ -38,7 +38,9 @@ const rating = ref(0)
 const visible = ref(false)
 const loading = ref(false)
 const submitted = ref(false)
+const cidRef = ref(null)
 let resolveAfterClose = null
+
 async function handleRating(star) {
   if (loading.value) return
 
@@ -46,7 +48,7 @@ async function handleRating(star) {
   loading.value = true
   submitted.value = false
 
-  await userApi.rating(rating.value === 0 ? 0 : 1, rating.value)
+  await userApi.rating(rating.value === 0 ? 0 : 1, rating.value, cidRef.value)
   submitted.value = true
   visible.value = false
   resolveAfterClose?.(rating.value) // 👉 通知外部评分已完成
@@ -54,11 +56,12 @@ async function handleRating(star) {
   loading.value = false
 }
 
-function open() {
+function open(cid = null) {
   rating.value = 0
   loading.value = false
   submitted.value = false
   visible.value = true
+  cidRef.value = cid
 
   return new Promise((resolve) => {
     resolveAfterClose = resolve
@@ -81,5 +84,11 @@ defineExpose({
 }
 .va-icon:hover {
   transform: scale(1.2);
+}
+.rating {
+  top:0;
+  bottom: 0;
+  left:0;
+  right: 0;
 }
 </style>

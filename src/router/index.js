@@ -4,7 +4,6 @@ import {ClearLocalStorage} from "@/utils.js";
 import AboutView from "@/views/AboutView.vue";
 import AssistantWorkbench from "@/views/AssistantWorkbench.vue";
 import ChatRecordsView from "@/views/ChatRecordsView.vue";
-import ChatRecordTestView from '@/views/ChatRecordTestView.vue'
 import ChatRoomView from "@/views/ChatRoomView.vue";
 import FAQView from "@/views/FAQView.vue";
 import HomeView from "@/views/HomeView.vue";
@@ -24,12 +23,6 @@ const routes = [
         name: "Home",
         component: HomeView,
         meta: { needAuth: false, roles: [-1, 0, 1, 2, 3]}
-    },
-    {
-        path:"/chatrecord",
-        name:"ChatRecord",
-        component: ChatRecordTestView,
-        meta:{ needAuth:false, roles:[-1,0,1,2,3]}
     },
     {
         path: "/login",
@@ -171,7 +164,6 @@ router.beforeEach(async (to, from, next) => {
     const oldUserRole = localStorage.getItem("userRole");
     try {
         const userData = await userApi.checkSession();
-        console.log(userData);
         userRole = getUserClassCode(userData.userClass);
         isAuthenticated = localStorage.getItem("logged") === "true";
     } catch (e) {

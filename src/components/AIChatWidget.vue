@@ -32,7 +32,7 @@
 
 <script setup>
 import userApi from "@/api/userApi.js";
-import { nextTick, ref, useTemplateRef, watch } from 'vue'
+import {nextTick, ref, useTemplateRef, watch} from 'vue'
 
 const show = ref(false)
 const logged = ref(localStorage.getItem("logged")==="true"||false);
@@ -93,7 +93,7 @@ watch(()=> messages.value.length,()=>{
 <style scoped>
 .chat-wrapper {
   position: fixed;
-  bottom: 20px;
+  bottom: 60px;
   left: 20px;
   z-index: 9999;
 }
