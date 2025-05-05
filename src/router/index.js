@@ -164,7 +164,6 @@ router.beforeEach(async (to, from, next) => {
     const oldUserRole = localStorage.getItem("userRole");
     try {
         const userData = await userApi.checkSession();
-        console.log(userData);
         userRole = getUserClassCode(userData.userClass);
         isAuthenticated = localStorage.getItem("logged") === "true";
     } catch (e) {

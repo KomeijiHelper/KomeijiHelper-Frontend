@@ -1,11 +1,11 @@
 <template>
   <div class="profile-container">
     <!-- 背景层 -->
-    <div class="background-layers">
+    <!-- <div class="background-layers">
       <div class="layer layer-1"></div>
       <div class="layer layer-2"></div>
       <div class="layer layer-3"></div>
-    </div>
+    </div> -->
 
     <div class="content-container">
       <h1 class="page-title">个人信息</h1>
@@ -24,7 +24,7 @@
           
           <div class="form-group">
             <label for="email">邮箱</label>
-            <input v-model="profile.email" type="email" id="email" placeholder="请输入您的邮箱" />
+            <div class="email" type="email" id="email" >{{ profile.email===""? '未绑定邮箱':profile.email }}</div>
           </div>
           
           <div class="form-group" v-if="userClass.classCode === 0">
@@ -148,7 +148,7 @@ const handlePasswordChange = async ({oldPassword, newPassword}) => {
 
 .content-container {
   position: relative;
-  z-index: 1;
+  z-index: 0;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -201,6 +201,16 @@ label {
   margin-bottom: 8px;
   display: block;
   font-size: 1.1em;
+}
+
+.email {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1em;
+  color: #5d4037;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 input {

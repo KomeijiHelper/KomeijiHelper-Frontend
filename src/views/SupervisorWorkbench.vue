@@ -1,11 +1,11 @@
 <template>
   <div class="supervisor-workbench">
     <!-- 背景层 -->
-    <div class="background-layers">
+    <!-- <div class="background-layers">
       <div class="layer layer-1"></div>
       <div class="layer layer-2"></div>
       <div class="layer layer-3"></div>
-    </div>
+    </div> -->
 
     <div class="content-container">
       <h1 class="page-title">督导工作台</h1>

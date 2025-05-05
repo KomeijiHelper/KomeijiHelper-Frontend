@@ -1,11 +1,11 @@
 <template>
   <div class="assistant-workbench">
     <!-- 背景层 -->
-    <div class="background-layers">
+    <!-- <div class="background-layers">
       <div class="layer layer-1"></div>
       <div class="layer layer-2"></div>
       <div class="layer layer-3"></div>
-    </div>
+    </div> -->
 
     <div class="content-container">
       <h2 class="page-title">咨询师工作台</h2>
@@ -246,6 +246,7 @@ export default {
 
 .rating-section,
 .supervisor-section {
+  width: 45vh;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   padding: 25px;
