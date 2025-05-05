@@ -27,7 +27,7 @@
 <script setup>
 import userApi from '@/api/userApi';
 import {ref} from 'vue';
-import { useToast, VaModal,VaButton } from 'vuestic-ui';
+import {useToast, VaModal} from 'vuestic-ui';
 
 const emit = defineEmits(['close', 'submit']);
 

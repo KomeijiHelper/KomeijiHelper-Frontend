@@ -31,10 +31,10 @@
 </template>
 
 <script setup>
-import Rating from "@/components/Rating.vue";
-import { ref, computed, onMounted } from 'vue'
 import userApi from '@/api/userApi'
-import {VaButton, VaCard, VaCardContent, VaCardTitle, VaPagination, VaSelect, VaDataTable, useToast} from "vuestic-ui";
+import Rating from "@/components/Rating.vue";
+import {computed, onMounted, ref} from 'vue'
+import {useToast, VaButton, VaCard, VaCardContent, VaCardTitle, VaDataTable, VaPagination, VaSelect} from "vuestic-ui";
 import ChatRecord from './ChatRecord.vue';
 
 const chatRecords = ref([])
