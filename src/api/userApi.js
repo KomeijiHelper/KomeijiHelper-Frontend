@@ -107,8 +107,12 @@ export default {
         return apiClient.get('/consult/connect_request?consult_id=' + consultingId);
     },
 
-    cancelConsulting() {
-        return apiClient.get('/consult/cancel_request');
+    cancelConsulting(consult_id) {
+        return apiClient.get('/consult/cancel_request',{
+            params:{
+                consult_id:consult_id
+            }
+        });
     },
 
     responseToRequest(patientId, accept) {

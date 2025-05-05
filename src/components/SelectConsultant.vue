@@ -80,11 +80,12 @@ export default {
         this.currentConsultantId = consultantId
         this.setupWebSocket()
         const result = await userApi.consulting(consultantId)
+        console.log(result);
 
-        if (result.data.code === 406) {
+        if (result.data.code === '406') {
           notify("您已经取消预约")
           this.waitingForConfirm = false;
-        } else if (result.data.code === 407) {
+        } else if (result.data.code === '407') {
           notify("咨询师拒绝了请求")
           this.waitingForConfirm = false;
         }
@@ -128,7 +129,7 @@ export default {
       if (this.ws) {
         this.ws.close()
       }
-      userApi.cancelConsulting()
+      userApi.cancelConsulting(this.currentConsultantId)
       this.waitingForConfirm = false
       this.currentConsultantId = null
     }
