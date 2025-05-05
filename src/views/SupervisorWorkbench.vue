@@ -75,6 +75,9 @@ export default {
           const to=JSON.parse(data.content).to
           const url = `/chat/room?from=${from}&to=${to}`
           window.open(url, '_blank')
+        } else if (data.type === 'chat_reject') {
+          const cancelId = data.content;
+          this.requests = this.requests.filter(item=>item.userId !== cancelId);
         }
       }
 

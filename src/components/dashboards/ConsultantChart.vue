@@ -51,14 +51,14 @@ const showTimeSelect = ref(false);
 const currentTime = new Date();
 const defaultDate = new Date(currentTime.getFullYear(),currentTime.getMonth(),currentTime.getDate());
 const endDate = ref(defaultDate);
-const startDate = ref(calcDate(defaultDate,-7));
+const startDate = ref(calcDate(defaultDate,-6));
 let chartInstance = null;
 
 const getXlabel = ()=>{
   const days = [];
   const msPerDay = 1000*60*60*24;
   const total = Math.floor((endDate.value-startDate.value)/msPerDay);
-  for(let i =0;i < total;i++) {
+  for(let i =0;i <= total;i++) {
     const date = new Date(startDate.value);
     date.setDate(date.getDate()+i);
     days.push(`${date.getMonth() + 1}/${date.getDate()}`)
@@ -126,7 +126,7 @@ watch(() => props.data, () => {
 
 const setDefault = ()=>{
   endDate.value = defaultDate;
-  startDate.value = calcDate(defaultDate,-7);
+  startDate.value = calcDate(defaultDate,-6);
 }
 
 const hideTime = ()=>{
