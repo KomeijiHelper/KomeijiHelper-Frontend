@@ -152,35 +152,47 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(93, 64, 55, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 
 .popup {
-  background: white;
-  padding: 20px;
+  background: linear-gradient(135deg, #fff5eb 0%, #fff 100%);
+  padding: 30px;
   width: 90%;
   max-width: 800px;
-  max-height: 90%;
+  max-height: 90vh;
   overflow-y: auto;
-  border-radius: 10px;
-  position: relative;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(255, 167, 38, 0.15);
+  animation: slideUp 0.4s ease;
 }
 
 .popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(255, 167, 38, 0.2);
+}
+
+.popup-header h2 {
+  color: #5d4037;
+  font-size: 1.8em;
 }
 
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+  color: #8d6e63;
+  font-size: 28px;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #5d4037;
+  transform: rotate(90deg);
 }
 
 .consultant-list {
@@ -191,30 +203,34 @@ export default {
 }
 
 .consultant-card {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 1px solid rgba(255, 167, 38, 0.1);
 }
 
 .consultant-card:hover {
-  background-color: #e0e0e0;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(255, 167, 38, 0.2);
+  border-color: rgba(255, 167, 38, 0.3);
 }
 
 .waiting-message {
   text-align: center;
   padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(255, 167, 38, 0.1);
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 20px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 25px;
+  border: 4px solid #ffe0b2;
+  border-top: 4px solid #ffa726;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -225,17 +241,35 @@ export default {
 }
 
 .cancel-btn {
-  margin-top: 20px;
-  padding: 8px 16px;
-  background-color: #ff4444;
+  margin-top: 25px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #ff9e80, #ff6e40);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 1.1em;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
 .cancel-btn:hover {
-  background-color: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 110, 64, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
