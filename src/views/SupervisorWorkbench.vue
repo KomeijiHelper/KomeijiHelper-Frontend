@@ -29,7 +29,9 @@
 import userApi from "@/api/userApi.js";
 import ConsultantChart from "@/components/dashboards/ConsultantChart.vue";
 import StarWithPercent from "@/components/StarWithPercent.vue";
-import {VaButton} from "vuestic-ui";
+import {useToast, VaButton} from "vuestic-ui";
+
+const {notify} = useToast();
 
 export default {
   name: 'SupervisorWorkbench',
@@ -76,7 +78,10 @@ export default {
           const url = `/chat/room?from=${from}&to=${to}`
           window.open(url, '_blank')
         } else if (data.type === 'chat_reject') {
-          const cancelId = data.content;
+          const content = JSON.parse(data.content);
+          const cancelId = content.cancel_id;
+          const reason = content.reason;
+          notify(reason);
           this.requests = this.requests.filter(item=>item.userId !== cancelId);
         }
       }
