@@ -37,7 +37,7 @@ const initChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['普通用户', '咨询师', '管理员']
+      data: ['普通用户', '咨询师', '督导']
     },
     yAxis: {
       type: 'value',
