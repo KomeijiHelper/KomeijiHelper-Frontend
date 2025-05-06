@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-  <va-card class="p-4 w-96 mx-40 mt-20 text-center">
+  <va-card class="p-4 w-96 mx-10 mt-20 text-center">
     <h2 class="text-xl font-bold mb-4">请为我们的服务打分</h2>
     <div class="flex justify-center space-x-2 mb-4">
       <va-icon
@@ -8,7 +8,6 @@
           :key="star"
           :name="star <= rating ? 'mdi-star' : 'mdi-star-outline'"
           color="warning"
-          size="24px"
           class="cursor-pointer transition"
           :class="{ 'opacity-50': loading }"
           @click="handleRating(star)"

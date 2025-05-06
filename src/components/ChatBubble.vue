@@ -1,8 +1,11 @@
 <template>
   <div class="chat-bubble" :class="{ 'chat-bubble--self': isSelf }">
     <!-- TODO: VaSkeleton -->
-    <VaAvatar class="chat-avatar" :src="avatarSrc" :fallback-text="avatarName" :style="avatarStyle"
+    <div class='chat-meta' :class="{'chat-meta--self':isSelf}">
+      <div class="avatar-name" :style="avatarStyle">{{avatarName}}</div>
+      <VaAvatar class="chat-avatar" :src="avatarSrc" fallback-icon="person"
               :color="isSelf ? selfAvatarColor : otherAvatarColor" :text-color="textColor"></VaAvatar>
+    </div>
     <div class="chat-content">
       <div class="chat-message" @click="showBigger = !showBigger">
         <!-- TODO -->
@@ -81,7 +84,7 @@ const showBigger=ref(false);
 const avatarStyle = computed(() => {
   const maxSize = 20;
   const minSize = 5;
-  const size = Math.max(minSize, maxSize - (props.avatarName.length * 0.75));
+  const size = Math.max(minSize, maxSize - (props.avatarName.length * 0.7));
   return {
     fontSize: `${size}px`,
   }
@@ -112,6 +115,7 @@ const avatarStyle = computed(() => {
   flex-direction: column;
   align-items: flex-start;
   max-width: 40%;
+  margin-top: 35px;
 }
 
 .chat-bubble--self .chat-content {
@@ -145,4 +149,30 @@ const avatarStyle = computed(() => {
   height: 100%;
   object-fit: contain; /* 确保图片自适应且保持比例 */
 }
+
+.chat-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.chat-meta--self {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.avatar-name {
+  font-weight: 600;
+  color: #555;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  max-width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 </style>
