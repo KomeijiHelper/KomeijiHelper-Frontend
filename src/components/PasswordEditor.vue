@@ -45,15 +45,15 @@ const emailVerify = async ()=> {
     return;
   }
   // send email
+  showNotify.value = true;
+  checkMaiButtonValid = false;
+  showTimeOut.value = true;
+  showEmailInput.value = true;
   const response = await userApi.sendCaptcha("changePwd");
   if(response.data.code !== '200') {
     notify(response.data.msg);
     return;
   }
-  showNotify.value = true;
-  checkMaiButtonValid = false;
-  showTimeOut.value = true;
-  showEmailInput.value = true;
   const intervalId = setInterval(()=>{
     remainTime.value--;
     if(remainTime.value <= 0) {
