@@ -81,10 +81,6 @@ const options = ref([
                   to: "/faq"
                 }
             },
-            {
-                name: 'Help',
-                icon: 'fa-circle-info',
-            }
         ]
     },
     {

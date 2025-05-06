@@ -34,7 +34,6 @@
             <div class="request-content">
               <h3>新的咨询请求</h3>
               <p>用户ID: {{ request.userId }}</p>
-              <p>消息: {{ request.message }}</p>
             </div>
             <div class="button-group">
               <button @click="handleRequest(true, index)" class="accept-btn">
