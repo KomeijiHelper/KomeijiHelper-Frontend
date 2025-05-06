@@ -8,8 +8,17 @@
         </div>
 
         <div class="form-group">
-          <InputBlank ref="usernameRef" placeholder="用户名" title="大小写字母和数字组合，字母开头且5-19位" />
-          <InputBlank ref="passwordRef" placeholder="密码" type="password" />
+          <InputBlank ref="usernameRef" placeholder="用户名" @focus="showHint('name')" @blur="disableHint('name')"/>
+          <div v-if="showNameHint" class="hints">
+            <p class="hint">只能包含字母、数字，并以字母开头</p>
+            <p class="hint">长度为5-19个字符</p>
+          </div>
+          <InputBlank ref="passwordRef" placeholder="密码" type="password" @focus="showHint('pwd')" @blur="disableHint('pwd')" />
+          <div class="hints" v-if="showPwdHint">
+            <p class="hint">不能包含空格</p>
+            <p class="hint">长度为8-16个字符</p>
+            <p class="hint">必须包含字母、数字、符号中至少两种</p>
+          </div>
           <InputBlank ref="passwordRepeatRef" placeholder="请重复你的密码" type="password" />
           <InputBlank ref="emailRef" placeholder="请输入你的邮箱" />
           <div class="mail-container">
@@ -55,6 +64,9 @@ const emergencyContactRef = ref(null);
 const qualificationVisible = ref(false);
 const emergencyContactVisible = ref(true);
 
+const showNameHint = ref(false);
+const showPwdHint = ref(false);
+
 // email
 const showEmailInput = ref(false);
 const showTimeOut = ref(false);
@@ -66,6 +78,23 @@ const captchaRef = ref(null);
 const { notify } = useToast();
 const userClass = ref(0);
 
+const showHint = (kind)=> {
+  if(kind === 'name') {
+    showNameHint.value = true;
+  }
+  else if(kind === 'pwd') {
+    showPwdHint.value = true;
+  }
+}
+
+const disableHint = (kind) => {
+  if(kind === 'name') {
+    showNameHint.value = false;
+  }
+  else if(kind === 'pwd') {
+    showPwdHint.value = false;
+  }
+}
 
 const handleChange = (value) => {
   userClass.value = value === "普通用户" ? 0 : value === "咨询师" ? 1 : value === "督导" ? 2 : 0;
@@ -116,7 +145,7 @@ const handleRegister = async () => {
   if(captchaRef.value) {
      captcha = captchaRef.value.getValue();
   }
-  if (!username || !password || !passwordRepeat) {
+  if (!username || !password) {
     notify("请输入用户名和密码！");
     return;
   }
@@ -381,5 +410,26 @@ const handleRegister = async () => {
   font-size: 8px;
   color: #888;
   margin: 0;
+}
+
+.hints {
+  margin-bottom: 15px;
+}
+
+.hint {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0;
+  padding-left: 20px;
+  position: relative;
+  text-align: left;
+}
+.hint::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #999;
+  font-size: 16px;
+  line-height: 1;
 }
 </style>
