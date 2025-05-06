@@ -7,6 +7,9 @@
       <va-select v-model="perPage" :options="[5, 10, 20, 50]" label="每页数量" class="w-32" />
       <va-data-table :columns="columns" :items="chatRecords" :per-page="perPage" :current-page="currentPage"
         @update:current-page="currentPage = $event" :loading="isLoading" loading-text="加载中...">
+        <template #cell(score)="{ row }">
+          {{ row.rowData.score === 0 ? '-' : row.rowData.score }}
+        </template>
         <template #cell(actions)="{ row }">
           <va-button @click="viewChat(row.rowData.id)" color="primary">
             查看记录
@@ -14,7 +17,7 @@
           <va-button @click="downloadChat(row.rowData.id)" color="primary">
             导出记录
           </va-button>
-          <va-button v-if="row.rowData.score===0" @click="rating(row.rowData.id)" color="primary">
+          <va-button v-if="isNormalUser && row.rowData.score===0" @click="rating(row.rowData.id)" color="primary">
             打分
           </va-button>
         </template>
@@ -41,6 +44,8 @@ const chatRecords = ref([])
 const isLoading = ref(false)
 const currentPage = ref(1)
 const perPage = ref(5)
+
+const isNormalUser = ref(localStorage.getItem("userRole") === '0');
 
 const recordContent = ref();
 const showRecord = ref(false);
@@ -90,6 +95,10 @@ const viewChat = async (id) => {
   try {
     const response = await userApi.getChatContent(id);
     console.log(response);
+    if(response.data.code !== '200') {
+      notify(response.data.msg);
+      return;
+    }
     recordContent.value = response.data.data;
     showRecord.value = true;
   }

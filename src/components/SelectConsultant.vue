@@ -211,7 +211,6 @@ export default {
 .consultant-card {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  width: 300px;
   padding: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
