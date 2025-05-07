@@ -113,6 +113,7 @@ let websocket;
 const emojis = emojiList;
 const chatBubbleList = reactive([])
 const showPopup = ref(false);
+const nickName = ref(null);
 const onClick = async () => {
   showPopup.value = true;
 }
@@ -121,16 +122,23 @@ const onClickSyncMessage = async () => {
   sendTextToWebSocket(MessageType.ChatRecord, messageObj)
 }
 
-onMounted(() => {
-  websocket = new WebSocket("ws://127.0.0.1:54950/ws?from="+from+"&to="+to);
+onMounted(async () => {
+  websocket = new WebSocket("ws://127.0.0.1:54950/ws?from=" + from + "&to=" + to);
+  nickName.value = (await userApi.checkSession()).nickName;
   showHelpBtn.value = localStorage.getItem('userRole') === "1" && load.value === '';
   websocket.onmessage = (event) => {
-    console.log(event.data);
     const data = JSON.parse(event.data);
     const content = JSON.parse(data.content);
     const time = new Date(data.timestamp);
     const type = data.type;
-    chatBubbleList.push({ avatarSrc: '', avatarName: content.userName, isSelf: false, time: time.toLocaleString(), type: type, content: content.content });
+    chatBubbleList.push({
+      avatarSrc: '',
+      avatarName: content.userName,
+      isSelf: false,
+      time: time.toLocaleString(),
+      type: type,
+      content: content.content
+    });
   };
   websocket.onopen = () => {
     console.log("WebSocket connected");
@@ -150,7 +158,9 @@ onMounted(() => {
     else if (event.code === 4001) {
       notify("超过十分钟未进行对话，自动关闭聊天");
     }
-    await (new Promise(resolve => setTimeout(resolve, 1000)));
+    await (
+        new Promise(resolve => setTimeout(resolve, 1000))
+    );
     router.push("/workbench")
   };
 });
@@ -205,7 +215,7 @@ const handlerFileChange = (event) => {
 const sendTextToWebSocket = (type, innerContent) => {
   const time = new Date();
   const content = {
-    userName: localStorage.getItem("userName"),
+    userName: nickName.value,
     content: innerContent,
   }
   const message = {
@@ -215,7 +225,7 @@ const sendTextToWebSocket = (type, innerContent) => {
   };
 
   websocket.send(JSON.stringify(message));
-  chatBubbleList.push({ avatarSrc: '', avatarName: localStorage.getItem("userName"), isSelf: true, time: time.toLocaleString(), type: type, content: innerContent })
+  chatBubbleList.push({ avatarSrc: '', avatarName: nickName.value, isSelf: true, time: time.toLocaleString(), type: type, content: innerContent })
 }
 
 const sendMessage = async (event) => {
