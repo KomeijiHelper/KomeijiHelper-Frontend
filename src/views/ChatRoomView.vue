@@ -123,7 +123,7 @@ const onClickSyncMessage = async () => {
 }
 
 onMounted(async () => {
-  websocket = new WebSocket("ws://127.0.0.1:54950/ws?from=" + from + "&to=" + to);
+  websocket = new WebSocket("wss://komeiji.cyou:54950/ws?from=" + from + "&to=" + to);
   nickName.value = (await userApi.checkSession()).nickName;
   showHelpBtn.value = localStorage.getItem('userRole') === "1" && load.value === '';
   websocket.onmessage = (event) => {
