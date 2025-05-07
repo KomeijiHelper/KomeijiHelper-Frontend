@@ -104,7 +104,6 @@ const handleChange = (value) => {
 };
 
 const emailVerify = async ()=>{
-  console.log("emailVerify");
   if(!checkMaiButtonValid) return;
 
   const username = usernameRef.value.getValue();
@@ -113,15 +112,16 @@ const emailVerify = async ()=>{
     notify("邮件格式错误")
     return;
   }
+  notify("邮件可能在垃圾箱中，请注意查收。")
+  showEmailInput.value = true;
+  showTimeOut.value = true;
+  checkMaiButtonValid = false;
+  emailChecked = true;
   const response = await userApi.sendRegisterCaptcha(username,email);
   if(response.data.code !== '200') {
     notify(response.data.msg);
     return;
   }
-  showEmailInput.value = true;
-  showTimeOut.value = true;
-  checkMaiButtonValid = false;
-  emailChecked = true;
   const intervalId = setInterval(()=>{
     remainTime.value--;
     if(remainTime.value <= 0) {

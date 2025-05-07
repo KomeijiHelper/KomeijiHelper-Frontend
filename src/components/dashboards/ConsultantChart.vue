@@ -31,7 +31,7 @@
 import userApi from '@/api/userApi';
 import * as echarts from 'echarts'
 import {onBeforeUnmount, onMounted, ref, watch} from 'vue'
-import {VaButton, VaModal} from 'vuestic-ui'
+import {VaButton, VaModal, VaDateInput} from 'vuestic-ui'
 
 const props = defineProps({
   data: {
