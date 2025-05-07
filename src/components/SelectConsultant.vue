@@ -15,7 +15,7 @@
              :key="consultant.consultantId"
              class="consultant-card"
              @click="selectConsultant(consultant.consultantName)">
-          <h3>咨询师 {{ consultant.consultantName }}</h3>
+          <h3>{{ consultant.consultantNickname }}</h3>
           <StarWithPercent :score="consultant.avgScore" />
           <p>咨询数：{{ consultant.totalRecord }}</p>
           <p>有评分咨询数：{{ consultant.scoreRecord }}</p>
@@ -56,7 +56,6 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.onShow();
-          console.log("show")
         }
       }
     }
@@ -68,7 +67,7 @@ export default {
     async fetchConsultants() {
       try {
         const response = await userApi.getConsultants();
-        this.consultants = response.data.data;
+        this.consultants = JSON.parse(response.data.data);
         if(!this.consultants || this.consultants.length === 0) {
           console.log("empty")
         }
